@@ -17,6 +17,12 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->enum('customer_type', ['guest', 'registered'])->default('guest'); // Khách vãng lai hoặc đăng ký
+            $table->string('avatar')->nullable(); // Ảnh đại diện
+            $table->enum('gender', ['male', 'female', 'other'])->nullable(); // Giới tính
+            $table->date('birthdate')->nullable(); // Ngày sinh
+            $table->string('phone')->nullable(); // Số điện thoại
+            $table->string('address')->nullable(); // Địa chỉ
             $table->rememberToken();
             $table->timestamps();
         });
