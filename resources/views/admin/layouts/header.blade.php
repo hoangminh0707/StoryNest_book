@@ -780,44 +780,35 @@
                                         <a href="dashboard-crm.html" class="nav-link" data-key="t-crm"> CRM </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="index.html" class="nav-link" data-key="t-ecommerce"> Ecommerce </a>
+                                        <a href="http://storynest_book.test/banners" class="nav-link" data-key="Banners"> Banners </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="dashboard-crypto.html" class="nav-link" data-key="t-crypto"> Crypto </a>
+                                        <a href="http://storynest_book.test/list-orders" class="nav-link" data-key=""> Đơn hàng </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="dashboard-projects.html" class="nav-link" data-key="t-projects"> Projects </a>
+                                        <a href="http://storynest_book.test/comments" class="nav-link" data-key="bình luận"> Bình luận </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="dashboard-nft.html" class="nav-link" data-key="t-nft"> NFT</a>
+                                        <a href="http://storynest_book.test/blogs" class="nav-link" data-key="Blogs"> Blogs</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="dashboard-job.html" class="nav-link" data-key="t-job">Job</a>
+                                        <a href="http://storynest_book.test/reviews" class="nav-link" data-key="Reviews">Reviews</a>
                                     </li>
                                 </ul>
                             </div>
                         </li> <!-- end Dashboard Menu -->
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarApps">
-                                <i class="ri-apps-2-line"></i> <span data-key="t-apps">Apps</span>
+                                <i class="ri-apps-2-line"></i> <span data-key="t-apps">Quản lí tài khoản</span>
                             </a>
                             <div class="collapse menu-dropdown" id="sidebarApps">
                                 <ul class="nav nav-sm flex-column">
-                                    <li class="nav-item">
-                                        <a href="#sidebarCalendar" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarCalendar" data-key="t-calender">
-                                            Calendar
+                                    <div class="nav-item">
+                                        <a  href="" class="nav-link">
+                                           Tài khoản danh sách nhân viên
                                         </a>
-                                        <div class="collapse menu-dropdown" id="sidebarCalendar">
-                                            <ul class="nav nav-sm flex-column">
-                                                <li class="nav-item">
-                                                    <a href="apps-calendar.html" class="nav-link" data-key="t-main-calender"> Main Calender </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="apps-calendar-month-grid.html" class="nav-link" data-key="t-month-grid"> Month Grid </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
+
+                                    </div>
                                             </ul>
                             </div>
                         </li>
@@ -826,7 +817,7 @@
             </div>
         </div>
     </div>
-    
+
 
             <div class="sidebar-background"></div>
         </div>
