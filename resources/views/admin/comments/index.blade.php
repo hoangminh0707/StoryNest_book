@@ -40,7 +40,7 @@
                             <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE') <!-- Phương thức HTTP DELETE -->
-                                <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
+                                <button type="button" onclick="return confirm('Bạn có chắc chắn muốn xóa không?');" class="btn btn-danger btn-sm">Xóa</button>
                             </form>
 
                         </td>

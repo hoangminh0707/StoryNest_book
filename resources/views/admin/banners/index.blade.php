@@ -35,7 +35,7 @@
                         <form action="{{ route('banners.destroy', $banner->id) }}" method="POST" style="display: inline;">
                             @csrf
                             @method('DELETE')
-                            <button class="btn btn-danger btn-sm" type="submit">Xóa</button>
+                            <button type="button" onclick="return confirm('Bạn có chắc chắn muốn xóa không?');" class="btn btn-danger btn-sm">Xóa</button>
                         </form>
                     </td>
                 </tr>
