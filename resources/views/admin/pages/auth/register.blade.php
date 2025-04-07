@@ -163,17 +163,6 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="mb-3">
-                                                    <label for="customer_type" class="form-label">Loại Tài Khoản <span class="text-danger">*</span></label>
-                                                    <select class="form-select mb-3" id="customer_type" name="customer_type" required>
-                                                        <option value="guest" {{ old('customer_type') == 'guest' ? 'selected' : '' }}>guest</option>
-                                                        <option value="registered" {{ old('customer_type') == 'registered' ? 'selected' : '' }}>registered</option>
-                                                    </select>
-                                                    <div class="invalid-feedback">
-                                                        @error('customer_type')<div>{{ $message }}</div>@enderror
-                                                    </div>
-                                                </div>
-
                                                 <div class="mt-4">
                                                     <button class="btn btn-success w-100" type="submit">Đăng Ký</button>
                                                 </div>

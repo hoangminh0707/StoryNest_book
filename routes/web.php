@@ -23,8 +23,9 @@ use App\Http\Controllers\admin\RolesController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('client.pages.index');
 });
+
 
 
 Route::get('/admin', [AdminController::class, 'dashboard'])->middleware(['auth', 'role:admin'])->name('admin.dashboard');
@@ -35,7 +36,7 @@ Route::post('/admin/logout', [LoginController::class, 'logout'])->name('admin.lo
 
 
 Route::get('/admin/register', [RegisterController::class, 
-'showAdminRegistrationForm'])->name('register.admin.form')->middleware(['auth', 'role:admin']);
+'showAdminRegistrationForm'])->name('register.admin.form');
 
 Route::post('/admin/register', [RegisterController::class, 
 'registerAdmin'])->name('register.admin');
