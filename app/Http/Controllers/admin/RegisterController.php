@@ -26,7 +26,6 @@ class RegisterController extends Controller
         'birthdate' => 'required|date',
         'phone' => 'nullable|string|max:15',
         'address' => 'nullable|string|max:255',
-        'customer_type' => 'required|in:guest,registered',
     ]);
 
     if ($validator->fails()) {
@@ -38,7 +37,6 @@ class RegisterController extends Controller
         'name' => $request->name,
         'email' => $request->email,
         'password' => Hash::make($request->password),
-        'customer_type' => $request->customer_type,
         'avatar' => $request->avatar ?? null,
         'gender' => $request->gender,
         'birthdate' => $request->birthdate,
