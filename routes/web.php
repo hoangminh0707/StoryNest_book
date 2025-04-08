@@ -26,6 +26,40 @@ Route::get('/', function () {
     return view('client.pages.index');
 });
 
+Route::get('/shop', function () {
+    return view('client.pages.shop');
+});
+
+Route::get('/about', function () {
+    return view('client.pages.about');
+});
+
+
+Route::get('/blog', function () {
+    return view('client.pages.blog');
+});
+
+Route::get('/cart', function () {
+    return view('client.pages.cart');
+});
+
+Route::get('/checkout', function () {
+    return view('client.pages.checkout');
+});
+
+Route::get('/contact', function () {
+    return view('client.pages.contact');
+});
+
+Route::get('/post', function () {
+    return view('client.pages.post');
+});
+
+Route::get('/product', function () {
+    return view('client.pages.product');
+});
+
+
 
 
 Route::get('/admin', [AdminController::class, 'dashboard'])->middleware(['auth', 'role:admin'])->name('admin.dashboard');
