@@ -31,9 +31,9 @@
         <div class="cart-table">
           <div class="cart-header border-bottom border-top">
             <div class="row d-flex text-capitalize">
-              <h4 class="col-lg-4 py-3 m-0">Product</h4>
-              <h4 class="col-lg-3 py-3 m-0">Quantity</h4>
-              <h4 class="col-lg-4 py-3 m-0">Subtotal</h4>
+              <h4 class="col-lg-4 py-3 m-0">Sản Phẩm</h4>
+              <h4 class="col-lg-3 py-3 m-0">Số Lượng</h4>
+              <h4 class="col-lg-4 py-3 m-0">Tổng Giá</h4>
             </div>
           </div>
 
@@ -159,12 +159,12 @@
           </div>
         </div>
         <div class="cart-totals padding-medium pb-0">
-          <h3 class="mb-3">Cart Totals</h3>
+          <h3 class="mb-3">Tổng số giỏ hàng</h3>
           <div class="total-price pb-3">
             <table cellspacing="0" class="table text-capitalize">
               <tbody>
                 <tr class="subtotal pt-2 pb-2 border-top border-bottom">
-                  <th>Subtotal</th>
+                  <th>Tổng giá</th>
                   <td data-title="Subtotal">
                     <span class="price-amount amount text-primary ps-5 fw-light">
                       <bdi>
@@ -174,7 +174,7 @@
                   </td>
                 </tr>
                 <tr class="order-total pt-2 pb-2 border-bottom">
-                  <th>Total</th>
+                  <th>Tổng cộng</th>
                   <td data-title="Total">
                     <span class="price-amount amount text-primary ps-5 fw-light">
                       <bdi>
@@ -186,9 +186,9 @@
             </table>
           </div>
           <div class="button-wrap d-flex flex-wrap gap-3">
-            <button class="btn">Update Cart</button>
-            <button class="btn">Continue Shopping</button>
-            <button class="btn">Proceed to checkout</button>
+            <button class="btn">Cập nhật giỏ hàng</button>
+            <button class="btn">Tiếp tục mua sắm</button>
+            <button class="btn">Tiến hành thanh toán</button>
           </div>
         </div>
       </div>

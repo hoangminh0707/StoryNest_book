@@ -42,7 +42,7 @@
                 <option value="">Name (A - Z)</option>
                 <option value="">Name (Z - A)</option>
                 <option value="">Model (A - Z)</option>
-                <option value="">Model (Z - A)</option>   
+                <option value="">Model (Z - A)</option>
               </select>
             </div>
           </div>
@@ -149,7 +149,7 @@
                     </svg>
                   </button>
                 </form>
-              </div> 
+              </div>
             </div>
             <div class="widget-product-categories pt-5">
               <div class="section-title overflow-hidden mb-2">

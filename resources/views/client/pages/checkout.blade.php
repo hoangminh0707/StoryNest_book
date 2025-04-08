@@ -13,12 +13,12 @@
       <div class="container">
         <div class="row">
           <div class="text-center">
-            <h1>Checkout</h1>
+            <h1>Thanh toán</h1>
             <div class="breadcrumbs">
               <span class="item">
                 <a href="index.html">Home &gt; </a>
               </span>
-              <span class="item text-decoration-underline">Checkout</span>
+              <span class="item text-decoration-underline">Thanh toán</span>
             </div>
           </div>
         </div>
@@ -32,24 +32,24 @@
       <form class="form-group">
         <div class="row d-flex flex-wrap">
           <div class="col-lg-6">
-            <h3 class="mb-3">Billing Details</h3>
+            <h3 class="mb-3">Chi tiết thanh toán</h3>
             <div class="billing-details">
               <label for="fname">First Name*</label>
               <input type="text" id="fname" name="firstname" class="form-control mt-2 mb-4 ps-3">
-              <label for="lname">Last Name*</label>
+              <label for="lname">Họ*</label>
               <input type="text" id="lname" name="lastname" class="form-control mt-2 mb-4 ps-3">
-              <label for="cname">Company Name(optional)*</label>
+              <label for="cname">Tên công ty(optional)*</label>
               <input type="text" id="cname" name="companyname" class="form-control mt-2 mb-4">
-              <label for="cname">Country / Region*</label>
+              <label for="cname">Quốc gia / Khu vực*</label>
               <select class="form-select form-control mt-2 mb-4" aria-label="Default select example">
                 <option selected="" hidden="">United States</option>
                 <option value="1">UK</option>
                 <option value="2">Australia</option>
-                <option value="3">Canada</option>
+                <option value="3">Việt Nam</option>
               </select>
-              <label for="address">Street Address*</label>
-              <input type="text" id="adr" name="address" placeholder="House number and street name" class="form-control mt-3 ps-3 mb-3">
-              <input type="text" id="adr" name="address" placeholder="Appartments, suite, etc." class="form-control ps-3 mb-4">
+              <label for="address">Địa chỉ đường phố*</label>
+              <input type="text" id="adr" name="address" placeholder="Số nhà và tên phố" class="form-control mt-3 ps-3 mb-3">
+              <input type="text" id="adr" name="address" placeholder="Căn hộ, phòng suite, v.v." class="form-control ps-3 mb-4">
               <label for="city">Town / City *</label>
               <input type="text" id="city" name="city" class="form-control mt-3 ps-3 mb-4">
               <label for="state">State *</label>
@@ -61,17 +61,17 @@
                 <option value="3">San Jose</option>
                 <option value="3">Houston</option>
               </select>
-              <label for="zip">Zip Code *</label>
+              <label for="zip">Mã bưu chính*</label>
               <input type="text" id="zip" name="zip" class="form-control mt-2 mb-4 ps-3">
-              <label for="email">Phone *</label>
+              <label for="email">Số điện thoại *</label>
               <input type="text" id="phone" name="phone" class="form-control mt-2 mb-4 ps-3">
-              <label for="email">Email address *</label>
+              <label for="email">Địa chỉ email *</label>
               <input type="text" id="email" name="email" class="form-control mt-2 mb-4 ps-3">
             </div>
           </div>
           <div class="col-lg-6">
             <div>
-              <h3 class="mb-3">Additional Information</h3>
+              <h3 class="mb-3">Thông tin bổ sung</h3>
               <div class="billing-details">
                 <label for="fname">Order notes (optional)</label>
                 <textarea class="form-control pt-3 pb-3 ps-3 mt-2" placeholder="Notes about your order. Like special notes for delivery."></textarea>
@@ -79,12 +79,12 @@
             </div>
 
             <div class="cart-totals padding-medium pb-0">
-              <h3 class="mb-3">Cart Totals</h3>
+              <h3 class="mb-3">Tổng số giỏ hàng</h3>
               <div class="total-price pb-3">
                 <table cellspacing="0" class="table text-capitalize">
                   <tbody>
                     <tr class="subtotal pt-2 pb-2 border-top border-bottom">
-                      <th>Subtotal</th>
+                      <th>Tổng Gía</th>
                       <td data-title="Subtotal">
                         <span class="price-amount amount text-primary ps-5 fw-light">
                           <bdi>
@@ -94,7 +94,7 @@
                       </td>
                     </tr>
                     <tr class="order-total pt-2 pb-2 border-bottom">
-                      <th>Total</th>
+                      <th>Tổng cộng</th>
                       <td data-title="Total">
                         <span class="price-amount amount text-primary ps-5 fw-light">
                           <bdi>
@@ -109,36 +109,35 @@
                 <label class="list-group-item d-flex gap-2 border-0">
                   <input class="form-check-input flex-shrink-0" type="radio" name="listGroupRadios" id="listGroupRadios1" value="" checked="">
                   <span>
-                    <p class="mb-1">Direct bank transfer</p>
+                    <p class="mb-1">Chuyển khoản ngân hàng trực tiếp</p>
                     <small>Make your payment directly into our bank account. Please use your Order ID. Your order will
-                      shipped after funds have cleared in our account.</small>
+                        shipped after funds have cleared in our account.</small>
                   </span>
                 </label>
                 <label class="list-group-item d-flex gap-2 border-0">
                   <input class="form-check-input flex-shrink-0" type="radio" name="listGroupRadios" id="listGroupRadios2" value="">
                   <span>
-                    <p class="mb-1">Check payments</p>
-                    <small>Please send a check to Store Name, Store Street, Store Town, Store State / County, Store
-                      Postcode.</small>
+                    <p class="mb-1">Kiểm tra thanh toán</p>
+                    <small>Vui lòng gửi séc đến Tên cửa hàng, Đường phố của cửa hàng, Thị trấn của cửa hàng, Tiểu bang/Quận của cửa hàng, Mã bưu chính của cửa hàng.</small>
                   </span>
                 </label>
                 <label class="list-group-item d-flex gap-2 border-0">
                   <input class="form-check-input flex-shrink-0" type="radio" name="listGroupRadios" id="listGroupRadios3" value="">
                   <span>
-                    <p class="mb-1">Cash on delivery</p>
-                    <small>Pay with cash upon delivery.</small>
+                    <p class="mb-1">Thanh toán khi nhận hàng</p>
+                    <small>Thanh toán bằng tiền mặt khi nhận hàng.</small>
                   </span>
                 </label>
                 <label class="list-group-item d-flex gap-2 border-0">
                   <input class="form-check-input flex-shrink-0" type="radio" name="listGroupRadios" id="listGroupRadios3" value="">
                   <span>
                     <p class="mb-1">Paypal</p>
-                    <small>Pay via PayPal; you can pay with your credit card if you don’t have a PayPal account.</small>
+                    <small>Thanh toán qua PayPal; bạn có thể thanh toán bằng thẻ tín dụng nếu bạn không có tài khoản PayPal.</small>
                   </span>
                 </label>
               </div>
               <div class="button-wrap mt-3">
-                <button type="submit" name="submit" class="btn">Place an order</button>
+                <button type="submit" name="submit" class="btn">Đặt hàng</button>
               </div>
             </div>
 
@@ -232,7 +231,7 @@
     </div>
   </section>
 
-  
+
 
 
 @endsection

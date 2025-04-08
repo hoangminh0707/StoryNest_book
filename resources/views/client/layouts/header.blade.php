@@ -97,7 +97,7 @@
         d="M14 10.5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 .5-.5zm0-3a.5.5 0 0 0-.5-.5h-7a.5.5 0 0 0 0 1h7a.5.5 0 0 0 .5-.5zm0-3a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0 0 1h11a.5.5 0 0 0 .5-.5z" />
     </symbol>
   </svg>
-  
+
 <header id="header" class="site-header">
 
     <div class="top-info border-bottom d-none d-md-block ">
@@ -118,7 +118,7 @@
 
     <nav id="header-nav" class="navbar navbar-expand-lg py-3">
       <div class="container">
-        <a class="navbar-brand" href="index.html">
+        <a class="navbar-brand" href="http://storynest_book.test">
           <img src="{{ asset('assetClient/images/main-logo.png') }}" class="logo">
         </a>
         <button class="navbar-toggler d-flex d-lg-none order-3 p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#bdNavbar" aria-controls="bdNavbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -128,7 +128,7 @@
         </button>
         <div class="offcanvas offcanvas-end" tabindex="-1" id="bdNavbar" aria-labelledby="bdNavbarOffcanvasLabel">
           <div class="offcanvas-header px-4 pb-0">
-            <a class="navbar-brand" href="index.html">
+            <a class="navbar-brand" href="http://storynest_book.test/">
               <img src="{{ asset('assetClient/images/main-logo.png') }}" class="logo">
             </a>
             <button type="button" class="btn-close btn-close-black" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#bdNavbar"></button>
@@ -136,51 +136,50 @@
           <div class="offcanvas-body">
             <ul id="navbar" class="navbar-nav text-uppercase justify-content-start justify-content-lg-center align-items-start align-items-lg-center flex-grow-1">
               <li class="nav-item">
-                <a class="nav-link me-4 active" href="index.html">Home</a>
+                <a class="nav-link me-4 active" href="http://storynest_book.test/">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link me-4" href="about.html">About</a>
+                <a class="nav-link me-4" href="http://storynest_book.test/about">About</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link me-4" href="shop.html">Shop</a>
+                <a class="nav-link me-4" href="http://storynest_book.test/shop">Shop</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link me-4" href="blog.html">Blogs</a>
+                <a class="nav-link me-4" href="http://storynest_book.test/blog">Blogs</a>
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link me-4 dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Pages</a>
                 <ul class="dropdown-menu animate slide border">
                   <li>
-                    <a href="about.html" class="dropdown-item fw-light">About <span class="badge bg-primary">Pro</span></a>
+                    <a href="http://storynest_book.test/about" class="dropdown-item fw-light">About <span class="badge bg-primary">Pro</span></a>
                   </li>
                   <li>
-                    <a href="shop.html" class="dropdown-item fw-light">Shop <span class="badge bg-primary">Pro</span></a>
+                    <a href="http://storynest_book.test/shop" class="dropdown-item fw-light">Shop <span class="badge bg-primary">Pro</span></a>
                   </li>
                   <li>
-                    <a href="single-product.html" class="dropdown-item fw-light">Single Product <span class="badge bg-primary">Pro</span></a>
+                    <a href="http://storynest_book.test/product" class="dropdown-item fw-light">Single Product <span class="badge bg-primary">Pro</span></a>
                   </li>
                   <li>
-                    <a href="cart.html" class="dropdown-item fw-light">Cart <span class="badge bg-primary">Pro</span></a>
+                    <a href="http://storynest_book.test/cart" class="dropdown-item fw-light">Cart <span class="badge bg-primary">Pro</span></a>
                   </li>
                   <li>
-                    <a href="checkout.html" class="dropdown-item fw-light">Checkout <span class="badge bg-primary">Pro</span></a>
+                    <a href="http://storynest_book.test/checkout" class="dropdown-item fw-light">Checkout <span class="badge bg-primary">Pro</span></a>
                   </li>
                   <li>
-                    <a href="blog.html" class="dropdown-item fw-light">Blog <span class="badge bg-primary">Pro</span></a>
+                    <a href="http://storynest_book.test/blog" class="dropdown-item fw-light">Blog <span class="badge bg-primary">Pro</span></a>
                   </li>
                   <li>
-                    <a href="single-post.html" class="dropdown-item fw-light">Single Post <span class="badge bg-primary">Pro</span></a>
+                    <a href="http://storynest_book.test/post" class="dropdown-item fw-light">Single Post <span class="badge bg-primary">Pro</span></a>
                   </li>
                   <li>
-                    <a href="contact.html" class="dropdown-item fw-light">Contact <span class="badge bg-primary">Pro</span></a>
+                    <a href="http://storynest_book.test/contact" class="dropdown-item fw-light">Contact <span class="badge bg-primary">Pro</span></a>
                   </li>
                 </ul>
               </li>
               <li class="nav-item">
-                <a class="nav-link me-4" href="contact.html">Contact</a>
+                <a class="nav-link me-4" href="http://storynest_book.test/contact">Contact</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-decoration-underline me-4" href="https://templatesjungle.gumroad.com/l/bookly-bookstore-ecommerce-bootstrap-html-css-website-template" target="_blank">Get Pro</a>
               </li>
             </ul>
             <div class="user-items d-flex">
@@ -332,8 +331,8 @@
                       </li>
                     </ul>
                     <div class="d-flex flex-wrap justify-content-center">
-                      <a href="cart.html" class="w-100 btn btn-dark mb-1" type="submit">View Cart</a>
-                      <a href="checkout.html" class="w-100 btn btn-primary" type="submit">Go to checkout</a>
+                      <a href="http://storynest_book.test/cart" class="w-100 btn btn-dark mb-1" type="submit">View Cart</a>
+                      <a href="http://storynest_book.test/checkout" class="w-100 btn btn-primary" type="submit">Go to checkout</a>
                     </div>
                   </div>
                 </li>
