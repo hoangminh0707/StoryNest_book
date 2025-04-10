@@ -189,42 +189,42 @@
                         <div class="tabs-listing">
                           <nav>
                             <div class="nav nav-tabs d-flex justify-content-center" id="nav-tab" role="tablist">
-                              <button class="nav-link text-capitalize active" id="nav-sign-in-tab" data-bs-toggle="tab" data-bs-target="#nav-sign-in" type="button" role="tab" aria-controls="nav-sign-in" aria-selected="true">Sign In</button>
-                              <button class="nav-link text-capitalize" id="nav-register-tab" data-bs-toggle="tab" data-bs-target="#nav-register" type="button" role="tab" aria-controls="nav-register" aria-selected="false" tabindex="-1">Register</button>
+                              <button class="nav-link text-capitalize active" id="nav-sign-in-tab" data-bs-toggle="tab" data-bs-target="#nav-sign-in" type="button" role="tab" aria-controls="nav-sign-in" aria-selected="true">Đăng nhập</button>
+                              <button class="nav-link text-capitalize" id="nav-register-tab" data-bs-toggle="tab" data-bs-target="#nav-register" type="button" role="tab" aria-controls="nav-register" aria-selected="false" tabindex="-1">Đăng ký</button>
                             </div>
                           </nav>
                           <div class="tab-content" id="nav-tabContent">
                             <div class="tab-pane fade active show" id="nav-sign-in" role="tabpanel" aria-labelledby="nav-sign-in-tab">
                               <div class="form-group py-3">
-                                <label class="mb-2" for="sign-in">Username or email address *</label>
-                                <input type="text" minlength="2" name="username" placeholder="Your Username" class="form-control w-100 rounded-3 p-3" required="">
+                                <label class="mb-2" for="sign-in">Tên người dùng hoặc địa chỉ email *</label>
+                                <input type="text" minlength="2" name="username" placeholder="Tên người dùng của bạn" class="form-control w-100 rounded-3 p-3" required="">
                               </div>
                               <div class="form-group pb-3">
-                                <label class="mb-2" for="sign-in">Password *</label>
-                                <input type="password" minlength="2" name="password" placeholder="Your Password" class="form-control w-100 rounded-3 p-3" required="">
+                                <label class="mb-2" for="sign-in">Mật khẩu *</label>
+                                <input type="password" minlength="2" name="password" placeholder="Mật khẩu của bạn" class="form-control w-100 rounded-3 p-3" required="">
                               </div>
                               <label class="py-3">
                                 <input type="checkbox" required="" class="d-inline">
-                                <span class="label-body">Remember me</span>
-                                <span class="label-body"><a href="#" class="fw-bold">Forgot Password</a></span>
+                                <span class="label-body">Hãy nhớ tôi</span>
+                                <span class="label-body"><a href="#" class="fw-bold">Quên mật khẩu</a></span>
                               </label>
-                              <button type="submit" name="submit" class="btn btn-dark w-100 my-3">Login</button>
+                              <button type="submit" name="submit" class="btn btn-dark w-100 my-3">Đăng nhập</button>
                             </div>
                             <div class="tab-pane fade" id="nav-register" role="tabpanel" aria-labelledby="nav-register-tab">
                               <div class="form-group py-3">
-                                <label class="mb-2" for="register">Your email address *</label>
-                                <input type="text" minlength="2" name="username" placeholder="Your Email Address" class="form-control w-100 rounded-3 p-3" required="">
+                                <label class="mb-2" for="register">Tên người dùng hoặc địa chỉ email*</label>
+                                <input type="text" minlength="2" name="username" placeholder="Tên người dùng của bạn" class="form-control w-100 rounded-3 p-3" required="">
                               </div>
                               <div class="form-group pb-3">
-                                <label class="mb-2" for="sign-in">Password *</label>
-                                <input type="password" minlength="2" name="password" placeholder="Your Password" class="form-control w-100 rounded-3 p-3" required="">
+                                <label class="mb-2" for="sign-in">Mật khẩu  *</label>
+                                <input type="password" minlength="2" name="password" placeholder="Mật khẩu của bạn" class="form-control w-100 rounded-3 p-3" required="">
                               </div>
                               <label class="py-3">
                                 <input type="checkbox" required="" class="d-inline">
-                                <span class="label-body">I agree to the <a href="#" class="fw-bold">Privacy
-                                    Policy</a></span>
+                                <span class="label-body">Tôi đồng ý với<a href="#" class="fw-bold">Sự riêng tư
+                                    Chính sách</a></span>
                               </label>
-                              <button type="submit" name="submit" class="btn btn-dark w-100 my-3">Register</button>
+                              <button type="submit" name="submit" class="btn btn-dark w-100 my-3">Đăng ký</button>
                             </div>
                           </div>
                         </div>
@@ -241,8 +241,8 @@
                 </a>
                 <div class="dropdown-menu animate slide dropdown-menu-start dropdown-menu-lg-end p-3">
                   <h4 class="d-flex justify-content-between align-items-center mb-3">
-                    <span class="text-primary">Your wishlist</span>
-                    <span class="badge bg-primary rounded-pill">2</span>
+                    <span class="text-primary">Danh sách yêu thích của bạn</span>
+                                        <span class="badge bg-primary rounded-pill">2</span>
                   </h4>
                   <ul class="list-group mb-3">
                     <li class="list-group-item bg-transparent d-flex justify-content-between lh-sm">
@@ -251,7 +251,7 @@
                           <a href="single-product.html">The Emerald Crown</a>
                         </h5>
                         <small>Special discounted price.</small>
-                        <a href="#" class="d-block fw-medium text-capitalize mt-2">Add to cart</a>
+                        <a href="#" class="d-block fw-medium text-capitalize mt-2">Thêm vào giỏ</a>
                       </div>
                       <span class="text-primary">$2000</span>
                     </li>
@@ -261,18 +261,18 @@
                           <a href="single-product.html">The Last Enchantment</a>
                         </h5>
                         <small>Perfect for enlightened people.</small>
-                        <a href="#" class="d-block fw-medium text-capitalize mt-2">Add to cart</a>
+                        <a href="#" class="d-block fw-medium text-capitalize mt-2">Thêm vào giỏ</a>
                       </div>
                       <span class="text-primary">$400</span>
                     </li>
                     <li class="list-group-item bg-transparent d-flex justify-content-between">
-                      <span class="text-capitalize"><b>Total (USD)</b></span>
+                      <span class="text-capitalize"><b>Tổng tiền (USD)</b></span>
                       <strong>$1470</strong>
                     </li>
                   </ul>
                   <div class="d-flex flex-wrap justify-content-center">
-                    <a href="#" class="w-100 btn btn-dark mb-1" type="submit">Add all to cart</a>
-                    <a href="cart.html" class="w-100 btn btn-primary" type="submit">View cart</a>
+                    <a href="#" class="w-100 btn btn-dark mb-1" type="submit">Thêm tất cả vào giỏ hàng</a>
+                    <a href="cart.html" class="w-100 btn btn-primary" type="submit">Xem giỏ hàng</a>
                   </div>
                 </div>
               </li>
@@ -284,36 +284,36 @@
                 </a>
                 <div class="dropdown-menu animate slide dropdown-menu-start dropdown-menu-lg-end p-3">
                   <h4 class="d-flex justify-content-between align-items-center mb-3">
-                    <span class="text-primary">Your cart</span>
+                    <span class="text-primary">Giỏ hàng của bạn</span>
                     <span class="badge bg-primary rounded-pill">2</span>
                   </h4>
                   <ul class="list-group mb-3">
                     <li class="list-group-item bg-transparent d-flex justify-content-between lh-sm">
                       <div>
                         <h5>
-                          <a href="single-product.html">Secrets of the Alchemist</a>
+                          <a href="single-product.html">Bí mật của nhà giả kim</a>
                         </h5>
-                        <small>High quality in good price.</small>
+                        <small>Chất lượng cao với giá tốt.</small>
                       </div>
                       <span class="text-primary">$870</span>
                     </li>
                     <li class="list-group-item bg-transparent d-flex justify-content-between lh-sm">
                       <div>
                         <h5>
-                          <a href="single-product.html">Quest for the Lost City</a>
+                          <a href="single-product.html">Nhiệm vụ tìm kiếm thành phố đã mất</a>
                         </h5>
-                        <small>Professional Quest for the Lost City.</small>
+                        <small>Nhiệm vụ chuyên nghiệp cho thành phố đã mất.</small>
                       </div>
                       <span class="text-primary">$600</span>
                     </li>
                     <li class="list-group-item bg-transparent d-flex justify-content-between">
-                      <span class="text-capitalize"><b>Total (USD)</b></span>
+                      <span class="text-capitalize"><b>Tổng tiền (USD)</b></span>
                       <strong>$1470</strong>
                     </li>
                   </ul>
                   <div class="d-flex flex-wrap justify-content-center">
-                    <a href="http://storynest_book.test/cart" class="w-100 btn btn-dark mb-1" type="submit">View Cart</a>
-                    <a href="http://storynest_book.test/checkout" class="w-100 btn btn-primary" type="submit">Go to checkout</a>
+                    <a href="http://storynest_book.test/cart" class="w-100 btn btn-dark mb-1" type="submit">Xem giỏ hàng</a>
+                    <a href="http://storynest_book.test/checkout" class="w-100 btn btn-primary" type="submit">Đi đến trang thanh toán</a>
                   </div>
                 </div>
               </li>
