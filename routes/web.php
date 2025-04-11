@@ -6,6 +6,7 @@ use App\Http\Controllers\admin\LoginController;
 use App\Http\Controllers\admin\RegisterController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\RolesController;
+use App\Http\Controllers\ProductController;
 
 
 
@@ -22,13 +23,9 @@ use App\Http\Controllers\admin\RolesController;
 |
 */
 
-Route::get('/', function () {
-    return view('client.pages.index');
-});
+Route::get('/', [ProductController::class, 'index'])->name('index');
 
-Route::get('/shop', function () {
-    return view('client.pages.shop');
-});
+Route::get('/shop', [ProductController::class, 'shop'])->name('shop');
 
 Route::get('/about', function () {
     return view('client.pages.about');

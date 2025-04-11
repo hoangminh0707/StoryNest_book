@@ -107,7 +107,7 @@
             <p class="fs-6 my-2 text-center">Need any help? Call us <a href="#">112233344455</a></p>
           </div>
           <div class="col-md-4 border-start border-end">
-            <p class="fs-6 my-2 text-center">Summer sale discount off 60% off! <a class="text-decoration-underline" href="shop.html">Shop Now</a></p>
+            <p class="fs-6 my-2 text-center">Summer sale discount off 60% off! <a class="text-decoration-underline" href="{{ route('shop') }}">Shop Now</a></p>
           </div>
           <div class="col-md-4">
             <p class="fs-6 my-2 text-center">2-3 business days delivery &amp; free returns</p>
@@ -128,7 +128,7 @@
         </button>
         <div class="offcanvas offcanvas-end" tabindex="-1" id="bdNavbar" aria-labelledby="bdNavbarOffcanvasLabel">
           <div class="offcanvas-header px-4 pb-0">
-            <a class="navbar-brand" href="http://storynest_book.test/">
+            <a class="navbar-brand" href="{{ route('index') }}">
               <img src="{{ asset('assetClient/images/main-logo.png') }}" class="logo">
             </a>
             <button type="button" class="btn-close btn-close-black" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#bdNavbar"></button>
@@ -136,13 +136,13 @@
           <div class="offcanvas-body">
             <ul id="navbar" class="navbar-nav text-uppercase justify-content-start justify-content-lg-center align-items-start align-items-lg-center flex-grow-1">
               <li class="nav-item">
-                <a class="nav-link me-4 active" href="http://storynest_book.test/">Home</a>
+                <a class="nav-link me-4 {{ View::getSection('active_pages_index') ?? ' ' }}" href="{{ route('index') }}">Home</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link me-4" href="http://storynest_book.test/about">About</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link me-4" href="http://storynest_book.test/shop">Shop</a>
+                <a class="nav-link me-4 {{ View::getSection('active_pages_shop') ?? ' ' }}" href="{{ route('shop') }}">Shop</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link me-4" href="http://storynest_book.test/blog">Blogs</a>
