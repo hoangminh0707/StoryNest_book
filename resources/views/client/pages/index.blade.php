@@ -4,6 +4,7 @@
 
 @extends('client.layouts.app')
 @section('title', 'Dashboards')
+@section('active_pages_index','active')
 
 @section('content')
 
@@ -26,9 +27,9 @@
           <div class="row d-flex flex-column-reverse flex-md-row align-items-center">
             <div class="col-md-5 offset-md-1 mt-5 mt-md-0 text-center text-md-start">
               <div class="banner-content">
-                <h2>The Fine Print Book Collection</h2>
-                <p>Best Offer Save 30%. Grab it now!</p>
-                <a href="shop.html" class="btn mt-3">Shop Collection</a>
+                <h2>Bộ sưu tập sách in đẹp</h2>
+                <p>Ưu đãi tốt nhất Tiết kiệm 30%. Lấy nó ngay bây giờ!</p>
+                <a href="{{ route('shop') }}" class="btn mt-3">Cửa hàng</a>
               </div>
             </div>
             <div class="col-md-6 text-center">
@@ -44,9 +45,9 @@
           <div class="row d-flex flex-column-reverse flex-md-row align-items-center">
             <div class="col-md-5 offset-md-1 mt-5 mt-md-0 text-center text-md-start">
               <div class="banner-content">
-                <h2>How Innovation works</h2>
-                <p>Discount available. Grab it now!</p>
-                <a href="shop.html" class="btn mt-3">Shop Product</a>
+                <h2>Cách thức hoạt động của Đổi mới</h2>
+                <p>Giảm giá có sẵn. Lấy nó ngay bây giờ!</p>
+                <a href="{{ route('shop') }}" class="btn mt-3">Cửa hàng</a>
               </div>
             </div>
             <div class="col-md-6 text-center">
@@ -62,9 +63,9 @@
           <div class="row d-flex flex-column-reverse flex-md-row align-items-center">
             <div class="col-md-5 offset-md-1 mt-5 mt-md-0 text-center text-md-start">
               <div class="banner-content">
-                <h2>Your Heart is the Sea</h2>
-                <p>Limited stocks available. Grab it now!</p>
-                <a href="shop.html" class="btn mt-3">Shop Collection</a>
+                <h2>Trái tim của bạn là biển</h2>
+                <p>Số lượng hàng có hạn. Lấy nó ngay bây giờ!</p>
+                <a href="{{ route('shop') }}" class="btn mt-3">Cửa hàng</a>
               </div>
             </div>
             <div class="col-md-6 text-center">
@@ -144,7 +145,7 @@
   <div class="container">
     <div class="section-title d-md-flex justify-content-between align-items-center mb-4">
       <h3 class="d-flex align-items-center">Các mặt hàng bán chạy nhất</h3>
-      <a href="shop.html" class="btn">Xem tất cả</a>
+      <a href="{{ route('shop') }}" class="btn">Xem tất cả</a>
     </div>
     <div class="position-absolute top-50 end-0 pe-0 pe-xxl-5 me-0 me-xxl-5 swiper-next product-slider-button-next">
       <svg class="chevron-forward-circle d-flex justify-content-center align-items-center p-2" width="80" height="80">
@@ -158,15 +159,24 @@
     </div>
     <div class="swiper product-swiper">
       <div class="swiper-wrapper">
+
+
+        @foreach($products as $product)
         <div class="swiper-slide">
           <div class="card position-relative p-4 border rounded-3">
             <div class="position-absolute">
               <p class="bg-primary py-1 px-3 fs-6 text-white rounded-2">10% off</p>
             </div>
-            <img src="assetClient/images/product-item1.png" class="img-fluid shadow-sm" alt="product item">
-            <h6 class="mt-4 mb-0 fw-bold"><a href="single-product.html">House of Sky Breath</a></h6>
+            {{-- Show Ảnh --}}
+            @if($product->images->isNotEmpty())
+            <img src="{{ asset($product->images->first()->image_path) }}" class="img-fluid shadow-sm" alt="{{ $product->name }}">
+      
+            @endif
+
+            {{-- end Show ảnh --}}
+            <h6 class="mt-4 mb-0 fw-bold"><a href="single-product.html">{{ $product->name }}</a></h6>
             <div class="review-content d-flex">
-              <p class="my-2 me-2 fs-6 text-black-50">Lauren Asher</p>
+              <p class="my-2 me-2 fs-6 text-black-50">{{ $product->author->name }}</p>
 
               <div class="rating text-warning d-flex align-items-center">
                 <svg class="star star-fill">
@@ -186,7 +196,7 @@
                 </svg>
               </div>
             </div>
-            <span class="price text-primary fw-bold mb-2 fs-5">$870</span>
+            <span class="price text-primary fw-bold mb-2 fs-5">{{ number_format($product->price) }} <strong>VND</strong></span>
             <div class="card-concern position-absolute start-0 end-0 d-flex gap-2">
               <button type="button" href="#" class="btn btn-dark" data-bs-toggle="tooltip" data-bs-placement="top"
                 data-bs-title="Tooltip on top">
@@ -204,230 +214,9 @@
             </div>
           </div>
         </div>
-        <div class="swiper-slide">
-          <div class="card position-relative p-4 border rounded-3">
-            <img src="assetClient/images/product-item2.png" class="img-fluid shadow-sm" alt="product item">
-            <h6 class="mt-4 mb-0 fw-bold"><a href="single-product.html">Heartland Stars</a></h6>
-            <div class="review-content d-flex">
-              <p class="my-2 me-2 fs-6 text-black-50">Lauren Asher</p>
-
-              <div class="rating text-warning d-flex align-items-center">
-                <svg class="star star-fill">
-                  <use xlink:href="#star-fill"></use>
-                </svg>
-                <svg class="star star-fill">
-                  <use xlink:href="#star-fill"></use>
-                </svg>
-                <svg class="star star-fill">
-                  <use xlink:href="#star-fill"></use>
-                </svg>
-                <svg class="star star-fill">
-                  <use xlink:href="#star-fill"></use>
-                </svg>
-                <svg class="star star-fill">
-                  <use xlink:href="#star-fill"></use>
-                </svg>
-              </div>
-            </div>
-
-            <span class="price text-primary fw-bold mb-2 fs-5">$870</span>
-            <div class="card-concern position-absolute start-0 end-0 d-flex gap-2">
-              <button type="button" href="#" class="btn btn-dark" data-bs-toggle="tooltip" data-bs-placement="top"
-                data-bs-title="Tooltip on top">
-                <svg class="cart">
-                  <use xlink:href="#cart"></use>
-                </svg>
-              </button>
-              <a href="#" class="btn btn-dark">
-                <span>
-                  <svg class="wishlist">
-                    <use xlink:href="#heart"></use>
-                  </svg>
-                </span>
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="swiper-slide">
-          <div class="card position-relative p-4 border rounded-3">
-            <img src="assetClient/images/product-item3.png" class="img-fluid shadow-sm" alt="product item">
-            <h6 class="mt-4 mb-0 fw-bold"><a href="single-product.html">Heavenly Bodies</a></h6>
-            <div class="review-content d-flex">
-              <p class="my-2 me-2 fs-6 text-black-50">Lauren Asher</p>
-
-              <div class="rating text-warning d-flex align-items-center">
-                <svg class="star star-fill">
-                  <use xlink:href="#star-fill"></use>
-                </svg>
-                <svg class="star star-fill">
-                  <use xlink:href="#star-fill"></use>
-                </svg>
-                <svg class="star star-fill">
-                  <use xlink:href="#star-fill"></use>
-                </svg>
-                <svg class="star star-fill">
-                  <use xlink:href="#star-fill"></use>
-                </svg>
-                <svg class="star star-fill">
-                  <use xlink:href="#star-fill"></use>
-                </svg>
-              </div>
-            </div>
-
-            <span class="price text-primary fw-bold mb-2 fs-5">$870</span>
-            <div class="card-concern position-absolute start-0 end-0 d-flex gap-2">
-              <button type="button" href="#" class="btn btn-dark" data-bs-toggle="tooltip" data-bs-placement="top"
-                data-bs-title="Tooltip on top">
-                <svg class="cart">
-                  <use xlink:href="#cart"></use>
-                </svg>
-              </button>
-              <a href="#" class="btn btn-dark">
-                <span>
-                  <svg class="wishlist">
-                    <use xlink:href="#heart"></use>
-                  </svg>
-                </span>
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="swiper-slide">
-          <div class="card position-relative p-4 border rounded-3">
-            <div class="position-absolute">
-              <p class="bg-primary py-1 px-3 fs-6 text-white rounded-2">10% off</p>
-            </div>
-            <img src="assetClient/images/product-item4.png" class="img-fluid shadow-sm" alt="product item">
-            <h6 class="mt-4 mb-0 fw-bold"><a href="single-product.html">His Saving Grace</a></h6>
-            <div class="review-content d-flex">
-              <p class="my-2 me-2 fs-6 text-black-50">Lauren Asher</p>
-
-              <div class="rating text-warning d-flex align-items-center">
-                <svg class="star star-fill">
-                  <use xlink:href="#star-fill"></use>
-                </svg>
-                <svg class="star star-fill">
-                  <use xlink:href="#star-fill"></use>
-                </svg>
-                <svg class="star star-fill">
-                  <use xlink:href="#star-fill"></use>
-                </svg>
-                <svg class="star star-fill">
-                  <use xlink:href="#star-fill"></use>
-                </svg>
-                <svg class="star star-fill">
-                  <use xlink:href="#star-fill"></use>
-                </svg>
-              </div>
-            </div>
-
-            <span class="price text-primary fw-bold mb-2 fs-5">$870</span>
-            <div class="card-concern position-absolute start-0 end-0 d-flex gap-2">
-              <button type="button" href="#" class="btn btn-dark" data-bs-toggle="tooltip" data-bs-placement="top"
-                data-bs-title="Tooltip on top">
-                <svg class="cart">
-                  <use xlink:href="#cart"></use>
-                </svg>
-              </button>
-              <a href="#" class="btn btn-dark">
-                <span>
-                  <svg class="wishlist">
-                    <use xlink:href="#heart"></use>
-                  </svg>
-                </span>
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="swiper-slide">
-          <div class="card position-relative p-4 border rounded-3">
-            <img src="assetClient/images/product-item5.png" class="img-fluid shadow-sm" alt="product item">
-            <h6 class="mt-4 mb-0 fw-bold"><a href="single-product.html">My Dearest Darkest</a></h6>
-            <div class="review-content d-flex">
-              <p class="my-2 me-2 fs-6 text-black-50">Lauren Asher</p>
-
-              <div class="rating text-warning d-flex align-items-center d-flex align-items-center">
-                <svg class="star star-fill">
-                  <use xlink:href="#star-fill"></use>
-                </svg>
-                <svg class="star star-fill">
-                  <use xlink:href="#star-fill"></use>
-                </svg>
-                <svg class="star star-fill">
-                  <use xlink:href="#star-fill"></use>
-                </svg>
-                <svg class="star star-fill">
-                  <use xlink:href="#star-fill"></use>
-                </svg>
-                <svg class="star star-fill">
-                  <use xlink:href="#star-fill"></use>
-                </svg>
-              </div>
-            </div>
-
-            <span class="price text-primary fw-bold mb-2 fs-5">$870</span>
-            <div class="card-concern position-absolute start-0 end-0 d-flex gap-2">
-              <button type="button" href="#" class="btn btn-dark" data-bs-toggle="tooltip" data-bs-placement="top"
-                data-bs-title="Tooltip on top">
-                <svg class="cart">
-                  <use xlink:href="#cart"></use>
-                </svg>
-              </button>
-              <a href="#" class="btn btn-dark">
-                <span>
-                  <svg class="wishlist">
-                    <use xlink:href="#heart"></use>
-                  </svg>
-                </span>
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="swiper-slide">
-          <div class="card position-relative p-4 border rounded-3">
-            <img src="assetClient/images/product-item6.png" class="img-fluid shadow-sm" alt="product item">
-            <h6 class="mt-4 mb-0 fw-bold"><a href="single-product.html">The Story of Success</a></h6>
-            <div class="review-content d-flex">
-              <p class="my-2 me-2 fs-6 text-black-50">Lauren Asher</p>
-
-              <div class="rating text-warning d-flex align-items-center">
-                <svg class="star star-fill">
-                  <use xlink:href="#star-fill"></use>
-                </svg>
-                <svg class="star star-fill">
-                  <use xlink:href="#star-fill"></use>
-                </svg>
-                <svg class="star star-fill">
-                  <use xlink:href="#star-fill"></use>
-                </svg>
-                <svg class="star star-fill">
-                  <use xlink:href="#star-fill"></use>
-                </svg>
-                <svg class="star star-fill">
-                  <use xlink:href="#star-fill"></use>
-                </svg>
-              </div>
-            </div>
-
-            <span class="price text-primary fw-bold mb-2 fs-5">$870</span>
-            <div class="card-concern position-absolute start-0 end-0 d-flex gap-2">
-              <button type="button" href="#" class="btn btn-dark" data-bs-toggle="tooltip" data-bs-placement="top"
-                data-bs-title="Tooltip on top">
-                <svg class="cart">
-                  <use xlink:href="#cart"></use>
-                </svg>
-              </button>
-              <a href="#" class="btn btn-dark">
-                <span>
-                  <svg class="wishlist">
-                    <use xlink:href="#heart"></use>
-                  </svg>
-                </span>
-              </a>
-            </div>
-          </div>
-        </div>
-
+        @endforeach
+        
+       
       </div>
     </div>
   </div>
@@ -443,7 +232,7 @@
         </div>
       </div>
       <div class="col-md-5 offset-md-1 mt-5 mt-md-0 text-center text-md-start">
-        <h2>30% Discount on all items. Hurry Up !!!</h2>
+        <h2>Giảm giá lên đến 30%. Hãy mua ngay!!</h2>
         <div id="countdown-clock" class="text-dark d-flex align-items-center my-3">
           <div class="time d-grid pe-3">
             <span class="days fs-1 fw-normal"></span>
@@ -465,7 +254,7 @@
             <small>Sec</small>
           </div>
         </div>
-        <a href="shop.html" class="btn mt-3">Shop Collection</a>
+        <a href="{{ route('shop') }}" class="btn mt-3">Cửa hàng</a>
       </div>
     </div>
   </div>
@@ -481,12 +270,19 @@
             <h3 class="d-flex flex-column mb-0">Nổi bật</h3>
           </div>
           <div class="items-lists">
+
+
+            @php $count = 0; @endphp
+             @foreach($products->random(3) as $product)
             <div class="item d-flex">
-              <img src="assetClient/images/product-item2.png" class="img-fluid shadow-sm" alt="product item">
+               {{-- Show Ảnh --}}
+            @if($product->images->isNotEmpty())
+              <img src="{{ asset($product->images->first()->image_path) }}" class="img-fluid shadow-sm" alt="{{ $product->name }}">
+              @endif
               <div class="item-content ms-3">
-                <h6 class="mb-0 fw-bold"><a href="single-product.html">Echoes of the Ancients</a></h6>
+                <h6 class="mb-0 fw-bold"><a href="single-product.html">{{ $product->name }}</a></h6>
                 <div class="review-content d-flex">
-                  <p class="my-2 me-2 fs-6 text-black-50">Lauren Asher</p>
+                  <p class="my-2 me-2 fs-6 text-black-50">{{ $product->author->name }}</p>
 
                   <div class="rating text-warning d-flex align-items-center">
                     <svg class="star star-fill">
@@ -506,66 +302,17 @@
                     </svg>
                   </div>
                 </div>
-                <span class="price text-primary fw-bold mb-2 fs-5">$870</span>
+                <span class="price text-primary fw-bold mb-2 fs-5">{{number_format($product->price) }} <strong>VND</strong></span>
               </div>
             </div>
+            
+            @php $count++; @endphp
+            @if($count < 3)
             <hr class="gray-400">
-            <div class="item d-flex">
-              <img src="assetClient/images/product-item1.png" class="img-fluid shadow-sm" alt="product item">
-              <div class="item-content ms-3">
-                <h6 class="mb-0 fw-bold"><a href="single-product.html">The Midnight Garden</a></h6>
-                <div class="review-content d-flex">
-                  <p class="my-2 me-2 fs-6 text-black-50">Lauren Asher</p>
-                  <div class="rating text-warning d-flex align-items-center">
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                  </div>
-                </div>
-                <span class="price text-primary fw-bold mb-2 fs-5">$870</span>
-              </div>
-            </div>
-            <hr>
-            <div class="item d-flex">
-              <img src="assetClient/images/product-item3.png" class="img-fluid shadow-sm" alt="product item">
-              <div class="item-content ms-3">
-                <h6 class="mb-0 fw-bold"><a href="single-product.html">Shadow of the Serpent</a></h6>
-                <div class="review-content d-flex">
-                  <p class="my-2 me-2 fs-6 text-black-50">Lauren Asher</p>
+            @endif
 
-                  <div class="rating text-warning d-flex align-items-center">
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                  </div>
-                </div>
-                <span class="price text-primary fw-bold mb-2 fs-5">$870</span>
-              </div>
-            </div>
+            @endforeach
+            
           </div>
         </div>
       </div>
@@ -575,12 +322,19 @@
             <h3 class="d-flex flex-column mb-0">Các mục mới nhất</h3>
           </div>
           <div class="items-lists">
+
+             @php $count = 0; @endphp
+             @foreach($products->random(3) as $product)
             <div class="item d-flex">
-              <img src="assetClient/images/product-item4.png" class="img-fluid shadow-sm" alt="product item">
+               {{-- Show Ảnh --}}
+            @if($product->images->isNotEmpty())
+              <img src="{{ asset($product->images->first()->image_path) }}" class="img-fluid shadow-sm" alt="{{ $product->name }}">
+              @endif
               <div class="item-content ms-3">
-                <h6 class="mb-0 fw-bold"><a href="single-product.html">Whispering Winds</a></h6>
+                <h6 class="mb-0 fw-bold"><a href="single-product.html">{{ $product->name }}</a></h6>
                 <div class="review-content d-flex">
-                  <p class="my-2 me-2 fs-6 text-black-50">Lauren Asher</p>
+                  <p class="my-2 me-2 fs-6 text-black-50">{{ $product->author->name }}</p>
+
                   <div class="rating text-warning d-flex align-items-center">
                     <svg class="star star-fill">
                       <use xlink:href="#star-fill"></use>
@@ -599,65 +353,18 @@
                     </svg>
                   </div>
                 </div>
-                <span class="price text-primary fw-bold mb-2 fs-5">$870</span>
+                <span class="price text-primary fw-bold mb-2 fs-5">{{number_format($product->price) }} <strong>VND</strong></span>
               </div>
             </div>
+            
+            @php $count++; @endphp
+            @if($count < 3)
             <hr class="gray-400">
-            <div class="item d-flex">
-              <img src="assetClient/images/product-item5.png" class="img-fluid shadow-sm" alt="product item">
-              <div class="item-content ms-3">
-                <h6 class="mb-0 fw-bold"><a href="single-product.html">The Forgotten Realm</a></h6>
-                <div class="review-content d-flex">
-                  <p class="my-2 me-2 fs-6 text-black-50">Lauren Asher</p>
-                  <div class="rating text-warning d-flex align-items-center">
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                  </div>
-                </div>
-                <span class="price text-primary fw-bold mb-2 fs-5">$870</span>
-              </div>
-            </div>
-            <hr>
-            <div class="item d-flex">
-              <img src="assetClient/images/product-item6.png" class="img-fluid shadow-sm" alt="product item">
-              <div class="item-content ms-3">
-                <h6 class="mb-0 fw-bold"><a href="single-product.html">Moonlit Secrets</a></h6>
-                <div class="review-content d-flex">
-                  <p class="my-2 me-2 fs-6 text-black-50">Lauren Asher</p>
-                  <div class="rating text-warning d-flex align-items-center">
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                  </div>
-                </div>
-                <span class="price text-primary fw-bold mb-2 fs-5">$870</span>
-              </div>
-            </div>
+            @endif
+
+            @endforeach
+
+
           </div>
         </div>
       </div>
@@ -667,12 +374,19 @@
             <h3 class="d-flex flex-column mb-0">Được đánh giá tốt nhất</h3>
           </div>
           <div class="items-lists">
+
+             @php $count = 0; @endphp
+             @foreach($products->random(3) as $product)
             <div class="item d-flex">
-              <img src="assetClient/images/product-item7.png" class="img-fluid shadow-sm" alt="product item">
+               {{-- Show Ảnh --}}
+            @if($product->images->isNotEmpty())
+              <img src="{{ asset($product->images->first()->image_path) }}" class="img-fluid shadow-sm" alt="{{ $product->name }}">
+              @endif
               <div class="item-content ms-3">
-                <h6 class="mb-0 fw-bold"><a href="single-product.html">The Crystal Key</a></h6>
+                <h6 class="mb-0 fw-bold"><a href="single-product.html">{{ $product->name }}</a></h6>
                 <div class="review-content d-flex">
-                  <p class="my-2 me-2 fs-6 text-black-50">Lauren Asher</p>
+                  <p class="my-2 me-2 fs-6 text-black-50">{{ $product->author->name }}</p>
+
                   <div class="rating text-warning d-flex align-items-center">
                     <svg class="star star-fill">
                       <use xlink:href="#star-fill"></use>
@@ -691,65 +405,16 @@
                     </svg>
                   </div>
                 </div>
-                <span class="price text-primary fw-bold mb-2 fs-5">$870</span>
+                <span class="price text-primary fw-bold mb-2 fs-5">{{number_format($product->price) }} <strong>VND</strong></span>
               </div>
             </div>
+            
+            @php $count++; @endphp
+            @if($count < 3)
             <hr class="gray-400">
-            <div class="item d-flex">
-              <img src="assetClient/images/product-item8.png" class="img-fluid shadow-sm" alt="product item">
-              <div class="item-content ms-3">
-                <h6 class="mb-0 fw-bold"><a href="single-product.html">Starlight Sonata</a></h6>
-                <div class="review-content d-flex">
-                  <p class="my-2 me-2 fs-6 text-black-50">Lauren Asher</p>
-                  <div class="rating text-warning d-flex align-items-center">
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                  </div>
-                </div>
-                <span class="price text-primary fw-bold mb-2 fs-5">$870</span>
-              </div>
-            </div>
-            <hr>
-            <div class="item d-flex">
-              <img src="assetClient/images/product-item9.png" class="img-fluid shadow-sm" alt="product item">
-              <div class="item-content ms-3">
-                <h6 class="mb-0 fw-bold"><a href="single-product.html">Tales of the Enchanted Forest</a></h6>
-                <div class="review-content d-flex">
-                  <p class="my-2 me-2 fs-6 text-black-50">Lauren Asher</p>
-                  <div class="rating text-warning d-flex align-items-center">
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                  </div>
-                </div>
-                <span class="price text-primary fw-bold mb-2 fs-5">$870</span>
-              </div>
-            </div>
+            @endif
+
+            @endforeach
           </div>
         </div>
       </div>
@@ -759,12 +424,19 @@
             <h3 class="d-flex flex-column mb-0">Đang bán</h3>
           </div>
           <div class="items-lists">
+
+             @php $count = 0; @endphp
+             @foreach($products->random(3) as $product)
             <div class="item d-flex">
-              <img src="assetClient/images/product-item10.png" class="img-fluid shadow-sm" alt="product item">
+               {{-- Show Ảnh --}}
+            @if($product->images->isNotEmpty())
+              <img src="{{ asset($product->images->first()->image_path) }}" class="img-fluid shadow-sm" alt="{{ $product->name }}">
+              @endif
               <div class="item-content ms-3">
-                <h6 class="mb-0 fw-bold"><a href="single-product.html">The Phoenix Chronicles</a></h6>
+                <h6 class="mb-0 fw-bold"><a href="single-product.html">{{ $product->name }}</a></h6>
                 <div class="review-content d-flex">
-                  <p class="my-2 me-2 fs-6 text-black-50">Lauren Asher</p>
+                  <p class="my-2 me-2 fs-6 text-black-50">{{ $product->author->name }}</p>
+
                   <div class="rating text-warning d-flex align-items-center">
                     <svg class="star star-fill">
                       <use xlink:href="#star-fill"></use>
@@ -783,68 +455,17 @@
                     </svg>
                   </div>
                 </div>
-                <span class="price text-primary fw-bold mb-2 fs-5"><s class="text-black-50">$1666</s>
-                  $999</span>
+                <span class="price text-primary fw-bold mb-2 fs-5">{{number_format($product->price) }} <strong>VND</strong></span>
               </div>
             </div>
+            
+            @php $count++; @endphp
+            @if($count < 3)
             <hr class="gray-400">
-            <div class="item d-flex">
-              <img src="assetClient/images/product-item11.png" class="img-fluid shadow-sm" alt="product item">
-              <div class="item-content ms-3">
-                <h6 class="mb-0 fw-bold"><a href="single-product.html">Dreams of Avalon</a></h6>
-                <div class="review-content d-flex">
-                  <p class="my-2 me-2 fs-6 text-black-50">Lauren Asher</p>
-                  <div class="rating text-warning d-flex align-items-center">
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                  </div>
-                </div>
-                <span class="price text-primary fw-bold mb-2 fs-5"><s class="text-black-50">$500</s>
-                  $410</span>
-              </div>
-            </div>
-            <hr>
-            <div class="item d-flex">
-              <img src="assetClient/images/product-item12.png" class="img-fluid shadow-sm" alt="product item">
-              <div class="item-content ms-3">
-                <h6 class="mb-0 fw-bold"><a href="single-product.html">Legends of the Dragon Isles</a></h6>
-                <div class="review-content d-flex">
-                  <p class="my-2 me-2 fs-6 text-black-50">Lauren Asher</p>
-                  <div class="rating text-warning d-flex align-items-center">
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                  </div>
-                </div>
-                <span class="price text-primary fw-bold mb-2 fs-5"><s class="text-black-50">$600</s>
-                  $500</span>
-              </div>
-            </div>
+            @endif
+
+            @endforeach
+
           </div>
         </div>
       </div>
@@ -858,33 +479,19 @@
       <h3 class="d-flex align-items-center">Thể loại</h3>
     </div>
     <div class="row">
+      @foreach ($categories as $category)
       <div class="col-md-4">
         <div class="card mb-4 border-0 rounded-3 position-relative">
-          <a href="shop.html">
+          <a href="{{ route('shop') }}">
             <img src="assetClient/images/category1.jpg" class="img-fluid rounded-3" alt="cart item">
-            <h6 class=" position-absolute bottom-0 bg-primary m-4 py-2 px-3 rounded-3"><a href="shop.html"
-                class="text-white">Lãng mạn</a></h6>
+            <h6 class=" position-absolute bottom-0 bg-primary m-4 py-2 px-3 rounded-3"><a href="{{ route('shop') }}"
+                class="text-white">{{ $category->name }}</a></h6>
           </a>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="card text-center mb-4 border-0 rounded-3">
-          <a href="shop.html">
-            <img src="assetClient/images/category2.jpg" class="img-fluid rounded-3" alt="cart item">
-            <h6 class=" position-absolute bottom-0 bg-primary m-4 py-2 px-3 rounded-3"><a href="shop.html"
-                class="text-white"> Phong cách sống</a></h6>
-          </a>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card text-center mb-4 border-0 rounded-3">
-          <a href="shop.html">
-            <img src="assetClient/images/category3.jpg" class="img-fluid rounded-3" alt="cart item">
-            <h6 class=" position-absolute bottom-0 bg-primary m-4 py-2 px-3 rounded-3"><a href="shop.html"
-                class="text-white">Công thức</a></h6>
-          </a>
-        </div>
-      </div>
+      @endforeach
+
+    
     </div>
   </div>
 </section>
@@ -1035,7 +642,7 @@
   <div class="container">
     <div class="section-title d-md-flex justify-content-between align-items-center mb-4">
       <h3 class="d-flex align-items-center">Bài viết mới nhất</h3>
-      <a href="shop.html" class="btn">Xem tất cả</a>
+      <a href="{{ route('shop') }}" class="btn">Xem tất cả</a>
     </div>
     <div class="row">
       <div class="col-md-3 posts mb-4">
