@@ -14,12 +14,6 @@
         <div class="row">
           <div class="text-center">
             <h1>About Us</h1>
-            <div class="breadcrumbs">
-              <span class="item">
-                <a href="index.html">Home &gt; </a>
-              </span>
-              <span class="item text-decoration-underline">About Us</span>
-            </div>
           </div>
         </div>
       </div>
@@ -96,24 +90,25 @@
         <div class="col-md-6">
           <div class="image-holder position-relative mb-4 d-flex align-items-center justify-content-center">
             <a type="button" data-bs-toggle="modal" data-src="https://www.youtube.com/embed/l4MOE3hZATA" data-bs-target="#myModal" class="play-btn position-absolute">
-              <div class="play-icon border border-2 border-dark rounded-pill p-5">
+              <div class="play-icon rounded-pill p-5">
                 <svg class="search" width="40" height="40">
                   <use xlink:href="#play"></use>
                 </svg>
               </div>
             </a>
             <div class="image">
-              <img src="assetClient/images/single-image-about.jpg" alt="single" class="img-fluid rounded-3 single-image">
+              <img src="assetClient/images/2_ctkm_t4_154_840x320.png" class="img-fluid rounded-3 single-image">
             </div>
           </div>
         </div>
         <div class="col-md-6">
-          <div class="detail ps-md-5 mt-5">
+          <div class="detail ps-md-5 ">
             <div class="display-header">
               <h3 class="mb-3">Hiệu sách tốt nhất mọi thời đại</h3>
-              <p class="pb-1">Risus augue curabitur diam senectus congue velit et. Sed vitae metus nibh sit era. Nulla adipiscing pharetra pellentesque maecenas odio eros at. Et libero vulputate amet duis erat volutpat vitae eget. Sed vitae metus nibh sit era. Nulla adipiscing pharetra eros at.
-              </p><p>Nulla adipiscing pharetra pellentesque maecenas odio eros at. Et libero vulputate amet duis erat volutpat vitae eget. Quam libero etiam et in ac at quis. Risus augue curabitur diam senectus congue velit et. </p>
-              <a href="shop.html" class="btn mt-3">Đi đến cửa hàng</a>
+              <p class="pb-1">Thật dễ để tìm thấy một cái gì đó nhanh chóng. Một cuốn sách, một bộ phim, một thông tin, một cảm xúc vui buồn hay sợ hãi, hay cả một mối quan hệ. Nhưng điều gì nhanh đến thì cũng rất dễ rời đi, và nhanh chóng chưa bao giờ gần với ” bình yên”.
+              </p><p>Một cuốn sách đọc chậm rãi, sẽ được nhớ lâu hơn là một đoạn phim speed up. Một không gian yên tĩnh khiến bạn để tâm đến điều bạn thực sự cần hơn, một chút yên bình nổi bật giữa sự náo nhiệt.
+                </p>
+              <a href="http://storynest_book.test/shop" class="btn mt-3">Đi đến cửa hàng</a>
             </div>
           </div>
         </div>
@@ -269,7 +264,7 @@
     <div class="container">
       <div class="section-title d-md-flex justify-content-between align-items-center mb-4">
         <h3 class="d-flex align-items-center">Bài viết mới nhất</h3>
-        <a href="shop.html" class="btn">Xem tất cả</a>
+        <a href="http://storynest_book.test/shop" class="btn">Xem tất cả</a>
       </div>
       <div class="row">
         <div class="col-md-3 posts mb-4">
