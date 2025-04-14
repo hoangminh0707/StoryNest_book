@@ -702,10 +702,10 @@
                                         <a href="{{ route('vouchers.index') }}" class="nav-link" data-key="t-basic-elements">
                                             Danh sách Mã Giảm Giá
                                         </a>
-                                        <a href="forms-elements.html" class="nav-link" data-key="t-basic-elements">
+                                        <a href="{{ route('banners.index') }}" class="nav-link" data-key="t-basic-elements">
                                             Danh sách Slider
                                         </a>
-                                        <a href="forms-elements.html" class="nav-link" data-key="t-basic-elements">
+                                        <a href="{{ route('blogs.index') }}" class="nav-link" data-key="t-basic-elements">
                                             Danh sách bài viết
                                         </a>
                                         <a href="forms-elements.html" class="nav-link" data-key="t-basic-elements">

@@ -17,6 +17,8 @@ use App\Http\Controllers\Admin\AttributeValueController;
 use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\ShippingMethodController;
 use App\Http\Controllers\Admin\VoucherConditionController;
+use App\Http\Controllers\Admin\BannerController;
+use App\Http\Controllers\Admin\BlogController;
 
 
 
@@ -77,9 +79,9 @@ Route::post('/admin/login', [LoginController::class, 'login']);
 Route::post('/admin/logout', [LoginController::class, 'logout'])->name('admin.logout');
 
 
-Route::get('/admin/register', [RegisterController::class,'showAdminRegistrationForm'])->name('register.admin.form');
+Route::get('/admin/register', [RegisterController::class, 'showAdminRegistrationForm'])->name('register.admin.form');
 
-Route::post('/admin/register', [RegisterController::class,'registerAdmin'])->name('register.admin');
+Route::post('/admin/register', [RegisterController::class, 'registerAdmin'])->name('register.admin');
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/users', [UserController::class, 'index'])->name('userIndex'); // Danh sách người dùng
@@ -146,7 +148,9 @@ Route::get('reviews/{id}/approve', [\App\Http\Controllers\Admin\ReviewController
 //Payment
 
 Route::resource('payments', \App\Http\Controllers\Admin\PaymentController::class)->only([
-    'index', 'show', 'destroy'
+    'index',
+    'show',
+    'destroy'
 ]);
 
 Route::post('payments/{id}/update-status', [\App\Http\Controllers\Admin\PaymentController::class, 'updateStatus'])
@@ -162,24 +166,24 @@ Route::resource('vouchers', App\Http\Controllers\Admin\VoucherController::class)
 Route::patch('vouchers/{voucher}/toggle', [App\Http\Controllers\Admin\VoucherController::class, 'toggle'])->name('vouchers.toggle');
 
 
-   // Route quản lý điều kiện áp dụng (VoucherCondition)
+// Route quản lý điều kiện áp dụng (VoucherCondition)
 Route::resource('/admin/voucher-conditions', App\Http\Controllers\Admin\VoucherConditionController::class);
 
 
 Route::resource('orders', \App\Http\Controllers\Admin\OrderController::class)->only([
-    'index', 'show', 'destroy'
+    'index',
+    'show',
+    'destroy'
 ]);
 Route::get('orders/{order}/edit-status', [\App\Http\Controllers\Admin\OrderController::class, 'editStatus'])->name('orders.editStatus');
 Route::put('orders/{order}/update-status', [\App\Http\Controllers\Admin\OrderController::class, 'updateStatus'])->name('orders.updateStatus');
 
 
+Route::resource('admin/banners', BannerController::class); // Tạo các route cho các phương thức resource
+Route::delete('banners/bulk-delete', [BannerController::class, 'bulkDelete'])->name('banners.bulk-delete');  // Route cho bulk delete
+Route::patch('banners/{id}/toggle', [BannerController::class, 'toggleStatus'])->name('banners.toggle');
 
-
-
-
-
-
-
-
-
-
+Route::prefix('admin')->group(function () {
+    Route::resource('blogs', BlogController::class);
+    Route::post('blogs/mass-delete', [BlogController::class, 'massDelete'])->name('admin.blogs.massDelete');
+});

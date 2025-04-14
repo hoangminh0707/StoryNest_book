@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('title')->nullable(); // Tiêu đề của banner (có thể để trống)
             $table->string('link')->nullable(); // Đường dẫn liên kết (có thể để trống)
             $table->integer('order')->default(0); // Số thứ tự hiển thị
+            $table->boolean('status')->default(true); // true: hiển thị, false: ẩn
+            $table->softDeletes();
             $table->timestamps(); // Thời gian tạo và cập nhật
         });
     }
