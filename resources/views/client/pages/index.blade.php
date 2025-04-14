@@ -169,12 +169,11 @@
             </div>
             {{-- Show Ảnh --}}
             @if($product->images->isNotEmpty())
-            <img src="{{ asset($product->images->first()->image_path) }}" class="img-fluid shadow-sm" alt="{{ $product->name }}">
-      
-            @endif
-
+               <img src="{{ Storage::url($product->images->first()->image_path) }}" alt="{{ $product->name }}" 
+               class="img-fluid shadow-sm">
+               @endif
             {{-- end Show ảnh --}}
-            <h6 class="mt-4 mb-0 fw-bold"><a href="single-product.html">{{ $product->name }}</a></h6>
+            <h6 class="mt-4 mb-0 fw-bold"><a href="{{ route('product.show',$product->id) }}">{{ $product->name }}</a></h6>
             <div class="review-content d-flex">
               <p class="my-2 me-2 fs-6 text-black-50">{{ $product->author->name }}</p>
 
@@ -198,13 +197,27 @@
             </div>
             <span class="price text-primary fw-bold mb-2 fs-5">{{ number_format($product->price) }} <strong>VND</strong></span>
             <div class="card-concern position-absolute start-0 end-0 d-flex gap-2">
-              <button type="button" href="#" class="btn btn-dark" data-bs-toggle="tooltip" data-bs-placement="top"
+              @auth
+
+              <form action="{{ route('cart.add', $product->id) }}" method="POST" style="display:inline;">
+                @csrf
+              <button type="submit" href="#" class="btn btn-dark" data-bs-toggle="tooltip" data-bs-placement="top"
                 data-bs-title="Tooltip on top">
                 <svg class="cart">
                   <use xlink:href="#cart"></use>
                 </svg>
               </button>
-              <a href="#" class="btn btn-dark">
+              </form>
+            @endauth
+            @guest
+             <a href="#" onclick="showLoginAlert()" class="btn btn-dark" data-bs-toggle="tooltip" data-bs-placement="top"
+             data-bs-title="Tooltip on top">
+             <svg class="cart">
+              <use xlink:href="#cart"></use>
+            </svg>
+            </a>
+            @endguest
+              <a href="{{ route('wishlist.add', $product->id) }}" class="btn btn-dark">
                 <span>
                   <svg class="wishlist">
                     <use xlink:href="#heart"></use>
@@ -276,11 +289,12 @@
              @foreach($products->random(3) as $product)
             <div class="item d-flex">
                {{-- Show Ảnh --}}
-            @if($product->images->isNotEmpty())
-              <img src="{{ asset($product->images->first()->image_path) }}" class="img-fluid shadow-sm" alt="{{ $product->name }}">
-              @endif
+               @if($product->images->isNotEmpty())
+               <img src="{{ Storage::url($product->images->first()->image_path) }}" alt="{{ $product->name }}" 
+               class="img-fluid shadow-sm" alt="{{ $product->name}}">
+               @endif
               <div class="item-content ms-3">
-                <h6 class="mb-0 fw-bold"><a href="single-product.html">{{ $product->name }}</a></h6>
+                <h6 class="mb-0 fw-bold"><a href="{{ route('product.show',$product->id) }}">{{ $product->name }}</a></h6>
                 <div class="review-content d-flex">
                   <p class="my-2 me-2 fs-6 text-black-50">{{ $product->author->name }}</p>
 
@@ -327,11 +341,12 @@
              @foreach($products->random(3) as $product)
             <div class="item d-flex">
                {{-- Show Ảnh --}}
-            @if($product->images->isNotEmpty())
-              <img src="{{ asset($product->images->first()->image_path) }}" class="img-fluid shadow-sm" alt="{{ $product->name }}">
-              @endif
+               @if($product->images->isNotEmpty())
+               <img src="{{ Storage::url($product->images->first()->image_path) }}" alt="{{ $product->name }}" 
+               class="img-fluid shadow-sm" alt="{{ $product->name}}">
+               @endif
               <div class="item-content ms-3">
-                <h6 class="mb-0 fw-bold"><a href="single-product.html">{{ $product->name }}</a></h6>
+                <h6 class="mb-0 fw-bold"><a href="{{ route('product.show',$product->id) }}">{{ $product->name }}</a></h6>
                 <div class="review-content d-flex">
                   <p class="my-2 me-2 fs-6 text-black-50">{{ $product->author->name }}</p>
 
@@ -379,11 +394,12 @@
              @foreach($products->random(3) as $product)
             <div class="item d-flex">
                {{-- Show Ảnh --}}
-            @if($product->images->isNotEmpty())
-              <img src="{{ asset($product->images->first()->image_path) }}" class="img-fluid shadow-sm" alt="{{ $product->name }}">
-              @endif
+               @if($product->images->isNotEmpty())
+               <img src="{{ Storage::url($product->images->first()->image_path) }}" alt="{{ $product->name }}" 
+               class="img-fluid shadow-sm" alt="{{ $product->name}}">
+               @endif
               <div class="item-content ms-3">
-                <h6 class="mb-0 fw-bold"><a href="single-product.html">{{ $product->name }}</a></h6>
+                <h6 class="mb-0 fw-bold"><a href="{{ route('product.show',$product->id) }}">{{ $product->name }}</a></h6>
                 <div class="review-content d-flex">
                   <p class="my-2 me-2 fs-6 text-black-50">{{ $product->author->name }}</p>
 
@@ -429,11 +445,12 @@
              @foreach($products->random(3) as $product)
             <div class="item d-flex">
                {{-- Show Ảnh --}}
-            @if($product->images->isNotEmpty())
-              <img src="{{ asset($product->images->first()->image_path) }}" class="img-fluid shadow-sm" alt="{{ $product->name }}">
-              @endif
+               @if($product->images->isNotEmpty())
+               <img src="{{ Storage::url($product->images->first()->image_path) }}" alt="{{ $product->name }}" 
+               class="img-fluid shadow-sm" alt="{{ $product->name}}">
+               @endif
               <div class="item-content ms-3">
-                <h6 class="mb-0 fw-bold"><a href="single-product.html">{{ $product->name }}</a></h6>
+                <h6 class="mb-0 fw-bold"><a href="{{ route('product.show',$product->id) }}">{{ $product->name }}</a></h6>
                 <div class="review-content d-flex">
                   <p class="my-2 me-2 fs-6 text-black-50">{{ $product->author->name }}</p>
 
@@ -482,9 +499,9 @@
       @foreach ($categories as $category)
       <div class="col-md-4">
         <div class="card mb-4 border-0 rounded-3 position-relative">
-          <a href="{{ route('shop') }}">
+          <a href="{{ route('shop', ['category_id' => $category->id]) }}">
             <img src="assetClient/images/category1.jpg" class="img-fluid rounded-3" alt="cart item">
-            <h6 class=" position-absolute bottom-0 bg-primary m-4 py-2 px-3 rounded-3"><a href="{{ route('shop') }}"
+            <h6 class=" position-absolute bottom-0 bg-primary m-4 py-2 px-3 rounded-3"><a href="{{ route('shop', ['category_id' => $category->id]) }}"
                 class="text-white">{{ $category->name }}</a></h6>
           </a>
         </div>

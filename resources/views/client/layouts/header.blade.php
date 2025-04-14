@@ -96,7 +96,26 @@
       <path
         d="M14 10.5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 .5-.5zm0-3a.5.5 0 0 0-.5-.5h-7a.5.5 0 0 0 0 1h7a.5.5 0 0 0 .5-.5zm0-3a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0 0 1h11a.5.5 0 0 0 .5-.5z" />
     </symbol>
+    <symbol id="trash" viewBox="0 0 16 16">
+      <path d="M5.5 5.5a.5.5 0 0 1 .5-.5h.5v6H6a.5.5 0 0 1-.5-.5v-5zM8 5h.5v6H8a.5.5 0 0 1-.5-.5v-5A.5.5 0 0 1 8 5zM10 5.5a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-.5.5h-.5v-6h.5z"/>
+      <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1H1v1a1 1 0 0 0 1 1h.5v9a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2V5h.5a1 1 0 0 0 1-1V3h-.5zM4.118 5l.359 9h7.046l.359-9H4.118z"/>
+    </symbol>
+    <symbol xmlns="http://www.w3.org/2000/svg" id="plus" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M19 11h-6V5a1 1 0 0 0-2 0v6H5a1 1 0 0 0 0 2h6v6a1 1 0 0 0 2 0v-6h6a1 1 0 0 0 0-2Z" />
+    </symbol>
+    <symbol xmlns="http://www.w3.org/2000/svg" id="minus" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M19 11H5a1 1 0 0 0 0 2h14a1 1 0 0 0 0-2Z" />
+    </symbol>
+    <symbol xmlns="http://www.w3.org/2000/svg" id="cart-cross-outline" viewBox="0 0 24 24">
+      <path fill="currentColor"
+        d="M12.03 8.97a.75.75 0 1 0-1.06 1.06l.97.97l-.97.97a.75.75 0 1 0 1.06 1.06l.97-.97l.97.97a.75.75 0 1 0 1.06-1.06l-.97-.97l.97-.97a.75.75 0 1 0-1.06-1.06l-.97.97z" />
+      <path fill="currentColor" fill-rule="evenodd"
+        d="M1.293 2.751a.75.75 0 0 1 .956-.459l.301.106c.617.217 1.14.401 1.553.603c.44.217.818.483 1.102.899c.282.412.399.865.452 1.362l.011.108H17.12c.819 0 1.653 0 2.34.077c.35.039.697.101 1.003.209c.3.105.631.278.866.584c.382.496.449 1.074.413 1.66c-.035.558-.173 1.252-.338 2.077l-.01.053l-.002.004l-.508 2.47c-.15.726-.276 1.337-.439 1.82c-.172.51-.41.96-.837 1.308c-.427.347-.916.49-1.451.556c-.505.062-1.13.062-1.87.062H10.88c-1.345 0-2.435 0-3.293-.122c-.897-.127-1.65-.4-2.243-1.026c-.547-.576-.839-1.188-.985-2.042c-.137-.8-.15-1.848-.15-3.3V7.038c0-.74-.002-1.235-.043-1.615c-.04-.363-.109-.545-.2-.677c-.087-.129-.22-.25-.524-.398c-.323-.158-.762-.314-1.43-.549l-.26-.091a.75.75 0 0 1-.46-.957M5.708 6.87v2.89c0 1.489.018 2.398.13 3.047c.101.595.274.925.594 1.263c.273.288.65.472 1.365.573c.74.105 1.724.107 3.14.107h5.304c.799 0 1.33-.001 1.734-.05c.382-.047.56-.129.685-.231c.125-.102.24-.26.364-.625c.13-.385.238-.905.4-1.688l.498-2.42v-.002c.178-.89.295-1.482.322-1.926c.026-.421-.04-.569-.101-.65a.561.561 0 0 0-.177-.087a3.17 3.17 0 0 0-.672-.134c-.595-.066-1.349-.067-2.205-.067zM5.25 19.5a2.25 2.25 0 1 0 4.5 0a2.25 2.25 0 0 0-4.5 0m2.25.75a.75.75 0 1 1 0-1.5a.75.75 0 0 1 0 1.5m6.75-.75a2.25 2.25 0 1 0 4.5 0a2.25 2.25 0 0 0-4.5 0m2.25.75a.75.75 0 1 1 0-1.5a.75.75 0 0 1 0 1.5"
+        clip-rule="evenodd" />
+    </symbol>
   </svg>
+
+  
 
 <header id="header" class="site-header">
 
@@ -191,151 +210,148 @@
                     </svg>
                   </a>
                 </li>
-                <li class="pe-3">
-                  <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    <svg class="user">
+                <li class="nav-item dropdown pe-3">
+                  <a class="nav-link" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <svg class="user" width="24" height="24">
                       <use xlink:href="#user"></use>
                     </svg>
                   </a>
-                  <!-- Modal -->
-                  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header border-bottom-0">
-                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                          <div class="tabs-listing">
-                            <nav>
-                              <div class="nav nav-tabs d-flex justify-content-center" id="nav-tab" role="tablist">
-                                <button class="nav-link text-capitalize active" id="nav-sign-in-tab" data-bs-toggle="tab" data-bs-target="#nav-sign-in" type="button" role="tab" aria-controls="nav-sign-in" aria-selected="true">Sign In</button>
-                                <button class="nav-link text-capitalize" id="nav-register-tab" data-bs-toggle="tab" data-bs-target="#nav-register" type="button" role="tab" aria-controls="nav-register" aria-selected="false" tabindex="-1">Register</button>
-                              </div>
-                            </nav>
-                            <div class="tab-content" id="nav-tabContent">
-                              <div class="tab-pane fade active show" id="nav-sign-in" role="tabpanel" aria-labelledby="nav-sign-in-tab">
-                                <div class="form-group py-3">
-                                  <label class="mb-2" for="sign-in">Username or email address *</label>
-                                  <input type="text" minlength="2" name="username" placeholder="Your Username" class="form-control w-100 rounded-3 p-3" required="">
-                                </div>
-                                <div class="form-group pb-3">
-                                  <label class="mb-2" for="sign-in">Password *</label>
-                                  <input type="password" minlength="2" name="password" placeholder="Your Password" class="form-control w-100 rounded-3 p-3" required="">
-                                </div>
-                                <label class="py-3">
-                                  <input type="checkbox" required="" class="d-inline">
-                                  <span class="label-body">Remember me</span>
-                                  <span class="label-body"><a href="#" class="fw-bold">Forgot Password</a></span>
-                                </label>
-                                <button type="submit" name="submit" class="btn btn-dark w-100 my-3">Login</button>
-                              </div>
-                              <div class="tab-pane fade" id="nav-register" role="tabpanel" aria-labelledby="nav-register-tab">
-                                <div class="form-group py-3">
-                                  <label class="mb-2" for="register">Your email address *</label>
-                                  <input type="text" minlength="2" name="username" placeholder="Your Email Address" class="form-control w-100 rounded-3 p-3" required="">
-                                </div>
-                                <div class="form-group pb-3">
-                                  <label class="mb-2" for="sign-in">Password *</label>
-                                  <input type="password" minlength="2" name="password" placeholder="Your Password" class="form-control w-100 rounded-3 p-3" required="">
-                                </div>
-                                <label class="py-3">
-                                  <input type="checkbox" required="" class="d-inline">
-                                  <span class="label-body">I agree to the <a href="#" class="fw-bold">Privacy
-                                      Policy</a></span>
-                                </label>
-                                <button type="submit" name="submit" class="btn btn-dark w-100 my-3">Register</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+    
+                    @guest
+                      <!-- Nếu chưa đăng nhập -->
+                      <li><a class="dropdown-item" href="{{ route('login') }}">Đăng nhập</a></li>
+                      <li><a class="dropdown-item" href="{{ route('register') }}">Đăng ký</a></li>
+                    @endguest
+                
+                    @auth
+                      <!-- Nếu đã đăng nhập -->
+                      <li><span class="dropdown-item-text fw-bold">{{ Auth::user()->name }}</span></li>
+                      <hr class="my-1">
+                      <li><a class="dropdown-item" href=""> <i class="bi bi-gear-fill"></i>  Cài đặt</a></li>
+                      <li>
+                        <form method="POST" action="{{ route('logout') }}">
+                          @csrf
+                          <button type="submit" class="dropdown-item">
+                            <i class="bi bi-box-arrow-left"></i> 
+                            Đăng xuất
+                          </button>
+                        </form>
+                      </li>
+                    @endauth
+                
+                  </ul>
                 </li>
+
+
                 <li class="wishlist-dropdown dropdown pe-3">
                   <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">
-                    <svg class="wishlist">
+                    <svg class="wishlist" width="24" height="24">
                       <use xlink:href="#heart"></use>
                     </svg>
                   </a>
+                
                   <div class="dropdown-menu animate slide dropdown-menu-start dropdown-menu-lg-end p-3">
                     <h4 class="d-flex justify-content-between align-items-center mb-3">
-                      <span class="text-primary">Your wishlist</span>
-                      <span class="badge bg-primary rounded-pill">2</span>
+                      <span class="text-primary">Sản phẩm yêu thích</span>
+                      <span class="badge bg-primary rounded-pill">{{ $wishlistItems->count() }}</span>
                     </h4>
-                    <ul class="list-group mb-3">
-                      <li class="list-group-item bg-transparent d-flex justify-content-between lh-sm">
-                        <div>
-                          <h5>
-                            <a href="single-product.html">The Emerald Crown</a>
-                          </h5>
-                          <small>Special discounted price.</small>
-                          <a href="#" class="d-block fw-medium text-capitalize mt-2">Add to cart</a>
-                        </div>
-                        <span class="text-primary">$2000</span>
-                      </li>
-                      <li class="list-group-item bg-transparent d-flex justify-content-between lh-sm">
-                        <div>
-                          <h5>
-                            <a href="single-product.html">The Last Enchantment</a>
-                          </h5>
-                          <small>Perfect for enlightened people.</small>
-                          <a href="#" class="d-block fw-medium text-capitalize mt-2">Add to cart</a>
-                        </div>
-                        <span class="text-primary">$400</span>
-                      </li>
-                      <li class="list-group-item bg-transparent d-flex justify-content-between">
-                        <span class="text-capitalize"><b>Total (USD)</b></span>
-                        <strong>$1470</strong>
-                      </li>
-                    </ul>
-                    <div class="d-flex flex-wrap justify-content-center">
-                      <a href="#" class="w-100 btn btn-dark mb-1" type="submit">Add all to cart</a>
-                      <a href="cart.html" class="w-100 btn btn-primary" type="submit">View cart</a>
-                    </div>
+                
+                    @if ($wishlistItems->isEmpty())
+                      <p class="text-dark">Bạn chưa thêm sản phẩm nào.</p>
+                    @else
+                      <ul class="list-group mb-3">
+                        @php $total = 0; @endphp
+                        @foreach ($wishlistItems as $item)
+                          @php $total += $item->product->price; @endphp
+                          <li class="list-group-item bg-transparent d-flex justify-content-between lh-sm">
+                            <div>
+                              <h5>
+                                <a href="{{ route('product.show', $item->product->id) }}">{{ $item->product->name }}</a>
+                              </h5>
+                              <small>{{ Str::limit($item->product->description, 50) }}</small>
+
+                              <a href="{{ route('cart.add', $item->product->id) }}" class="d-block fw-medium text-capitalize mt-2">Thêm vào giỏ hàng</a>
+                              <a href="{{ route('wishlist.remove', $item->product->id) }}" class="d-block fw-medium text-capitalize mt-2">Xóa</a>
+                            </form>
+                            </div>
+                            <span class="text-primary">{{ number_format($item->product->price) }} VND</span>
+                          </li>
+                        @endforeach
+                        <li class="list-group-item bg-transparent d-flex justify-content-between">
+                          <span class="text-capitalize"><b>Tổng Tiền (VND)</b></span>
+                          <strong>{{ number_format($total) }} VND</strong>
+                        </li>
+                      </ul>
+                
+                      <div class="d-flex flex-wrap justify-content-center">
+                        <a href="#" class="w-100 btn btn-dark mb-1" type="submit">Thêm tất cả vào giỏ hàng</a>
+                      </div>
+                    @endif
                   </div>
                 </li>
+                
+
+
+
                 <li class="cart-dropdown dropdown">
-                  <a href="cart.html" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">
+                  <a href="" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">
                     <svg class="cart">
                       <use xlink:href="#cart"></use>
-                    </svg><span class="fs-6 fw-light">(02)</span>
+                    </svg>
+                    <span class="fs-6 fw-light">({{ auth()->check() ? $cartItems->count() : 0 }})</span>
                   </a>
                   <div class="dropdown-menu animate slide dropdown-menu-start dropdown-menu-lg-end p-3">
                     <h4 class="d-flex justify-content-between align-items-center mb-3">
-                      <span class="text-primary">Your cart</span>
-                      <span class="badge bg-primary rounded-pill">2</span>
+                      <span class="text-primary">Giỏ hàng của bạn</span>
+                      <span class="badge bg-primary rounded-pill">{{ auth()->check() ? $cartItems->count() : 0 }}</span>
                     </h4>
                     <ul class="list-group mb-3">
-                      <li class="list-group-item bg-transparent d-flex justify-content-between lh-sm">
-                        <div>
-                          <h5>
-                            <a href="single-product.html">Secrets of the Alchemist</a>
-                          </h5>
-                          <small>High quality in good price.</small>
-                        </div>
-                        <span class="text-primary">$870</span>
-                      </li>
-                      <li class="list-group-item bg-transparent d-flex justify-content-between lh-sm">
-                        <div>
-                          <h5>
-                            <a href="single-product.html">Quest for the Lost City</a>
-                          </h5>
-                          <small>Professional Quest for the Lost City.</small>
-                        </div>
-                        <span class="text-primary">$600</span>
-                      </li>
+                      @php $total = 0; @endphp
+                      @forelse($cartItems as $item)
+                        @php
+                          $product = $item->product;
+                          $total += $item->price * $item->quantity;
+                        @endphp
+                        <li class="list-group-item bg-transparent d-flex justify-content-between lh-sm">
+                          <div>
+                            <h5>
+                              <a href="{{ route('product.show', $product->id) }}">{{ $product->name }}</a>
+                            </h5>
+                            <small>{{ $product->description ?? 'No description' }}</small>
+                            <p>Số lượng : {{$item->quantity}}</p>
+                           
+                            
+                             {{-- Biểu tượng xóa --}}
+                              <a href="#" onclick="event.preventDefault(); this.nextElementSibling.submit();" class="text-danger mt-1" title="Xóa sản phẩm">
+                                <svg width="16" height="16" fill="currentColor">
+                                  <use xlink:href="#trash"></use>
+                                </svg>
+                              </a>
+                              <form action="{{ route('cart.remove', $item['id']) }}" method="POST" style="display: none;">
+                                @csrf
+                              </form>
+
+                          </div>
+                          <span class="text-primary">{{ number_format($item->price * $item->quantity) }} VND</span>
+                        </li>
+                      @empty
+                        <li class="list-group-item bg-transparent text-center">Giỏ hàng trống</li>
+                      @endforelse
                       <li class="list-group-item bg-transparent d-flex justify-content-between">
-                        <span class="text-capitalize"><b>Total (USD)</b></span>
-                        <strong>$1470</strong>
+                        <span class="text-capitalize"><b>Tổng (VND)</b></span>
+                        <strong>{{ number_format($total)}} VND</strong>
                       </li>
                     </ul>
                     <div class="d-flex flex-wrap justify-content-center">
-                      <a href="http://storynest_book.test/cart" class="w-100 btn btn-dark mb-1" type="submit">View Cart</a>
-                      <a href="http://storynest_book.test/checkout" class="w-100 btn btn-primary" type="submit">Go to checkout</a>
+                      <a href="" class="w-100 btn btn-dark mb-1">View Cart</a>
+                      <a href="" class="w-100 btn btn-primary">Go to checkout</a>
                     </div>
                   </div>
                 </li>
+                
+                
               </ul>
             </div>
           </div>

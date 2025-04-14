@@ -1,107 +1,117 @@
-<?php
-?>
-
 @extends('admin.layouts.app')
-@section('title', 'Edit Users')
+@section('title', 'Chỉnh sửa người dùng')
+
 @section('content')
+<div class="container-fluid mt-4">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Chỉnh sửa người dùng</h4>
+            <a href="{{ route('admin.userIndex') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-1"></i> Quay lại
+            </a>
+        </div>
+        <div class="card-body">
+            <form action="{{ route('admin.userUpdate', $user->id) }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
 
-<div class="row">
-    <div class="col-lg-12">
-        <div class="card">
-            <div class="card-header">
-                <h4 class="card-title mb-0">Thêm Khách Hàng</h4>
-            </div><!-- end card header -->
-            <div class="card-body">
-                <form method="POST" action="{{ route('admin.updateUser', $user->id) }}">
-                    @csrf
-                    @method('PUT')
+                <!-- Họ tên -->
+                <div class="mb-3">
+                    <label class="form-label">Họ và tên</label>
+                    <input type="text" name="name" class="form-control" value="{{ old('name', $user->name) }}" required>
+                </div>
 
-                    <div>
-                        <label class="form-label" for="name" >Họ và tên</label>
-                        <input class="form-control" type="text" id="name" name="name" value="{{ old('name', $user->name)}}" required >
-                        @error('name')<div>{{ $message }}</div>@enderror
-                    </div>
+                <!-- Email -->
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control" value="{{ old('email', $user->email) }}" required>
+                </div>
 
-                    <div>
-                        <label class="form-label" for="email" >Email</label>
-                        <input class="form-control" type="text" id="email" name="email" value="{{ old('name', $user->email)}}" required >
-                        @error('email')<div>{{ $message }}</div>@enderror
-                    </div>
-                
-                
-                    <div>
-                        <label class="form-label" for="password">Mật khẩu</label>
-                        <input class="form-control" type="password" id="password" name="password">
-                        @error('password')<div>{{ $message }}</div>@enderror
-                    </div>
-                
-                    <div>
-                        <label class="form-label" for="gender">Giới tính</label>
-                        <select class="form-select" id="gender" name="gender" required>
-                            <option value="male" {{ old('gender', $user->gender) == 'male' ? 'selected' : '' }}>Nam</option>
-                            <option value="female" {{ old('gender', $user->gender) == 'female' ? 'selected' : '' }}>Nữ</option>
-                            <option value="other" {{ old('gender', $user->gender) == 'other' ? 'selected' : '' }}>Khác</option>
-                        </select>
-                        @error('gender')<div>{{ $message }}</div>@enderror
-                    </div>
-                
-                    <div>
-                        <label class="form-label" for="birthdate">Ngày sinh</label>
-                        <input class="form-control" type="date" id="birthdate" name="birthdate" value="{{ old('birthdate', $user->birthdate) }}" required>
-                        @error('birthdate')<div>{{ $message }}</div>@enderror
-                    </div>
-                
-                    <div>
-                        <label class="form-label" for="phone">Số điện thoại</label>
-                        <input class="form-control" type="text" id="phone" name="phone" value="{{ old('phone', $user->phone) }}">
-                    </div>
-                
-                    <div>
-                        <label class="form-label" for="address">Địa chỉ</label>
-                        <input class="form-control" id="address" name="address" value="{{ old('address', $user->address) }}">
-                    </div>
+                <!-- Mật khẩu -->
+                <div class="mb-3">
+                    <label class="form-label">Mật khẩu mới (bỏ qua nếu không đổi)</label>
+                    <input type="password" name="password" class="form-control">
+                </div>
 
-                    <label for="roles" class="form-label">Vai trò:</label>
-                    <select class="form-select" id="roles" name="roles[]" required>
-                        @foreach($roles as $role)
-                            <option value="{{ $role->id }}" {{ $user->roles->contains($role->id) ? 'selected' : '' }}>
-                                {{ $role->name }}
-                            </option>
-                        @endforeach
+                <!-- Xác nhận mật khẩu -->
+                <div class="mb-3">
+                    <label class="form-label">Xác nhận mật khẩu</label>
+                    <input type="password" name="password_confirmation" class="form-control">
+                </div>
+
+                <!-- Ảnh đại diện -->
+                <div class="mb-3">
+                    <label class="form-label">Ảnh đại diện</label>
+                    <input type="file" name="avatar" class="form-control">
+                    @if ($user->avatar)
+                        <div class="mt-2">
+                            <img src="{{ asset('storage/' . $user->avatar) }}" alt="avatar" width="100" class="img-thumbnail">
+                        </div>
+                    @endif
+                </div>
+
+                <!-- Giới tính -->
+                <div class="mb-3">
+                    <label class="form-label">Giới tính</label>
+                    <select name="gender" class="form-select" required>
+                        <option value="">-- Chọn giới tính --</option>
+                        <option value="male" {{ old('gender', $user->gender) == 'male' ? 'selected' : '' }}>Nam</option>
+                        <option value="female" {{ old('gender', $user->gender) == 'female' ? 'selected' : '' }}>Nữ</option>
+                        <option value="other" {{ old('gender', $user->gender) == 'other' ? 'selected' : '' }}>Khác</option>
                     </select>
-                
-                    <button type="submit" class="btn btn-success float-end m-3">Cập Nhật</button>
-                </form>
+                </div>
 
-            </div>
+                <!-- Ngày sinh -->
+                <div class="mb-3">
+                    <label class="form-label">Ngày sinh</label>
+                    <input type="date" name="birthdate" class="form-control" value="{{ old('birthdate', $user->birthdate) }}" required>
+                </div>
+
+                <!-- SĐT -->
+                <div class="mb-3">
+                    <label class="form-label">Số điện thoại</label>
+                    <input type="text" name="phone" class="form-control" value="{{ old('phone', $user->phone) }}">
+                </div>
+
+                <!-- Địa chỉ -->
+                <div class="mb-3">
+                    <label class="form-label">Địa chỉ</label>
+                    <textarea name="address" class="form-control" rows="2">{{ old('address', $user->address) }}</textarea>
+                </div>
+
+                <!-- Vai trò -->
+                <div class="mb-3">
+                    <label class="form-label">Vai trò</label>
+                    <div class="row">
+                        @foreach ($roles as $role)
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input
+                                        type="checkbox"
+                                        name="roles[]"
+                                        value="{{ $role->id }}"
+                                        class="form-check-input"
+                                        id="role_{{ $role->id }}"
+                                        {{ in_array($role->id, old('roles', $user->roles->pluck('id')->toArray())) ? 'checked' : '' }}
+                                    >
+                                    <label class="form-check-label" for="role_{{ $role->id }}">
+                                        {{ $role->name }}
+                                    </label>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                    <small class="text-muted">Bạn có thể chọn nhiều vai trò.</small>
+                </div>
+
+                <!-- Nút cập nhật -->
+                <div class="text-end">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-1"></i> Cập nhật người dùng
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
-
-@if ($errors->any())
-    <div>
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-
-
-@if (session('input'))
-<div>
-    <h2>Received Input:</h2>
-    <ul>
-        @foreach (session('input') as $key => $value)
-            <li>{{ $key }}: {{ is_array($value) ? implode(', ', $value) : $value }}</li>
-        @endforeach
-    </ul>
-</div>
-@endif
-
-
-
-
-
 @endsection

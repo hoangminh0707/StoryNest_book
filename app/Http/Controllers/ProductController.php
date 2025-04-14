@@ -47,10 +47,31 @@ class ProductController extends Controller
 
                 $products = $query->paginate(12);
 
+               
+
                 $authors = Author::all();
                 $categories = Categories::all();
 
                 return view('client.pages.shop', compact('products', 'categories','authors'));
             }
+
+
+            
+                    public function show($id)
+                    {
+                        $products = Product::with(['author', 'images' => function($query) {
+                            $query->where('is_thumbnail', true);
+                            }])->get();
+                
+                        $categories = Categories::all();
+                        
+                        $product = Product::with(['author', 'category', 'images'])->findOrFail($id);
+                        $thumbnail = $product->images->where('is_thumbnail', 1)->first();
+                        $otherImages = $product->images->where('is_thumbnail', false);
+
+                        return view('client.pages.product', compact('product', 'thumbnail', 'otherImages','products','categories'));
+
+                    }
+
     
 }

@@ -33,21 +33,9 @@
         <main class="col-md-9">
           <div class="filter-shop d-flex flex-wrap justify-content-between mb-5">
             <div class="showing-product">
-              <p>Showing 1–9 of 55 results</p>
+              <p>Hiển thị từ {{ $products->firstItem() }}–{{ $products->lastItem() }} trong tổng {{ $products->total() }} sản phẩm</p>
             </div>
-            <div class="sort-by">
-              <select id="sorting" class="form-select" data-filter-sort="" data-filter-order="">
-                <option value="">Sắp xếp mặc định</option>
-                <option value="">Tên (A - Z)</option>
-                <option value="">Tên (Z - A)</option>
-                <option value="">Giá (Low-High)</option>
-                <option value="">Giá (High-Low)</option>
-                <option value="">Xếp hạng (Highest)</option>
-                <option value="">Xếp hạng (Lowest)</option>
-                <option value="">Người mẫu (A - Z)</option>
-                <option value="">Người mẫu (Z - A)</option>
-              </select>
-            </div>
+           
           </div>
           <div class="row product-content product-store">
             @foreach ($products as $product)
@@ -55,10 +43,17 @@
             <div class="col-lg-3 col-md-4 mb-4">
               <div class="card position-relative p-4 border rounded-3">
                 <div class="position-absolute">
-                  <p class="bg-primary py-1 px-3 fs-6 text-white rounded-2">10% off</p>
+                  {{-- <p class="bg-primary py-1 px-3 fs-6 text-white rounded-2">10% off</p> --}}
                 </div>
-                <img src="assetClient/images/product-item1.png" class="img-fluid shadow-sm" alt="product item">
-                <h6 class="mt-4 mb-0 fw-bold"><a href="single-product.html">{{ $product->name}}</a></h6>
+                
+
+                @if($product->images->isNotEmpty())
+                <img src="{{ Storage::url($product->images->first()->image_path) }}" alt="{{ $product->name }}" 
+                class="img-fluid shadow-sm" alt="{{ $product->name}}">
+                @endif
+                
+                
+                <h6 class="mt-4 mb-0 fw-bold"><a href="{{ route('product.show',$product->id) }}">{{ $product->name}}</a></h6>
                 <div class="review-content d-flex">
                   <p class="my-2 me-2 fs-6 text-black-50">{{ $product->author->name}}</p>
 

@@ -33,28 +33,35 @@
           <div class="d-flex gap-3 product-preview">
             <div class="swiper thumb-swiper w-50 swiper-initialized swiper-horizontal swiper-backface-hidden swiper-thumbs">
               <div class="swiper-wrapper d-flex flex-wrap gap-3 align-content-start" id="swiper-wrapper-8dc65d07f643104e8" aria-live="polite" style="transform: translate3d(0px, 0px, 0px);">
-                <div class="swiper-slide bg-white swiper-slide-active swiper-slide-visible swiper-slide-fully-visible swiper-slide-thumb-active" role="group" aria-label="1 / 3" style="width: 106px;">
-                  <img src="assetClient/images/product-thumbnail-1.png" alt="product-thumb" class="img-fluid border rounded-3">
+                @if($thumbnail)
+                <div class="swiper-slide bg-white swiper-slide-active swiper-slide-visible swiper-slide-fully-visible swiper-slide-thumb-active" role="group" aria-label="1 / {{ $otherImages->count() + 1 }}" style="width: 62px;">
+                  <img src="{{ Storage::url($thumbnail->image_path) }}" alt="product-thumb" class="img-fluid border rounded-3">
                 </div>
-                <div class="swiper-slide bg-white swiper-slide-next swiper-slide-visible swiper-slide-fully-visible" role="group" aria-label="2 / 3" style="width: 106px;">
-                  <img src="assetClient/images/product-thumbnail-2.png" alt="product-thumb" class="img-fluid border rounded-3">
+                @endif
+
+                @foreach($otherImages as $index => $image)
+                <div class="swiper-slide bg-white swiper-slide-next swiper-slide-visible swiper-slide-fully-visible" role="group" aria-label="{{ $index + 2 }} / {{ $otherImages->count() + 1 }}" style="width: 106px; height:62px;">
+                  <img src="{{ Storage::url($image->image_path)}}" alt="product-thumb" class="img-fluid border rounded-3">
                 </div>
-                <div class="swiper-slide bg-white swiper-slide-visible swiper-slide-fully-visible" role="group" aria-label="3 / 3" style="width: 106px;">
-                  <img src="assetClient/images/product-thumbnail-3.png" alt="product-thumb" class="img-fluid border rounded-3">
-                </div>
+                @endforeach
+               
               </div>
             <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span></div>
             <div class="swiper large-swiper border rounded-3 overflow-hidden swiper-fade swiper-initialized swiper-horizontal swiper-watch-progress swiper-backface-hidden">
               <div class="swiper-wrapper" id="swiper-wrapper-0513af73d940ca35" aria-live="polite">
-                <div class="swiper-slide bg-white swiper-slide-visible swiper-slide-fully-visible swiper-slide-active" role="group" aria-label="1 / 3" style="width: 513px; opacity: 1; transform: translate3d(0px, 0px, 0px);">
-                  <img src="assetClient/images/product-large-1.png" alt="single-product" class="img-fluid">
+
+                @if($thumbnail)
+                <div class="swiper-slide bg-white swiper-slide-visible swiper-slide-fully-visible swiper-slide-active" role="group" aria-label="1 / {{ $otherImages->count() + 1 }}" style="width: 513px; height:513px; opacity: 1; transform: translate3d(0px, 0px, 0px);">
+                  <img src="{{ Storage::url($thumbnail->image_path)  }}"   alt="{{ $product->name }}" class="img-fluid">
                 </div>
-                <div class="swiper-slide bg-white swiper-slide-next" role="group" aria-label="2 / 3" style="width: 513px; opacity: 0; transform: translate3d(-513px, 0px, 0px);">
-                  <img src="assetClient/images/product-large-2.png" alt="single-product" class="img-fluid">
-                </div>
-                <div class="swiper-slide bg-white" role="group" aria-label="3 / 3" style="width: 513px; opacity: 0; transform: translate3d(-1026px, 0px, 0px);">
-                  <img src="assetClient/images/product-large-3.png" alt="single-product" class="img-fluid">
-                </div>
+                  @endif
+
+                  @foreach($otherImages as $index => $image)
+                  <div class="swiper-slide bg-white swiper-slide-next" role="group" aria-label="{{ $index + 2 }} / {{ $otherImages->count() + 1 }}" style="width: 513px; height:513px; opacity: 0; transform: translate3d(-513px, 0px, 0px);">
+                    <img src="{{ asset('storage/' . $image->image_path) }}" alt="single-product" class="img-fluid">
+                  </div>
+                  @endforeach
+            
               </div>
             <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span></div>
           </div>
@@ -62,10 +69,10 @@
         <div class="col-lg-6">
           <div class="product-info ps-lg-5 pt-3 pt-lg-0">
             <div class="element-header">
-              <h1 class="product-title">The Emerald Crown</h1>
+              <h1 class="product-title">{{ $product->name}}</h1>
               <div class="product-price d-flex align-items-center mt-2">
-                <span class="fs-2 fw-light text-primary me-2">$200</span>
-                <del>$260</del>
+                <span class="fs-2 fw-light text-primary me-2">{{ number_format($product->price)}}</span> 
+                <del>{{ number_format($product->price + rand(10000,100000))}}</del>
               </div>
               <div class="rating text-warning d-flex align-items-center mb-2">
                 <svg class="star star-fill">
@@ -85,7 +92,7 @@
                 </svg>
               </div>
             </div>
-            <p>Justo, cum feugiat imperdiet nulla molestie ac vulputate scelerisque amet. Bibendum adipiscing platea blandit sit sed quam semper rhoncus.</p>
+            <p>{{ $product->description}}</p>
             <hr>
             <div class="cart-wrap">
               <div class="color-options product-select my-3">
@@ -122,6 +129,8 @@
                 <div class="item-title">
                   <l>2 in stock</l>
                 </div>
+                <form action="{{ route('cart.add', $product->id) }}" method="POST" style="display:inline;">
+                  @csrf
                 <div class="stock-button-wrap mt-2 d-flex flex-wrap align-items-center">
                   <div class="product-quantity">
                     <div class="input-group product-qty align-items-center" style="max-width: 150px;">
@@ -142,8 +151,12 @@
               </div>
               <div class="action-buttons my-3 d-flex flex-wrap gap-3">
                 <a href="#" class="btn">Order now</a>
-                <a href="#" class="btn btn-dark">Add to cart</a>
-                <a href="#" class="btn btn-dark">
+                <form action="{{ route('cart.add', $product->id) }}" method="POST" style="display:inline;">
+                  @csrf
+                  <button type="submit" class="btn btn-dark" >Add to cart</button>
+                </form>
+
+                <a href="{{ route('wishlist.add', $product->id) }}" class="btn btn-dark">
                   <svg class="heart" width="21" height="21">
                     <use xlink:href="#heart"></use>
                   </svg>
@@ -200,7 +213,7 @@
         <div class="tabs-listing">
           <nav>
             <div class="nav nav-tabs d-flex justify-content-center py-3" id="nav-tab" role="tablist">
-              <button class="nav-link text-capitalize active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Description</button>
+              <button class="nav-link text-capitalize active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Mô Tả</button>
               <button class="nav-link text-capitalize" id="nav-information-tab" data-bs-toggle="tab" data-bs-target="#nav-information" type="button" role="tab" aria-controls="nav-information" aria-selected="false" tabindex="-1">Additional information</button>
               <button class="nav-link text-capitalize" id="nav-shipping-tab" data-bs-toggle="tab" data-bs-target="#nav-shipping" type="button" role="tab" aria-controls="nav-shipping" aria-selected="false" tabindex="-1">Shipping &amp; Return</button>
               <button class="nav-link text-capitalize" id="nav-review-tab" data-bs-toggle="tab" data-bs-target="#nav-review" type="button" role="tab" aria-controls="nav-review" aria-selected="false" tabindex="-1">Reviews (02)</button>
@@ -208,14 +221,14 @@
           </nav>
           <div class="tab-content border-bottom py-4" id="nav-tabContent">
             <div class="tab-pane fade active show" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-              <p>Product Description</p>
-              <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna viverra non, semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis. Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer ligula vulputate sem tristique cursus.
+              <p>Mô Tả Sản Phẩm {{ $product->name}}</p>
+              <p>{{ $product->description}}</p>
               </p><ul class="fw-light">
-                <li>Donec nec justo eget felis facilisis fermentum.</li>
-                <li>Suspendisse urna viverra non, semper suscipit pede.</li>
-                <li>Aliquam porttitor mauris sit amet orci.</li>
+                <li> Tác Giả : {{ $product->author->name}}</li>
+                <li>Chất Liệu</li>
+                <li>Bla</li>
               </ul>
-              <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna viverra non, semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis. Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer ligula vulputate sem tristique cursus.</p>
+              <p>StoryNest Book cảm ơn bạn đã ghé qua!</p>
             </div>
             <div class="tab-pane fade" id="nav-information" role="tabpanel" aria-labelledby="nav-information-tab">
               <p>It is Comfortable and Best</p>
@@ -343,8 +356,8 @@
   <section id="related-items" class="position-relative padding-large ">
     <div class="container">
       <div class="section-title d-md-flex justify-content-between align-items-center mb-4">
-        <h3 class="d-flex align-items-center">Related Items</h3>
-        <a href="shop.html" class="btn">View All</a>
+        <h3 class="d-flex align-items-center">Các mục liên quan</h3>
+        <a href="{{ route('shop') }}" class="btn">Xem tất cả</a>
       </div>
       <div class="position-absolute top-50 end-0 pe-0 pe-xxl-5 me-0 me-xxl-5 swiper-next product-slider-button-next" tabindex="0" role="button" aria-label="Next slide" aria-controls="swiper-wrapper-d595e1cec66e64e4" aria-disabled="false">
         <svg class="chevron-forward-circle d-flex justify-content-center align-items-center p-2" width="80" height="80">
@@ -356,17 +369,21 @@
           <use xlink:href="#alt-arrow-left-outline"></use>
         </svg>
       </div>
+      
       <div class="swiper product-swiper swiper-initialized swiper-horizontal swiper-backface-hidden">
         <div class="swiper-wrapper" id="swiper-wrapper-d595e1cec66e64e4" aria-live="polite">
+          @foreach($products as $product)
           <div class="swiper-slide swiper-slide-active" role="group" aria-label="1 / 6" style="width: 243.2px; margin-right: 20px;">
             <div class="card position-relative p-4 border rounded-3">
               <div class="position-absolute">
                 <p class="bg-primary py-1 px-3 fs-6 text-white rounded-2">10% off</p>
               </div>
-              <img src="assetClient/images/product-item1.png" class="img-fluid shadow-sm" alt="product item">
-              <h6 class="mt-4 mb-0 fw-bold"><a href="single-product.html">Secrets of the Alchemist</a></h6>
+              @if($product->images->isNotEmpty())
+              <img src="{{ Storage::url($product->images->first()->image_path) }}" alt="{{ $product->name }}"  class="img-fluid shadow-sm">
+              @endif
+              <h6 class="mt-4 mb-0 fw-bold"><a href="{{ route('product.show',$product->id) }}">{{ $product->name }}</a></h6>
               <div class="review-content d-flex">
-                <p class="my-2 me-2 fs-6 text-black-50">Lauren Asher</p>
+                <p class="my-2 me-2 fs-6 text-black-50">{{ $product->author->name }}</p>
 
                 <div class="rating text-warning d-flex align-items-center">
                   <svg class="star star-fill">
@@ -386,241 +403,42 @@
                   </svg>
                 </div>
               </div>
-              <span class="price text-primary fw-bold mb-2 fs-5">$870</span>
+              <span class="price text-primary fw-bold mb-2 fs-5">{{ number_format($product->price) }} <strong>VND</strong></span>
               <div class="card-concern position-absolute start-0 end-0 d-flex gap-2">
-                <button type="button" href="#" class="btn btn-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tooltip on top">
+                @auth
+
+                <form action="{{ route('cart.add', $product->id) }}" method="POST" style="display:inline;">
+                  @csrf
+                <button type="submit" href="#" class="btn btn-dark" data-bs-toggle="tooltip" data-bs-placement="top"
+                  data-bs-title="Tooltip on top">
                   <svg class="cart">
                     <use xlink:href="#cart"></use>
                   </svg>
                 </button>
-                <a href="#" class="btn btn-dark">
-                  <span>
-                    <svg class="wishlist">
-                      <use xlink:href="#heart"></use>
-                    </svg>
-                  </span>
-                </a>
+                </form>
+              @endauth
+              @guest
+               <a href="#" onclick="showLoginAlert()" class="btn btn-dark" data-bs-toggle="tooltip" data-bs-placement="top"
+               data-bs-title="Tooltip on top">
+               <svg class="cart">
+                <use xlink:href="#cart"></use>
+              </svg>
+              </a>
+              @endguest
+
+                <a href="{{ route('wishlist.add', $product->id) }}" class="btn btn-dark">
+                <span>
+                  <svg class="wishlist">
+                    <use xlink:href="#heart"></use>
+                  </svg>
+                </span>
+              </a>
+
               </div>
             </div>
           </div>
-          <div class="swiper-slide swiper-slide-next" role="group" aria-label="2 / 6" style="width: 243.2px; margin-right: 20px;">
-            <div class="card position-relative p-4 border rounded-3">
-              <img src="assetClient/images/product-item2.png" class="img-fluid shadow-sm" alt="product item">
-              <h6 class="mt-4 mb-0 fw-bold"><a href="single-product.html">Secrets of the Alchemist</a></h6>
-              <div class="review-content d-flex">
-                <p class="my-2 me-2 fs-6 text-black-50">Lauren Asher</p>
-
-                <div class="rating text-warning d-flex align-items-center">
-                  <svg class="star star-fill">
-                    <use xlink:href="#star-fill"></use>
-                  </svg>
-                  <svg class="star star-fill">
-                    <use xlink:href="#star-fill"></use>
-                  </svg>
-                  <svg class="star star-fill">
-                    <use xlink:href="#star-fill"></use>
-                  </svg>
-                  <svg class="star star-fill">
-                    <use xlink:href="#star-fill"></use>
-                  </svg>
-                  <svg class="star star-fill">
-                    <use xlink:href="#star-fill"></use>
-                  </svg>
-                </div>
-              </div>
-
-              <span class="price text-primary fw-bold mb-2 fs-5">$870</span>
-              <div class="card-concern position-absolute start-0 end-0 d-flex gap-2">
-                <button type="button" href="#" class="btn btn-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tooltip on top">
-                  <svg class="cart">
-                    <use xlink:href="#cart"></use>
-                  </svg>
-                </button>
-                <a href="#" class="btn btn-dark">
-                  <span>
-                    <svg class="wishlist">
-                      <use xlink:href="#heart"></use>
-                    </svg>
-                  </span>
-                </a>
-              </div>
-            </div>
-          </div>
-          <div class="swiper-slide" role="group" aria-label="3 / 6" style="width: 243.2px; margin-right: 20px;">
-            <div class="card position-relative p-4 border rounded-3">
-              <img src="assetClient/images/product-item3.png" class="img-fluid shadow-sm" alt="product item">
-              <h6 class="mt-4 mb-0 fw-bold"><a href="single-product.html">Secrets of the Alchemist</a></h6>
-              <div class="review-content d-flex">
-                <p class="my-2 me-2 fs-6 text-black-50">Lauren Asher</p>
-
-                <div class="rating text-warning d-flex align-items-center">
-                  <svg class="star star-fill">
-                    <use xlink:href="#star-fill"></use>
-                  </svg>
-                  <svg class="star star-fill">
-                    <use xlink:href="#star-fill"></use>
-                  </svg>
-                  <svg class="star star-fill">
-                    <use xlink:href="#star-fill"></use>
-                  </svg>
-                  <svg class="star star-fill">
-                    <use xlink:href="#star-fill"></use>
-                  </svg>
-                  <svg class="star star-fill">
-                    <use xlink:href="#star-fill"></use>
-                  </svg>
-                </div>
-              </div>
-
-              <span class="price text-primary fw-bold mb-2 fs-5">$870</span>
-              <div class="card-concern position-absolute start-0 end-0 d-flex gap-2">
-                <button type="button" href="#" class="btn btn-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tooltip on top">
-                  <svg class="cart">
-                    <use xlink:href="#cart"></use>
-                  </svg>
-                </button>
-                <a href="#" class="btn btn-dark">
-                  <span>
-                    <svg class="wishlist">
-                      <use xlink:href="#heart"></use>
-                    </svg>
-                  </span>
-                </a>
-              </div>
-            </div>
-          </div>
-          <div class="swiper-slide" role="group" aria-label="4 / 6" style="width: 243.2px; margin-right: 20px;">
-            <div class="card position-relative p-4 border rounded-3">
-              <div class="position-absolute">
-                <p class="bg-primary py-1 px-3 fs-6 text-white rounded-2">10% off</p>
-              </div>
-              <img src="assetClient/images/product-item4.png" class="img-fluid shadow-sm" alt="product item">
-              <h6 class="mt-4 mb-0 fw-bold"><a href="single-product.html">Secrets of the Alchemist</a></h6>
-              <div class="review-content d-flex">
-                <p class="my-2 me-2 fs-6 text-black-50">Lauren Asher</p>
-
-                <div class="rating text-warning d-flex align-items-center">
-                  <svg class="star star-fill">
-                    <use xlink:href="#star-fill"></use>
-                  </svg>
-                  <svg class="star star-fill">
-                    <use xlink:href="#star-fill"></use>
-                  </svg>
-                  <svg class="star star-fill">
-                    <use xlink:href="#star-fill"></use>
-                  </svg>
-                  <svg class="star star-fill">
-                    <use xlink:href="#star-fill"></use>
-                  </svg>
-                  <svg class="star star-fill">
-                    <use xlink:href="#star-fill"></use>
-                  </svg>
-                </div>
-              </div>
-
-              <span class="price text-primary fw-bold mb-2 fs-5">$870</span>
-              <div class="card-concern position-absolute start-0 end-0 d-flex gap-2">
-                <button type="button" href="#" class="btn btn-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tooltip on top">
-                  <svg class="cart">
-                    <use xlink:href="#cart"></use>
-                  </svg>
-                </button>
-                <a href="#" class="btn btn-dark">
-                  <span>
-                    <svg class="wishlist">
-                      <use xlink:href="#heart"></use>
-                    </svg>
-                  </span>
-                </a>
-              </div>
-            </div>
-          </div>
-          <div class="swiper-slide" role="group" aria-label="5 / 6" style="width: 243.2px; margin-right: 20px;">
-            <div class="card position-relative p-4 border rounded-3">
-              <img src="assetClient/images/product-item5.png" class="img-fluid shadow-sm" alt="product item">
-              <h6 class="mt-4 mb-0 fw-bold"><a href="single-product.html">Secrets of the Alchemist</a></h6>
-              <div class="review-content d-flex">
-                <p class="my-2 me-2 fs-6 text-black-50">Lauren Asher</p>
-
-                <div class="rating text-warning d-flex align-items-center">
-                  <svg class="star star-fill">
-                    <use xlink:href="#star-fill"></use>
-                  </svg>
-                  <svg class="star star-fill">
-                    <use xlink:href="#star-fill"></use>
-                  </svg>
-                  <svg class="star star-fill">
-                    <use xlink:href="#star-fill"></use>
-                  </svg>
-                  <svg class="star star-fill">
-                    <use xlink:href="#star-fill"></use>
-                  </svg>
-                  <svg class="star star-fill">
-                    <use xlink:href="#star-fill"></use>
-                  </svg>
-                </div>
-              </div>
-
-              <span class="price text-primary fw-bold mb-2 fs-5">$870</span>
-              <div class="card-concern position-absolute start-0 end-0 d-flex gap-2">
-                <button type="button" href="#" class="btn btn-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tooltip on top">
-                  <svg class="cart">
-                    <use xlink:href="#cart"></use>
-                  </svg>
-                </button>
-                <a href="#" class="btn btn-dark">
-                  <span>
-                    <svg class="wishlist">
-                      <use xlink:href="#heart"></use>
-                    </svg>
-                  </span>
-                </a>
-              </div>
-            </div>
-          </div>
-          <div class="swiper-slide" role="group" aria-label="6 / 6" style="width: 243.2px; margin-right: 20px;">
-            <div class="card position-relative p-4 border rounded-3">
-              <img src="assetClient/images/product-item6.png" class="img-fluid shadow-sm" alt="product item">
-              <h6 class="mt-4 mb-0 fw-bold"><a href="single-product.html">Secrets of the Alchemist</a></h6>
-              <div class="review-content d-flex">
-                <p class="my-2 me-2 fs-6 text-black-50">Lauren Asher</p>
-
-                <div class="rating text-warning d-flex align-items-center">
-                  <svg class="star star-fill">
-                    <use xlink:href="#star-fill"></use>
-                  </svg>
-                  <svg class="star star-fill">
-                    <use xlink:href="#star-fill"></use>
-                  </svg>
-                  <svg class="star star-fill">
-                    <use xlink:href="#star-fill"></use>
-                  </svg>
-                  <svg class="star star-fill">
-                    <use xlink:href="#star-fill"></use>
-                  </svg>
-                  <svg class="star star-fill">
-                    <use xlink:href="#star-fill"></use>
-                  </svg>
-                </div>
-              </div>
-
-              <span class="price text-primary fw-bold mb-2 fs-5">$870</span>
-              <div class="card-concern position-absolute start-0 end-0 d-flex gap-2">
-                <button type="button" href="#" class="btn btn-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tooltip on top">
-                  <svg class="cart">
-                    <use xlink:href="#cart"></use>
-                  </svg>
-                </button>
-                <a href="#" class="btn btn-dark">
-                  <span>
-                    <svg class="wishlist">
-                      <use xlink:href="#heart"></use>
-                    </svg>
-                  </span>
-                </a>
-              </div>
-            </div>
-          </div>
+          @endforeach
+        
 
         </div>
       <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span></div>
