@@ -667,26 +667,18 @@
                                         <a href="{{ route('publishers.index') }}" class="nav-link">
                                             Nhà suất bản
                                         </a>
+                                        <a href="{{ route('attributes.index') }}" class="nav-link">
+                                            Thuộc tính
+                                        </a>
 
                                     </li>
                                 </ul>
                             </div>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link menu-link collapsed" href="#sidebarAdvanceUI" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarAdvanceUI">
-                                <i class="ri-stack-line"></i> <span data-key="t-advance-ui">Biến thể</span>
+                            <a class="nav-link menu-link" href="{{ route('product_variants.index') }}">
+                                <i class="ri-file-edit-line"></i>Biến thể
                             </a>
-                            <div class="menu-dropdown collapse" id="sidebarAdvanceUI" style="">
-                                <ul class="nav nav-sm flex-column">
-                                    <li class="nav-item">
-                                        <a href="{{ route('product_variants.index') }}" class="nav-link" data-key="t-sweet-alerts">Danh sách biến thể</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{ route('attributes.index') }}" class="nav-link" data-key="t-nestable-list">Thuộc tính</a>
-                                    </li>
-
-                                </ul>
-                            </div>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="#sidebarPages" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarPages">
@@ -695,10 +687,54 @@
                             <div class="collapse menu-dropdown" id="sidebarPages">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item">
-                                        <a href="pages-starter.html" class="nav-link" data-key="t-starter"> Danh sách đơn hàng </a>
+                                        <a href="{{ route('orders.index') }}" class="nav-link" data-key="t-starter"> Danh sách đơn hàng </a>
                                     </li>
                                 </ul>
                             </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="#sidebarForms" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarForms">
+                                <i class="bx bxs-megaphone"></i> <span data-key="t-forms">Maketting</span>
+                            </a>
+                            <div class="collapse menu-dropdown" id="sidebarForms">
+                                <ul class="nav nav-sm flex-column">
+                                    <li class="nav-item">
+                                        <a href="{{ route('vouchers.index') }}" class="nav-link" data-key="t-basic-elements">
+                                            Danh sách Mã Giảm Giá
+                                        </a>
+                                        <a href="forms-elements.html" class="nav-link" data-key="t-basic-elements">
+                                            Danh sách Slider
+                                        </a>
+                                        <a href="forms-elements.html" class="nav-link" data-key="t-basic-elements">
+                                            Danh sách bài viết
+                                        </a>
+                                        <a href="forms-elements.html" class="nav-link" data-key="t-basic-elements">
+                                            Danh sách flash sale
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="{{ route('reviews.index') }}">
+                                <i class="ri-file-edit-line"></i>Đánh giá
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="{{ route('comments.index') }}">
+                                <i class=" ri-message-2-line"></i>Bình luận
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="{{ route('payments.index') }}">
+                                <i class=" ri-wallet-line"></i>Thanh toán
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="{{ route('shipping-methods.index') }}">
+                                <i class="  ri-truck-line"></i>Hình thức vận chuyển
+                            </a>
                         </li>
                     </ul>
                 </div>

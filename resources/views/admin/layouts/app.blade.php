@@ -11,21 +11,18 @@
     <meta content="Themesbrand" name="author" />
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdn.materialdesignicons.com/6.5.95/css/materialdesignicons.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+    <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
 
-
-        <!-- Sweet Alert css-->
-        <link href="{{ asset('assets/libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
+    <!-- Sweet Alert css-->
+    <link href="{{ asset('assets/libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
 
     <!-- plugin css -->
     <link href="{{ asset('assets/libs/jsvectormap/css/jsvectormap.min.css') }}" rel="stylesheet" type="text/css" />
 
-    <link href="{{ asset('assets/libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet"/>
+    <link href="{{ asset('assets/libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" />
 
     <!-- Thêm Link CSS -->
-<link href="https://cdn.jsdelivr.net/npm/list.js@2.3.1/dist/list.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/list.js@2.3.1/dist/list.min.css" rel="stylesheet">
 
 
     <!-- Layout config Js -->
@@ -41,8 +38,10 @@
 </head>
 
 <body>
-@include('admin.layouts.header')
-@yield('content')
-@include('admin.layouts.footer')
+    @include('admin.layouts.header')
+    @yield('content')
+    @include('admin.layouts.footer')
+    @yield('scripts')
 </body>
+
 </html>

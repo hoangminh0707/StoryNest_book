@@ -14,6 +14,9 @@ use App\Http\Controllers\Admin\PublisherController;
 use App\Http\Controllers\Admin\AuthorController;
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\AttributeValueController;
+use App\Http\Controllers\Admin\CommentController;
+use App\Http\Controllers\Admin\ShippingMethodController;
+use App\Http\Controllers\Admin\VoucherConditionController;
 
 
 
@@ -106,12 +109,12 @@ Route::resource('admin/categories', CategoryController::class);
 Route::resource('admin/products', ProductController::class);
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
 // Route để hiển thị form sửa sản phẩm
-Route::get('products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
-// Route để xử lý cập nhật sản phẩm
-Route::put('products/{product}', [ProductController::class, 'update'])->name('products.update');
+// Route::get('products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
+// // Route để xử lý cập nhật sản phẩm
+// Route::put('products/{product}', [ProductController::class, 'update'])->name('products.update');
 // Route để xóa ảnh của sản phẩm
-Route::delete('products/image/{image}', [ProductController::class, 'deleteImage'])->name('products.image.delete');
-Route::delete('products/{id}/image', [ProductController::class, 'deleteImage'])->name('products.image.delete');
+// Route::delete('products/image/{image}', [ProductController::class, 'deleteImage'])->name('products.image.delete');
+// Route::delete('products/{id}/image', [ProductController::class, 'deleteImage'])->name('products.image.delete');
 
 
 // 📌 Quản lý Nhà xuất bản (Publishers)
@@ -129,3 +132,54 @@ Route::resource('product_variants', ProductVariantController::class);
 
 // Route cho danh sách ảnh sản phẩm
 Route::resource('product-images', ProductImageController::class);
+
+//Bình luận
+Route::resource('comments', App\Http\Controllers\Admin\CommentController::class)->only(['index', 'destroy']);
+Route::patch('comments/{id}/approve', [App\Http\Controllers\Admin\CommentController::class, 'approve'])->name('comments.approve');
+
+
+
+//Đánh giá
+Route::resource('reviews', \App\Http\Controllers\Admin\ReviewController::class)->only(['index', 'show', 'destroy']);
+Route::get('reviews/{id}/approve', [\App\Http\Controllers\Admin\ReviewController::class, 'approve'])->name('reviews.approve');
+
+//Payment
+
+Route::resource('payments', \App\Http\Controllers\Admin\PaymentController::class)->only([
+    'index', 'show', 'destroy'
+]);
+
+Route::post('payments/{id}/update-status', [\App\Http\Controllers\Admin\PaymentController::class, 'updateStatus'])
+    ->name('payments.updateStatus');
+
+//Hình thức vận chuyển 
+Route::resource('shipping-methods', ShippingMethodController::class);
+Route::patch('/shipping-methods/{id}/toggle', [ShippingMethodController::class, 'toggleStatus'])->name('shipping-methods.toggle');
+
+
+//Voucher 
+Route::resource('vouchers', App\Http\Controllers\Admin\VoucherController::class);
+Route::patch('vouchers/{voucher}/toggle', [App\Http\Controllers\Admin\VoucherController::class, 'toggle'])->name('vouchers.toggle');
+
+
+   // Route quản lý điều kiện áp dụng (VoucherCondition)
+Route::resource('/admin/voucher-conditions', App\Http\Controllers\Admin\VoucherConditionController::class);
+
+
+Route::resource('orders', \App\Http\Controllers\Admin\OrderController::class)->only([
+    'index', 'show', 'destroy'
+]);
+Route::get('orders/{order}/edit-status', [\App\Http\Controllers\Admin\OrderController::class, 'editStatus'])->name('orders.editStatus');
+Route::put('orders/{order}/update-status', [\App\Http\Controllers\Admin\OrderController::class, 'updateStatus'])->name('orders.updateStatus');
+
+
+
+
+
+
+
+
+
+
+
+

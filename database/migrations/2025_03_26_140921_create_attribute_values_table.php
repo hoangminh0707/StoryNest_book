@@ -13,14 +13,12 @@ return new class extends Migration
     {
         Schema::create('attribute_values', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('attribute_id'); // FK đến attributes
-            $table->unsignedBigInteger('product_variant_id'); // FK đến product_variants
+            $table->foreignId('attribute_id')->constrained()->onDelete('cascade');
+           
             $table->string('value'); 
             $table->timestamps();
 
-            // Khóa ngoại
-            $table->foreign('attribute_id')->references('id')->on('attributes')->onDelete('cascade');
-            $table->foreign('product_variant_id')->references('id')->on('product_variants')->onDelete('cascade');
+        
         });
     }
 

@@ -1,76 +1,62 @@
 @extends('admin.layouts.app')
 
 @section('content')
-<div class="main-content">
-    <div class="page-content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-12">
-                    <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Chi Tiết Sản Phẩm</h4>
-                        <a href="{{ route('products.index') }}" class="btn btn-secondary">Quay Lại</a>
-                    </div>
-                </div>
-            </div>
+<div class="container">
+    <h1>Chi tiết sản phẩm: {{ $product->name }}</h1>
 
-            <div class="row">
-                <!-- Thông tin sản phẩm -->
-                <div class="col-lg-8">
-                    <div class="card">
-                        <div class="card-body">
-                            <h4 class="card-title">{{ $product->name }}</h4>
-                            <p>{{ $product->description }}</p>
-                            <p><strong>Giá:</strong> {{ number_format($product->price, 0, ',', '.') }} đ</p>
-                            <p><strong>Danh Mục:</strong> {{ $product->category->name ?? 'N/A' }}</p>
-                            <p><strong>Tác Giả:</strong> {{ $product->author->name ?? 'Chưa có' }}</p>
-                            <p><strong>Nhà Xuất Bản:</strong> {{ $product->publisher->name ?? 'Chưa có' }}</p>
-                        </div>
-                    </div>
-                </div>
+    <div class="row">
+        <div class="col-md-4">
+            <strong>Ảnh đại diện:</strong><br>
+            @if ($product->thumbnail)
+                <img src="{{ asset('storage/' . $product->thumbnail->image_path) }}" alt="Thumbnail" width="200">
+            @else
+                <em>Không có ảnh</em>
+            @endif
+        </div>
 
-                <!-- Ảnh sản phẩm -->
-                <div class="col-lg-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Hình Ảnh</h5>
-                            @foreach($product->images as $image)
-                                <img src="{{ asset('storage/' . $image->image_path) }}" alt="{{ $product->name }}" class="img-fluid mb-2">
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Biến thể sản phẩm -->
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Biến Thể</h5>
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>SKU</th>
-                                        <th>Tên Biến Thể</th>
-                                        <th>Giá</th>
-                                        <th>Số Lượng</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($product->variants as $variant)
-                                        <tr>
-                                            <td>{{ $variant->sku }}</td>
-                                            <td>{{ $variant->variant_name }}</td>
-                                            <td>{{ number_format($variant->variant_price, 0, ',', '.') }} đ</td>
-                                            <td>{{ $variant->stock_quantity }}</td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+        <div class="col-md-8">
+            <p><strong>Mô tả:</strong> {{ $product->description }}</p>
+            <p><strong>Tác giả:</strong> {{ $product->author->name ?? 'Không có' }}</p>
+            <p><strong>Nhà xuất bản:</strong> {{ $product->publisher->name ?? 'Không có' }}</p>
+            <p><strong>Danh mục:</strong> {{ $product->category->name ?? 'Không có' }}</p>
+            <p><strong>Loại sản phẩm:</strong> {{ $product->product_type }}</p>
+            <p><strong>Trạng thái:</strong> {{ $product->status }}</p>
+            <p><strong>Ngày tạo:</strong> {{ $product->created_at->format('d/m/Y') }}</p>
         </div>
     </div>
+
+    <hr>
+
+    @if($product->product_type === 'simple')
+        <p><strong>Giá:</strong> {{ number_format($product->price, 0, ',', '.') }} đ</p>
+    @else
+        <h4>Biến thể:</h4>
+        @foreach ($product->variants as $variant)
+            <div class="mb-3 p-3 border rounded">
+                <p>
+                    <strong>{{ $variant->variant_name }}</strong><br>
+                    SKU: {{ $variant->sku }}<br>
+                    Giá: {{ number_format($variant->variant_price, 0, ',', '.') }} đ<br>
+                    Số lượng: {{ $variant->stock_quantity }}
+                </p>
+                @if ($variant->attributeValues->count())
+                    <ul class="text-muted small">
+                        @foreach ($variant->attributeValues as $value)
+                            <li>{{ $value->attribute->name }}: {{ $value->value }}</li>
+                        @endforeach
+                    </ul>
+                @endif
+            </div>
+        @endforeach
+    @endif
+
+    <hr>
+
+    <h4>Ảnh khác:</h4>
+    @foreach ($product->images as $image)
+        @if (!$image->is_thumbnail)
+            <img src="{{ asset('storage/' . $image->image_path) }}" alt="Image" width="100" class="me-2 mb-2">
+        @endif
+    @endforeach
 </div>
 @endsection

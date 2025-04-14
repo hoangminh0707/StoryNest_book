@@ -1,0 +1,54 @@
+<?php
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+class Order extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'user_address_id',
+        'voucher_id',
+        'shipping_method_id',
+        'total_amount',
+        'discount_amount',
+        'shipping_fee',
+        'final_amount',
+        'status',
+    ];
+
+    // Relationships
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function userAddress()
+    {
+        return $this->belongsTo(UserAddress::class);
+    }
+
+    public function voucher()
+    {
+        return $this->belongsTo(Voucher::class);
+    }
+
+    public function shippingMethod()
+    {
+        return $this->belongsTo(ShippingMethod::class);
+    }
+
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
+    public function payment()
+    {
+        return $this->hasOne(Payment::class);
+    }
+}

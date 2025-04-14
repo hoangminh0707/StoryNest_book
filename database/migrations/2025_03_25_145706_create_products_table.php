@@ -15,10 +15,14 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->decimal('price', 10, 2);
+            $table->decimal('price', 10, 2)->nullable(); // Giá sản phẩm (cho sản phẩm đơn)
+            $table->integer('quantity')->nullable(); // Số lượng sản phẩm (cho sản phẩm đơn)
             $table->unsignedBigInteger('author_id')->nullable();
             $table->unsignedBigInteger('publisher_id')->nullable();
-            $table->timestamps();
+            $table->enum('product_type', ['simple', 'variable'])->default('simple'); // Loại sản phẩm
+            $table->enum('status', ['published', 'draft'])->default('draft'); // Trạng thái
+            $table->timestamps(); 
+            $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->foreign('author_id')->references('id')->on('authors')->onDelete('set null');
             $table->foreign('publisher_id')->references('id')->on('publishers')->onDelete('set null');
         });
