@@ -32,6 +32,7 @@
         <main class="col-md-9 mb-4 mb-md-0">
           <div class="filter-blog d-flex flex-wrap justify-content-between mb-4">
             <div class="showing-product">
+<<<<<<< HEAD
                 <p>Hiển thị 1-9 của 55 kết quả</p>
             </div>
             <div class="sort-by">
@@ -43,89 +44,165 @@
                 <option value="">Tên (Z - A)</option>
                 <option value="">Mẫu (A - Z)</option>
                 <option value="">Mẫu (Z - A)</option>
+=======
+              <p>Showing 1-9 of 55 results</p>
+            </div>
+            <div class="sort-by">
+              <select id="sorting" class="form-select" data-filter-sort="" data-filter-order="">
+                <option value="">Latest to oldest</option>
+                <option value="">Oldest to latest</option>
+                <option value="">Popular</option>
+                <option value="">Name (A - Z)</option>
+                <option value="">Name (Z - A)</option>
+                <option value="">Model (A - Z)</option>
+                <option value="">Model (Z - A)</option>
+>>>>>>> duong
               </select>
             </div>
           </div>
           <div class="row post-contents">
             <div class="col-lg-4 col-md-6 posts mb-5">
               <img src="assetClient/images/post-item1.jpg" alt="post image" class="img-fluid rounded-3">
+<<<<<<< HEAD
               <a href="blog.html" class="fs-6 text-primary">Sách</a>
               <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">Vương quốc hấp dẫn của khoa học viễn tưởng
 </a></h4>
               <p class="mb-2">Đi sâu vào thế giới công nghệ tiên tiến với bài đăng trên blog mới nhất của chúng tôi, nơi chúng tôi nêu bật
 Năm gadge thiết yếu. <span><a class="text-decoration-underline text-black-50" href="single-post.html">Đọc thêm</a></span>
+=======
+              <a href="blog.html" class="fs-6 text-primary">Books</a>
+              <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">The Fascinating Realm of Science Fiction</a></h4>
+              <p class="mb-2">Dive into the world of cutting-edge technology with our latest blog post, where we highlight
+                five essential gadge. <span><a class="text-decoration-underline text-black-50" href="single-post.html">Read More</a></span>
+>>>>>>> duong
               </p>
             </div>
             <div class="col-lg-4 col-md-6 posts mb-5">
               <img src="assetClient/images/post-item1.jpg" alt="post image" class="img-fluid rounded-3">
+<<<<<<< HEAD
               <a href="blog.html" class="fs-6 text-primary">Sách</a>
               <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">Vương quốc hấp dẫn của khoa học viễn tưởng
 </a></h4>
               <p class="mb-2">Đi sâu vào thế giới công nghệ tiên tiến với bài đăng trên blog mới nhất của chúng tôi, nơi chúng tôi nêu bật
 Năm gadge thiết yếu. <span><a class="text-decoration-underline text-black-50" href="single-post.html">Đọc thêm</a></span>
+=======
+              <a href="blog.html" class="fs-6 text-primary">Books</a>
+              <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">The Fascinating Realm of Science Fiction</a></h4>
+              <p class="mb-2">Dive into the world of cutting-edge technology with our latest blog post, where we highlight
+                five essential gadge. <span><a class="text-decoration-underline text-black-50" href="single-post.html">Read More</a></span>
+>>>>>>> duong
               </p>
             </div>
             <div class="col-lg-4 col-md-6 posts mb-5">
               <img src="assetClient/images/post-item2.jpg" alt="post image" class="img-fluid rounded-3">
+<<<<<<< HEAD
               <a href="blog.html" class="fs-6 text-primary">Sách</a>
               <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">Vương quốc hấp dẫn của khoa học viễn tưởng
 </a></h4>
               <p class="mb-2">Đi sâu vào thế giới công nghệ tiên tiến với bài đăng trên blog mới nhất của chúng tôi, nơi chúng tôi nêu bật
 Năm gadge thiết yếu. <span><a class="text-decoration-underline text-black-50" href="single-post.html">Đọc thêm</a></span>
+=======
+              <a href="blog.html" class="fs-6 text-primary">Books</a>
+              <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">The Fascinating Realm of Science Fiction</a></h4>
+              <p class="mb-2">Dive into the world of cutting-edge technology with our latest blog post, where we highlight
+                five essential gadge. <span><a class="text-decoration-underline text-black-50" href="single-post.html">Read More</a></span>
+>>>>>>> duong
               </p>
             </div>
             <div class="col-lg-4 col-md-6 posts mb-5">
               <img src="assetClient/images/post-item3.jpg" alt="post image" class="img-fluid rounded-3">
+<<<<<<< HEAD
               <a href="blog.html" class="fs-6 text-primary">Sách</a>
               <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">Vương quốc hấp dẫn của khoa học viễn tưởng
 </a></h4>
               <p class="mb-2">Đi sâu vào thế giới công nghệ tiên tiến với bài đăng trên blog mới nhất của chúng tôi, nơi chúng tôi nêu bật
 Năm gadge thiết yếu. <span><a class="text-decoration-underline text-black-50" href="single-post.html">Đọc thêm</a></span>
+=======
+              <a href="blog.html" class="fs-6 text-primary">Books</a>
+              <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">The Fascinating Realm of Science Fiction</a></h4>
+              <p class="mb-2">Dive into the world of cutting-edge technology with our latest blog post, where we highlight
+                five essential gadge. <span><a class="text-decoration-underline text-black-50" href="single-post.html">Read More</a></span>
+>>>>>>> duong
               </p>
             </div>
             <div class="col-lg-4 col-md-6 posts mb-5">
               <img src="assetClient/images/post-item4.jpg" alt="post image" class="img-fluid rounded-3">
+<<<<<<< HEAD
               <a href="blog.html" class="fs-6 text-primary">Sách</a>
               <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">Vương quốc hấp dẫn của khoa học viễn tưởng
 </a></h4>
               <p class="mb-2">Đi sâu vào thế giới công nghệ tiên tiến với bài đăng trên blog mới nhất của chúng tôi, nơi chúng tôi nêu bật
 Năm gadge thiết yếu. <span><a class="text-decoration-underline text-black-50" href="single-post.html">Đọc thêm</a></span>
+=======
+              <a href="blog.html" class="fs-6 text-primary">Books</a>
+              <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">The Fascinating Realm of Science Fiction</a></h4>
+              <p class="mb-2">Dive into the world of cutting-edge technology with our latest blog post, where we highlight
+                five essential gadge. <span><a class="text-decoration-underline text-black-50" href="single-post.html">Read More</a></span>
+>>>>>>> duong
               </p>
             </div>
             <div class="col-lg-4 col-md-6 posts mb-5">
               <img src="assetClient/images/post-item5.jpg" alt="post image" class="img-fluid rounded-3">
+<<<<<<< HEAD
               <a href="blog.html" class="fs-6 text-primary">Sách</a>
               <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">Vương quốc hấp dẫn của khoa học viễn tưởng<
 </a></h4>
               <p class="mb-2">Đi sâu vào thế giới công nghệ tiên tiến với bài đăng trên blog mới nhất của chúng tôi, nơi chúng tôi nêu bật
 Năm gadge thiết yếu. <span><a class="text-decoration-underline text-black-50" href="single-post.html">Đọc thêm</a></span>
+=======
+              <a href="blog.html" class="fs-6 text-primary">Books</a>
+              <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">The Fascinating Realm of Science Fiction</a></h4>
+              <p class="mb-2">Dive into the world of cutting-edge technology with our latest blog post, where we highlight
+                five essential gadge. <span><a class="text-decoration-underline text-black-50" href="single-post.html">Read More</a></span>
+>>>>>>> duong
               </p>
             </div>
             <div class="col-lg-4 col-md-6 posts mb-5">
               <img src="assetClient/images/post-item6.jpg" alt="post image" class="img-fluid rounded-3">
+<<<<<<< HEAD
               <a href="blog.html" class="fs-6 text-primary">Sách</a>
               <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">Vương quốc hấp dẫn của khoa học viễn tưởng<
 </a></h4>
               <p class="mb-2">Đi sâu vào thế giới công nghệ tiên tiến với bài đăng trên blog mới nhất của chúng tôi, nơi chúng tôi nêu bật
 Năm gadge thiết yếu. <span><a class="text-decoration-underline text-black-50" href="single-post.html">Đọc thêm</a></span>
+=======
+              <a href="blog.html" class="fs-6 text-primary">Books</a>
+              <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">The Fascinating Realm of Science Fiction</a></h4>
+              <p class="mb-2">Dive into the world of cutting-edge technology with our latest blog post, where we highlight
+                five essential gadge. <span><a class="text-decoration-underline text-black-50" href="single-post.html">Read More</a></span>
+>>>>>>> duong
               </p>
             </div>
             <div class="col-lg-4 col-md-6 posts mb-5">
               <img src="assetClient/images/post-item7.jpg" alt="post image" class="img-fluid rounded-3">
+<<<<<<< HEAD
               <a href="blog.html" class="fs-6 text-primary">Sách</a>
               <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">Vương quốc hấp dẫn của khoa học viễn tưởng
 </a></h4>
               <p class="mb-2">Đi sâu vào thế giới công nghệ tiên tiến với bài đăng trên blog mới nhất của chúng tôi, nơi chúng tôi nêu bật
 Năm gadge thiết yếu. <span><a class="text-decoration-underline text-black-50" href="single-post.html">Đọc thêm</a></span>
+=======
+              <a href="blog.html" class="fs-6 text-primary">Books</a>
+              <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">The Fascinating Realm of Science Fiction</a></h4>
+              <p class="mb-2">Dive into the world of cutting-edge technology with our latest blog post, where we highlight
+                five essential gadge. <span><a class="text-decoration-underline text-black-50" href="single-post.html">Read More</a></span>
+>>>>>>> duong
               </p>
             </div>
             <div class="col-lg-4 col-md-6 posts mb-5">
               <img src="assetClient/images/post-item8.jpg" alt="post image" class="img-fluid rounded-3">
+<<<<<<< HEAD
               <a href="blog.html" class="fs-6 text-primary">Sách</a>
               <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">Vương quốc hấp dẫn của khoa học viễn tưởng
 </a></h4>
               <p class="mb-2">Đi sâu vào thế giới công nghệ tiên tiến với bài đăng trên blog mới nhất của chúng tôi, nơi chúng tôi nêu bật
 Năm gadge thiết yếu. <span><a class="text-decoration-underline text-black-50" href="single-post.html">Đọc thêm</a></span>
+=======
+              <a href="blog.html" class="fs-6 text-primary">Books</a>
+              <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">The Fascinating Realm of Science Fiction</a></h4>
+              <p class="mb-2">Dive into the world of cutting-edge technology with our latest blog post, where we highlight
+                five essential gadge. <span><a class="text-decoration-underline text-black-50" href="single-post.html">Read More</a></span>
+>>>>>>> duong
               </p>
             </div>
 
@@ -133,7 +210,11 @@ Năm gadge thiết yếu. <span><a class="text-decoration-underline text-black-5
           <nav class="pt-5" aria-label="Page navigation">
             <ul class="pagination justify-content-center gap-4">
               <li class="page-item disabled">
+<<<<<<< HEAD
                 <a class="page-link">Trước</a>
+=======
+                <a class="page-link">Prev</a>
+>>>>>>> duong
               </li>
               <li class="page-item active" aria-current="page">
                 <span class="page-link">1</span>
@@ -141,7 +222,11 @@ Năm gadge thiết yếu. <span><a class="text-decoration-underline text-black-5
               <li class="page-item"><a class="page-link" href="#">2</a></li>
               <li class="page-item"><a class="page-link" href="#">3</a></li>
               <li class="page-item">
+<<<<<<< HEAD
                 <a class="page-link" href="#">Tiếp</a>
+=======
+                <a class="page-link" href="#">Next</a>
+>>>>>>> duong
               </li>
             </ul>
           </nav>
@@ -162,6 +247,7 @@ Năm gadge thiết yếu. <span><a class="text-decoration-underline text-black-5
             </div>
             <div class="widget-product-categories pt-5">
               <div class="section-title overflow-hidden mb-2">
+<<<<<<< HEAD
                 <h3 class="d-flex flex-column mb-0">Loại</h3>
               </div>
               <ul class="product-categories mb-0 sidebar-list list-unstyled">
@@ -179,11 +265,31 @@ Năm gadge thiết yếu. <span><a class="text-decoration-underline text-black-5
                 </li>
                 <li class="cat-item">
                   <a href="#">Đồng hồ</a>
+=======
+                <h3 class="d-flex flex-column mb-0">Categories</h3>
+              </div>
+              <ul class="product-categories mb-0 sidebar-list list-unstyled">
+                <li class="cat-item">
+                  <a href="/collections/categories">All</a>
+                </li>
+                <li class="cat-item">
+                  <a href="#">Phones</a>
+                </li>
+                <li class="cat-item">
+                  <a href="#">Accessories</a>
+                </li>
+                <li class="cat-item">
+                  <a href="#">Tablets</a>
+                </li>
+                <li class="cat-item">
+                  <a href="#">Watches</a>
+>>>>>>> duong
                 </li>
               </ul>
             </div>
             <div class="widget-product-tags pt-5">
               <div class="section-title overflow-hidden mb-2">
+<<<<<<< HEAD
                 <h3 class="d-flex flex-column mb-0">Thẻ</h3>
               </div>
               <ul class="product-tags mb-0 sidebar-list list-unstyled">
@@ -198,12 +304,32 @@ Năm gadge thiết yếu. <span><a class="text-decoration-underline text-black-5
                 </li>
                 <li class="tags-item">
                   <a href="#">Hiện đại</a>
+=======
+                <h3 class="d-flex flex-column mb-0">Tags</h3>
+              </div>
+              <ul class="product-tags mb-0 sidebar-list list-unstyled">
+                <li class="tags-item">
+                  <a href="#">White</a>
+                </li>
+                <li class="tags-item">
+                  <a href="#">Cheap</a>
+                </li>
+                <li class="tags-item">
+                  <a href="#">Mobile</a>
+                </li>
+                <li class="tags-item">
+                  <a href="#">Modern</a>
+>>>>>>> duong
                 </li>
               </ul>
             </div>
             <div class="widget-social-links pt-5">
               <div class="section-title overflow-hidden mb-2">
+<<<<<<< HEAD
                 <h3 class="d-flex flex-column mb-0">Liên kết xã hội</h3>
+=======
+                <h3 class="d-flex flex-column mb-0">Social Links</h3>
+>>>>>>> duong
               </div>
               <ul class="social-links mb-0 sidebar-list list-unstyled">
                 <li class="links">
@@ -230,6 +356,7 @@ Năm gadge thiết yếu. <span><a class="text-decoration-underline text-black-5
   </div>
 
 
+<<<<<<< HEAD
   <section id="customers-reviews" class="position-relative padding-large"
   style="background-image: url(assetClient/images/banner-image-bg.jpg); background-size: cover; background-repeat: no-repeat; background-position: center; height: 600px;">
   <div class="container offset-md-3 col-md-6 ">
@@ -371,6 +498,148 @@ Năm gadge thiết yếu. <span><a class="text-decoration-underline text-black-5
     </div>
   </div>
 </section>
+=======
+  <section id="customers-reviews" class="position-relative padding-large" style="background-image: url(assetClient/images/banner-image-bg.jpg); background-size: cover; background-repeat: no-repeat; background-position: center; height: 600px;">
+    <div class="container offset-md-3 col-md-6 ">
+      <div class="position-absolute top-50 end-0 pe-0 pe-xxl-5 me-0 me-xxl-5 swiper-next testimonial-button-next" tabindex="0" role="button" aria-label="Next slide" aria-controls="swiper-wrapper-b8e35288bf59c38b" aria-disabled="false">
+        <svg class="chevron-forward-circle d-flex justify-content-center align-items-center p-2" width="80" height="80">
+          <use xlink:href="#alt-arrow-right-outline"></use>
+        </svg>
+      </div>
+      <div class="position-absolute top-50 start-0 ps-0 ps-xxl-5 ms-0 ms-xxl-5 swiper-prev testimonial-button-prev swiper-button-disabled" tabindex="-1" role="button" aria-label="Previous slide" aria-controls="swiper-wrapper-b8e35288bf59c38b" aria-disabled="true">
+        <svg class="chevron-back-circle d-flex justify-content-center align-items-center p-2" width="80" height="80">
+          <use xlink:href="#alt-arrow-left-outline"></use>
+        </svg>
+      </div>
+      <div class="section-title mb-4 text-center">
+        <h3 class="mb-4">Customers reviews</h3>
+      </div>
+      <div class="swiper testimonial-swiper swiper-initialized swiper-horizontal swiper-backface-hidden">
+        <div class="swiper-wrapper" id="swiper-wrapper-b8e35288bf59c38b" aria-live="polite">
+          <div class="swiper-slide swiper-slide-active" role="group" aria-label="1 / 5" style="width: 736px; margin-right: 20px;">
+            <div class="card position-relative text-left p-5 border rounded-3">
+              <blockquote>"I stumbled upon this bookstore while visiting the city, and it instantly became my favorite spot. The cozy atmosphere, friendly staff, and wide selection of books make every visit a delight!"</blockquote>
+              <div class="rating text-warning d-flex align-items-center">
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+              </div>
+              <h5 class="mt-1 fw-normal">Emma Chamberlin</h5>
+            </div>
+          </div>
+          <div class="swiper-slide swiper-slide-next" role="group" aria-label="2 / 5" style="width: 736px; margin-right: 20px;">
+            <div class="card position-relative text-left p-5 border rounded-3">
+              <blockquote>"As an avid reader, I'm always on the lookout for new releases, and this bookstore never disappoints. They always have the latest titles, and their recommendations have introduced me to some incredible reads!"</blockquote>
+              <div class="rating text-warning d-flex align-items-center">
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+              </div>
+              <h5 class="mt-1 fw-normal">Thomas John</h5>
+            </div>
+          </div>
+          <div class="swiper-slide" role="group" aria-label="3 / 5" style="width: 736px; margin-right: 20px;">
+            <div class="card position-relative text-left p-5 border rounded-3">
+              <blockquote>"I ordered a few books online from this store, and I was impressed by the quick delivery and careful packaging. It's clear that they prioritize customer satisfaction, and I'll definitely be shopping here again!"</blockquote>
+              <div class="rating text-warning d-flex align-items-center">
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+              </div>
+              <h5 class="mt-1 fw-normal">Kevin Bryan</h5>
+            </div>
+          </div>
+          <div class="swiper-slide" role="group" aria-label="4 / 5" style="width: 736px; margin-right: 20px;">
+            <div class="card position-relative text-left p-5 border rounded-3">
+              <blockquote>“I stumbled upon this tech store while searching for a new laptop, and I couldn't be happier
+                with my experience! The staff was incredibly knowledgeable and guided me through the process of choosing
+                the perfect device for my needs. Highly recommended!”</blockquote>
+              <div class="rating text-warning d-flex align-items-center">
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+              </div>
+              <h5 class="mt-1 fw-normal">Stevin</h5>
+            </div>
+          </div>
+          <div class="swiper-slide" role="group" aria-label="5 / 5" style="width: 736px; margin-right: 20px;">
+            <div class="card position-relative text-left p-5 border rounded-3">
+              <blockquote>“I stumbled upon this tech store while searching for a new laptop, and I couldn't be happier
+                with my experience! The staff was incredibly knowledgeable and guided me through the process of choosing
+                the perfect device for my needs. Highly recommended!”</blockquote>
+              <div class="rating text-warning d-flex align-items-center">
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+              </div>
+              <h5 class="mt-1 fw-normal">Roman</h5>
+            </div>
+          </div>
+        </div>
+      <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span></div>
+    </div>
+  </section>
+>>>>>>> duong
 
   <section id="instagram">
     <div class="container padding-large pb-0">

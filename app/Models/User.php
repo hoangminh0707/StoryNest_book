@@ -7,6 +7,7 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     use Notifiable;
+    
 
     protected $fillable = [
         'name', 'email', 'password','avatar','gender','birthdate','phone','address',
@@ -14,6 +15,7 @@ class User extends Authenticatable
 
     protected $hidden = [
         'password', 'remember_token',
+       
     ];
 
     public function roles()
@@ -37,3 +39,7 @@ class User extends Authenticatable
     }
 
 }
+    
+
+  
+

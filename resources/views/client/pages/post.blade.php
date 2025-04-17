@@ -12,14 +12,22 @@
       <div class="container">
         <div class="row">
           <div class="text-center">
+<<<<<<< HEAD
             <h1>Bài đăng đơn
 </h1>
+=======
+            <h1>Single-Post</h1>
+>>>>>>> duong
             <div class="breadcrumbs">
               <span class="item">
                 <a href="index.html">Home &gt; </a>
               </span>
+<<<<<<< HEAD
               <span class="item text-decoration-underline">Bài đăng đơn
 </span>
+=======
+              <span class="item text-decoration-underline">Single-Post</span>
+>>>>>>> duong
             </div>
           </div>
         </div>
@@ -36,9 +44,15 @@
             <article class="post-item">
               <div class="post-content">
                 <div class="post-meta mt-4">
+<<<<<<< HEAD
                   <span class="post-category">Tháng Hai 22, 2024</span> - <span class="meta-date"><a href="blog.html">Sách</a></span>
                 </div>
                 <h1 class="post-title my-4">Phải đọc sách nếu bạn thích đọc Cốt truyện khoa học viễn tưởng. </h1>
+=======
+                  <span class="post-category">Feb 22, 2024 </span> - <span class="meta-date"><a href="blog.html">Books</a></span>
+                </div>
+                <h1 class="post-title my-4">Must read books if you like reading Sci-Fi Plot. </h1>
+>>>>>>> duong
                 <div class="hero-image col-lg-12">
                   <img src="assetClient/images/single-post.jpg" alt="single-post my-3" class="img-fluid">
                 </div>
@@ -145,10 +159,17 @@
                       <svg class="alt-arrow-left-bold" width="44" height="44">
                         <use xlink:href="#alt-arrow-left-bold"></use>
                       </svg>
+<<<<<<< HEAD
                       <h4 class="card-title text-capitalize text-dark">Phải đọc sách năm nay</h4>
                     </a>
                     <a itemprop="url" class="post-next d-flex align-items-center" href="#">
                       <h4 class="card-title text-capitalize text-dark">Sách để đọc nếu bạn muốn kiếm tiền</h4>
+=======
+                      <h4 class="card-title text-capitalize text-dark">Must read books of this year</h4>
+                    </a>
+                    <a itemprop="url" class="post-next d-flex align-items-center" href="#">
+                      <h4 class="card-title text-capitalize text-dark">Books to read if you want to earn money</h4>
+>>>>>>> duong
                       <svg class="alt-arrow-right-bold" width="44" height="44">
                         <use xlink:href="#alt-arrow-right-bold"></use>
                       </svg>
@@ -162,7 +183,11 @@
                 <div class="row">
                   <div class="col-lg-12">
                     <div class="comments-wrap">
+<<<<<<< HEAD
                       <h3 class="mb-3">3 Bình luận</h3>
+=======
+                      <h3 class="mb-3">3 Comments</h3>
+>>>>>>> duong
                       <div class="comment-list padding-small">
                         <article class="comment-item d-flex flex-wrap mb-4">
                           <div class="col-lg-1 col-sm-3 me-4 mb-3">
@@ -217,6 +242,7 @@
                         </article>
                       </div>
                     </div>
+<<<<<<< HEAD
 
                     <div class="comment-respond mt-5">
                       <h3>Để lại một bình luận</h3>
@@ -238,6 +264,29 @@
                           <span>Lưu tên, email và trang web của tôi trong trình duyệt này cho lần tiếp theo.</span>
                         </label>
                         <button type="submit" name="submit" class="btn my-3">Đăng bình luận</button>
+=======
+                    
+                    <div class="comment-respond mt-5">
+                      <h3>Leave a Comment</h3>
+                      <p>Your email address will not be published. Required fields are marked *</p>
+                      <form id="form" class="d-flex gap-3 flex-wrap">
+                        <div class="w-100 d-flex gap-3">
+                          <div class="w-50">
+                            <input type="text" name="name" placeholder="Write your name here *" class="form-control w-100">
+                          </div>
+                          <div class="w-50">
+                            <input type="text" name="email" placeholder="Write your email here *" class="form-control w-100">
+                          </div>
+                        </div>
+                        <div class="w-100">
+                          <textarea placeholder="Write your comment here *" class="form-control w-100"></textarea>
+                        </div>
+                        <label class="w-100">
+                          <input type="checkbox" required="" class="d-inline">
+                          <span>Save my name, email, and website in this browser for the next time.</span>
+                        </label>
+                        <button type="submit" name="submit" class="btn my-3">Post Comment</button>
+>>>>>>> duong
                       </form>
                     </div>
                   </div>
@@ -250,6 +299,7 @@
     </div>
   </div>
 
+<<<<<<< HEAD
   <section id="customers-reviews" class="position-relative padding-large"
   style="background-image: url(assetClient/images/banner-image-bg.jpg); background-size: cover; background-repeat: no-repeat; background-position: center; height: 600px;">
   <div class="container offset-md-3 col-md-6 ">
@@ -516,3 +566,134 @@
 </section>
 
 @endsection
+=======
+  <section id="latest-posts" class="padding-large pt-0">
+    <div class="container">
+      <div class="section-title d-md-flex justify-content-between align-items-center mb-4">
+        <h3 class="d-flex align-items-center">Latest posts</h3>
+        <a href="shop.html" class="btn">View All</a>
+      </div>
+      <div class="row">
+        <div class="col-md-3 posts mb-4">
+          <img src="assetClient/images/post-item1.jpg" alt="post image" class="img-fluid rounded-3">
+          <a href="blog.html" class="fs-6 text-primary">Books</a>
+          <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">5 Must-Have Gadgets for
+              the Modern Home</a></h4>
+          <p class="mb-2">Dive into the world of cutting-edge technology with our latest blog post, where we highlight
+            five essential gadge. <span><a class="text-decoration-underline text-black-50" href="single-post.html">Read More</a></span>
+          </p>
+        </div>
+        <div class="col-md-3 posts mb-4">
+          <img src="assetClient/images/post-item2.jpg" alt="post image" class="img-fluid rounded-3">
+          <a href="blog.html" class="fs-6 text-primary">Books</a>
+          <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">Eco-Friendly Innovations
+              Making a Difference</a></h4>
+          <p class="mb-2">Explore the intersection of technology and sustainability in our latest blog post. Learn about
+            the innovative <span><a class="text-decoration-underline text-black-50" href="single-post.html">Read More</a></span> </p>
+        </div>
+        <div class="col-md-3 posts mb-4">
+          <img src="assetClient/images/post-item3.jpg" alt="post image" class="img-fluid rounded-3">
+          <a href="blog.html" class="fs-6 text-primary">Books</a>
+          <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">The Future of Wearable
+              Tech: Trends to Watch</a></h4>
+          <p class="mb-2">Stay ahead of the curve with our insightful look into the rapidly evolving landscape of
+            wearable technology. <span><a class="text-decoration-underline text-black-50" href="single-post.html">Read More</a></span>
+          </p>
+        </div>
+        <div class="col-md-3 posts mb-4">
+          <img src="assetClient/images/post-item4.jpg" alt="post image" class="img-fluid rounded-3">
+          <a href="blog.html" class="fs-6 text-primary">Books</a>
+          <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">Top Apps and Tools for
+              Remote Work</a></h4>
+          <p class="mb-2">In today's remote work environment, productivity is key. Discover the top apps and tools that
+            can help you stay <span><a class="text-decoration-underline text-black-50" href="single-post.html">Read More</a></span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="instagram">
+    <div class="container">
+      <div class="text-center mb-4">
+        <h3>Instagram</h3>
+      </div>
+      <div class="row">
+        <div class="col-md-2">
+          <figure class="instagram-item position-relative rounded-3">
+            <a href="https://templatesjungle.com/" class="image-link position-relative">
+              <div class="icon-overlay position-absolute d-flex justify-content-center">
+                <svg class="instagram">
+                  <use xlink:href="#instagram"></use>
+                </svg>
+              </div>
+              <img src="assetClient/images/insta-item1.jpg" alt="instagram" class="img-fluid rounded-3 insta-image">
+            </a>
+          </figure>
+        </div>
+        <div class="col-md-2">
+          <figure class="instagram-item position-relative rounded-3">
+            <a href="https://templatesjungle.com/" class="image-link position-relative">
+              <div class="icon-overlay position-absolute d-flex justify-content-center">
+                <svg class="instagram">
+                  <use xlink:href="#instagram"></use>
+                </svg>
+              </div>
+              <img src="assetClient/images/insta-item2.jpg" alt="instagram" class="img-fluid rounded-3 insta-image">
+            </a>
+          </figure>
+        </div>
+        <div class="col-md-2">
+          <figure class="instagram-item position-relative rounded-3">
+            <a href="https://templatesjungle.com/" class="image-link position-relative">
+              <div class="icon-overlay position-absolute d-flex justify-content-center">
+                <svg class="instagram">
+                  <use xlink:href="#instagram"></use>
+                </svg>
+              </div>
+              <img src="assetClient/images/insta-item3.jpg" alt="instagram" class="img-fluid rounded-3 insta-image">
+            </a>
+          </figure>
+        </div>
+        <div class="col-md-2">
+          <figure class="instagram-item position-relative rounded-3">
+            <a href="https://templatesjungle.com/" class="image-link position-relative">
+              <div class="icon-overlay position-absolute d-flex justify-content-center">
+                <svg class="instagram">
+                  <use xlink:href="#instagram"></use>
+                </svg>
+              </div>
+              <img src="assetClient/images/insta-item4.jpg" alt="instagram" class="img-fluid rounded-3 insta-image">
+            </a>
+          </figure>
+        </div>
+        <div class="col-md-2">
+          <figure class="instagram-item position-relative rounded-3">
+            <a href="https://templatesjungle.com/" class="image-link position-relative">
+              <div class="icon-overlay position-absolute d-flex justify-content-center">
+                <svg class="instagram">
+                  <use xlink:href="#instagram"></use>
+                </svg>
+              </div>
+              <img src="assetClient/images/insta-item5.jpg" alt="instagram" class="img-fluid rounded-3 insta-image">
+            </a>
+          </figure>
+        </div>
+        <div class="col-md-2">
+          <figure class="instagram-item position-relative rounded-3">
+            <a href="https://templatesjungle.com/" class="image-link position-relative">
+              <div class="icon-overlay position-absolute d-flex justify-content-center">
+                <svg class="instagram">
+                  <use xlink:href="#instagram"></use>
+                </svg>
+              </div>
+              <img src="assetClient/images/insta-item6.jpg" alt="instagram" class="img-fluid rounded-3 insta-image">
+            </a>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+@endsection
+>>>>>>> duong

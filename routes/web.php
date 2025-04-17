@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\BlogController;
 
 
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -91,6 +92,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::put('/users/{user}', [UserController::class, 'update'])->name('userUpdate'); // Cập nhật người dùng
     Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('userDelete'); // Xóa người dùng
 });
+
 
 
 Route::get('/admin-Roles', [RolesController::class, 'index'])->middleware(['auth', 'role:admin'])->name('admin.roleIndex');
@@ -187,3 +189,5 @@ Route::prefix('admin')->group(function () {
     Route::resource('blogs', BlogController::class);
     Route::post('blogs/mass-delete', [BlogController::class, 'massDelete'])->name('admin.blogs.massDelete');
 });
+
+

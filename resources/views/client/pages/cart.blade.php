@@ -211,23 +211,181 @@
     </div>
   </section></section>
 
+<<<<<<< HEAD
   <section id="latest-posts" class="padding-large">
     <div class="container">
       <div class="section-title d-md-flex justify-content-between align-items-center mb-4">
         <h3 class="d-flex align-items-center">Bài viết mới nhất</h3>
         <a href="shop.html" class="btn">Xem tất cả</a>
+=======
+  <section id="customers-reviews" class="position-relative padding-large" style="background-image: url(assetClient/images/banner-image-bg.jpg); background-size: cover; background-repeat: no-repeat; background-position: center; height: 600px;">
+    <div class="container offset-md-3 col-md-6 ">
+      <div class="position-absolute top-50 end-0 pe-0 pe-xxl-5 me-0 me-xxl-5 swiper-next testimonial-button-next" tabindex="0" role="button" aria-label="Next slide" aria-controls="swiper-wrapper-0c15982eb983e2c8" aria-disabled="false">
+        <svg class="chevron-forward-circle d-flex justify-content-center align-items-center p-2" width="80" height="80">
+          <use xlink:href="#alt-arrow-right-outline"></use>
+        </svg>
+      </div>
+      <div class="position-absolute top-50 start-0 ps-0 ps-xxl-5 ms-0 ms-xxl-5 swiper-prev testimonial-button-prev swiper-button-disabled" tabindex="-1" role="button" aria-label="Previous slide" aria-controls="swiper-wrapper-0c15982eb983e2c8" aria-disabled="true">
+        <svg class="chevron-back-circle d-flex justify-content-center align-items-center p-2" width="80" height="80">
+          <use xlink:href="#alt-arrow-left-outline"></use>
+        </svg>
+      </div>
+      <div class="section-title mb-4 text-center">
+        <h3 class="mb-4">Customers reviews</h3>
+      </div>
+      <div class="swiper testimonial-swiper swiper-initialized swiper-horizontal swiper-backface-hidden">
+        <div class="swiper-wrapper" id="swiper-wrapper-0c15982eb983e2c8" aria-live="polite">
+          <div class="swiper-slide swiper-slide-active" role="group" aria-label="1 / 5" style="width: 736px; margin-right: 20px;">
+            <div class="card position-relative text-left p-5 border rounded-3">
+              <blockquote>"I stumbled upon this bookstore while visiting the city, and it instantly became my favorite spot. The cozy atmosphere, friendly staff, and wide selection of books make every visit a delight!"</blockquote>
+              <div class="rating text-warning d-flex align-items-center">
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+              </div>
+              <h5 class="mt-1 fw-normal">Emma Chamberlin</h5>
+            </div>
+          </div>
+          <div class="swiper-slide swiper-slide-next" role="group" aria-label="2 / 5" style="width: 736px; margin-right: 20px;">
+            <div class="card position-relative text-left p-5 border rounded-3">
+              <blockquote>"As an avid reader, I'm always on the lookout for new releases, and this bookstore never disappoints. They always have the latest titles, and their recommendations have introduced me to some incredible reads!"</blockquote>
+              <div class="rating text-warning d-flex align-items-center">
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+              </div>
+              <h5 class="mt-1 fw-normal">Thomas John</h5>
+            </div>
+          </div>
+          <div class="swiper-slide" role="group" aria-label="3 / 5" style="width: 736px; margin-right: 20px;">
+            <div class="card position-relative text-left p-5 border rounded-3">
+              <blockquote>"I ordered a few books online from this store, and I was impressed by the quick delivery and careful packaging. It's clear that they prioritize customer satisfaction, and I'll definitely be shopping here again!"</blockquote>
+              <div class="rating text-warning d-flex align-items-center">
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+              </div>
+              <h5 class="mt-1 fw-normal">Kevin Bryan</h5>
+            </div>
+          </div>
+          <div class="swiper-slide" role="group" aria-label="4 / 5" style="width: 736px; margin-right: 20px;">
+            <div class="card position-relative text-left p-5 border rounded-3">
+              <blockquote>“I stumbled upon this tech store while searching for a new laptop, and I couldn't be happier
+                with my experience! The staff was incredibly knowledgeable and guided me through the process of choosing
+                the perfect device for my needs. Highly recommended!”</blockquote>
+              <div class="rating text-warning d-flex align-items-center">
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+              </div>
+              <h5 class="mt-1 fw-normal">Stevin</h5>
+            </div>
+          </div>
+          <div class="swiper-slide" role="group" aria-label="5 / 5" style="width: 736px; margin-right: 20px;">
+            <div class="card position-relative text-left p-5 border rounded-3">
+              <blockquote>“I stumbled upon this tech store while searching for a new laptop, and I couldn't be happier
+                with my experience! The staff was incredibly knowledgeable and guided me through the process of choosing
+                the perfect device for my needs. Highly recommended!”</blockquote>
+              <div class="rating text-warning d-flex align-items-center">
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+                <svg class="star star-fill">
+                  <use xlink:href="#star-fill"></use>
+                </svg>
+              </div>
+              <h5 class="mt-1 fw-normal">Roman</h5>
+            </div>
+          </div>
+        </div>
+      <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span></div>
+    </div>
+  </section>
+
+
+  <section id="latest-posts" class="padding-large">
+    <div class="container">
+      <div class="section-title d-md-flex justify-content-between align-items-center mb-4">
+        <h3 class="d-flex align-items-center">Latest posts</h3>
+        <a href="shop.html" class="btn">View All</a>
+>>>>>>> duong
       </div>
       <div class="row">
         <div class="col-md-3 posts mb-4">
           <img src="assetClient/images/post-item1.jpg" alt="post image" class="img-fluid rounded-3">
+<<<<<<< HEAD
           <a href="blog.html" class="fs-6 text-primary">Sách</a>
           <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">10 cuốn sách nhất định phải đọc trong năm: Lựa chọn hàng đầu của chúng tôi!</a></h4>
           <p class="mb-2">Khám phá thế giới công nghệ tiên tiến với bài đăng trên blog mới nhất của chúng tôi, nơi chúng tôi nêu bật
               năm tiện ích thiết yếu. <span><a class="text-decoration-underline text-black-50" href="single-post.html">Đọc thêm</a></span>
+=======
+          <a href="blog.html" class="fs-6 text-primary">Books</a>
+          <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">10 Must-Read Books of the Year: Our Top Picks!</a></h4>
+          <p class="mb-2">Dive into the world of cutting-edge technology with our latest blog post, where we highlight
+            five essential gadg <span><a class="text-decoration-underline text-black-50" href="single-post.html">Read More</a></span>
+>>>>>>> duong
           </p>
         </div>
         <div class="col-md-3 posts mb-4">
           <img src="assetClient/images/post-item2.jpg" alt="post image" class="img-fluid rounded-3">
+<<<<<<< HEAD
           <a href="blog.html" class="fs-6 text-primary">Sách</a>
           <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">Thế giới hấp dẫn của khoa học viễn tưởng</a></h4>
           <p class="mb-2">Khám phá sự giao thoa giữa công nghệ và tính bền vững trong bài đăng blog mới nhất của chúng tôi. Tìm hiểu về <span><a class="text-decoration-underline text-black-50" href="single-post.html">Đọc thêm</a></span> </p>
@@ -238,20 +396,44 @@
           <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">Tìm thấy tình yêu trong những trang sách</a></h4>
           <p class="mb-2">Hãy đón đầu xu hướng với góc nhìn sâu sắc của chúng tôi về bối cảnh phát triển nhanh chóng của
               công nghệ đeo được. <span><a class="text-decoration-underline text-black-50" href="single-post.html">Đọc thêm</a></span>
+=======
+          <a href="blog.html" class="fs-6 text-primary">Books</a>
+          <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">The Fascinating Realm of Science Fiction</a></h4>
+          <p class="mb-2">Explore the intersection of technology and sustainability in our latest blog post. Learn about
+            the innovative <span><a class="text-decoration-underline text-black-50" href="single-post.html">Read More</a></span> </p>
+        </div>
+        <div class="col-md-3 posts mb-4">
+          <img src="assetClient/images/post-item3.jpg" alt="post image" class="img-fluid rounded-3">
+          <a href="blog.html" class="fs-6 text-primary">Books</a>
+          <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">Finding Love in the Pages of a Book</a></h4>
+          <p class="mb-2">Stay ahead of the curve with our insightful look into the rapidly evolving landscape of
+            wearable technology. <span><a class="text-decoration-underline text-black-50" href="single-post.html">Read More</a></span>
+>>>>>>> duong
           </p>
         </div>
         <div class="col-md-3 posts mb-4">
           <img src="assetClient/images/post-item4.jpg" alt="post image" class="img-fluid rounded-3">
+<<<<<<< HEAD
           <a href="blog.html" class="fs-6 text-primary">Sách</a>
           <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">Đọc sách để có sức khỏe tinh thần: Sách có thể chữa lành và truyền cảm hứng như thế nào</a></h4>
           <p class="mb-2">Trong môi trường làm việc từ xa ngày nay, năng suất là chìa khóa. Khám phá các ứng dụng và công cụ hàng đầu
               có thể giúp bạn duy trì <span><a class="text-decoration-underline text-black-50" href="single-post.html">Đọc thêm</a></span>
+=======
+          <a href="blog.html" class="fs-6 text-primary">Books</a>
+          <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">Reading for Mental Health: How Books Can Heal and Inspire</a></h4>
+          <p class="mb-2">In today's remote work environment, productivity is key. Discover the top apps and tools that
+            can help you stay <span><a class="text-decoration-underline text-black-50" href="single-post.html">Read More</a></span>
+>>>>>>> duong
           </p>
         </div>
       </div>
     </div>
   </section>
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> duong
   <section id="instagram">
     <div class="container">
       <div class="text-center mb-4">
