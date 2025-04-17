@@ -32,6 +32,8 @@
 
     // Thông Báo Thành Công
     document.addEventListener('DOMContentLoaded', function () {
+
+
         @if (session('success'))
         Swal.fire({
             title: 'Thành công!',
@@ -40,7 +42,20 @@
             confirmButtonText: 'OK'
         });
         @endif
+
+        @if (session('error'))
+        Swal.fire({
+            icon: 'error',
+            title: 'Lỗi!',
+            text: '{{ session('error') }}',
+            timer: 4000,
+            showConfirmButton: false
+        });
+        @endif
     });
+
+   
+
 
     // Thông báo giỏ hàng 
     function showLoginAlert() {
@@ -56,6 +71,8 @@
             }
         });
     }
+
+
 
 
 

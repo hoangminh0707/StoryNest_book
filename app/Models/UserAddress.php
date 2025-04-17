@@ -31,4 +31,9 @@ class UserAddress extends Model
     {
         return "{$this->address_line}, {$this->ward}, {$this->district}, {$this->city}";
     }
+
+    public function orders()
+{
+    return $this->hasMany(Order::class, 'user_address_id');
+}
 }

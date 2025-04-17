@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 class AuthController extends Controller
 {
     public function showLogin() {
-        return view('client.pages.login');
+        return view('client.pages.auth.login');
     }
 
     public function login(Request $request) {
@@ -28,7 +28,7 @@ class AuthController extends Controller
     
 
     public function showRegister() {
-        return view('client.pages.register');
+        return view('client.pages.auth.register');
     }
 
     public function register(Request $request) {

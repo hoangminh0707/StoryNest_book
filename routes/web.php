@@ -20,6 +20,10 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\UserAddressController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\VerificationController;
+use App\Http\Controllers\ProfileController;
+
+
 
 
 
@@ -41,8 +45,23 @@ use App\Http\Controllers\OrderController;
 |
 */
 
+Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+Route::get('/profile/change-email', [ProfileController::class, 'showChangeEmailForm'])->name('profile.email.change.form');
+Route::post('/profile/change-email', [ProfileController::class, 'changeEmail'])->name('profile.email.change');
 
-Route::middleware('auth')->group(function () {
+Route::get('/profile/change-password', [ProfileController::class, 'showChangePasswordForm'])->name('profile.password.form');
+Route::post('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.password.update');
+
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/email/verify', [VerificationController::class, 'notice'])->name('verification.notice');
+    Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify');
+    Route::post('/email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
+});
+
+Route::middleware('auth','verified')->group(function () {
     Route::get('/wishlist/add/{productId}', [WishlistController::class, 'add'])->name('wishlist.add');
     Route::get('/wishlist/remove/{productId}', [WishlistController::class, 'remove'])->name('wishlist.remove');
 
@@ -54,6 +73,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/addresses', [UserAddressController::class, 'index'])->name('addresses.index');
     Route::post('/addresses', [UserAddressController::class, 'store'])->name('addresses.store');
     Route::post('/addresses/set-default/{id}', [UserAddressController::class, 'setDefault'])->name('addresses.setDefault');
+
+    Route::get('/addresses/{id}/edit', [UserAddressController::class, 'edit'])->name('addresses.edit');
+    Route::put('/addresses/{id}', [UserAddressController::class, 'update'])->name('addresses.update');
+    Route::delete('/addresses/{id}', [UserAddressController::class, 'destroy'])->name('addresses.destroy');
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -84,6 +107,12 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+
+Route::middleware(['auth', 'verified'])->group(function () {
+Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
+    
+});
 
 
 Route::get('/', [ProductController::class, 'index'])->name('index');
