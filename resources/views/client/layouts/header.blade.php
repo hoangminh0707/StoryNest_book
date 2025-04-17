@@ -106,15 +106,17 @@
     <symbol xmlns="http://www.w3.org/2000/svg" id="minus" viewBox="0 0 24 24">
       <path fill="currentColor" d="M19 11H5a1 1 0 0 0 0 2h14a1 1 0 0 0 0-2Z" />
     </symbol>
-    <symbol xmlns="http://www.w3.org/2000/svg" id="cart-cross-outline" viewBox="0 0 24 24">
-      <path fill="currentColor"
-        d="M12.03 8.97a.75.75 0 1 0-1.06 1.06l.97.97l-.97.97a.75.75 0 1 0 1.06 1.06l.97-.97l.97.97a.75.75 0 1 0 1.06-1.06l-.97-.97l.97-.97a.75.75 0 1 0-1.06-1.06l-.97.97z" />
-      <path fill="currentColor" fill-rule="evenodd"
-        d="M1.293 2.751a.75.75 0 0 1 .956-.459l.301.106c.617.217 1.14.401 1.553.603c.44.217.818.483 1.102.899c.282.412.399.865.452 1.362l.011.108H17.12c.819 0 1.653 0 2.34.077c.35.039.697.101 1.003.209c.3.105.631.278.866.584c.382.496.449 1.074.413 1.66c-.035.558-.173 1.252-.338 2.077l-.01.053l-.002.004l-.508 2.47c-.15.726-.276 1.337-.439 1.82c-.172.51-.41.96-.837 1.308c-.427.347-.916.49-1.451.556c-.505.062-1.13.062-1.87.062H10.88c-1.345 0-2.435 0-3.293-.122c-.897-.127-1.65-.4-2.243-1.026c-.547-.576-.839-1.188-.985-2.042c-.137-.8-.15-1.848-.15-3.3V7.038c0-.74-.002-1.235-.043-1.615c-.04-.363-.109-.545-.2-.677c-.087-.129-.22-.25-.524-.398c-.323-.158-.762-.314-1.43-.549l-.26-.091a.75.75 0 0 1-.46-.957M5.708 6.87v2.89c0 1.489.018 2.398.13 3.047c.101.595.274.925.594 1.263c.273.288.65.472 1.365.573c.74.105 1.724.107 3.14.107h5.304c.799 0 1.33-.001 1.734-.05c.382-.047.56-.129.685-.231c.125-.102.24-.26.364-.625c.13-.385.238-.905.4-1.688l.498-2.42v-.002c.178-.89.295-1.482.322-1.926c.026-.421-.04-.569-.101-.65a.561.561 0 0 0-.177-.087a3.17 3.17 0 0 0-.672-.134c-.595-.066-1.349-.067-2.205-.067zM5.25 19.5a2.25 2.25 0 1 0 4.5 0a2.25 2.25 0 0 0-4.5 0m2.25.75a.75.75 0 1 1 0-1.5a.75.75 0 0 1 0 1.5m6.75-.75a2.25 2.25 0 1 0 4.5 0a2.25 2.25 0 0 0-4.5 0m2.25.75a.75.75 0 1 1 0-1.5a.75.75 0 0 1 0 1.5"
-        clip-rule="evenodd" />
-    </symbol>
+     <symbol xmlns="http://www.w3.org/2000/svg" id="cart-cross-outline" viewBox="0 0 24 24">
+        <path fill="currentColor"
+          d="M12.03 8.97a.75.75 0 1 0-1.06 1.06l.97.97l-.97.97a.75.75 0 1 0 1.06 1.06l.97-.97l.97.97a.75.75 0 1 0 1.06-1.06l-.97-.97l.97-.97a.75.75 0 1 0-1.06-1.06l-.97.97z" />
+        <path fill="currentColor" fill-rule="evenodd"
+          d="M1.293 2.751a.75.75 0 0 1 .956-.459l.301.106c.617.217 1.14.401 1.553.603c.44.217.818.483 1.102.899c.282.412.399.865.452 1.362l.011.108H17.12c.819 0 1.653 0 2.34.077c.35.039.697.101 1.003.209c.3.105.631.278.866.584c.382.496.449 1.074.413 1.66c-.035.558-.173 1.252-.338 2.077l-.01.053l-.002.004l-.508 2.47c-.15.726-.276 1.337-.439 1.82c-.172.51-.41.96-.837 1.308c-.427.347-.916.49-1.451.556c-.505.062-1.13.062-1.87.062H10.88c-1.345 0-2.435 0-3.293-.122c-.897-.127-1.65-.4-2.243-1.026c-.547-.576-.839-1.188-.985-2.042c-.137-.8-.15-1.848-.15-3.3V7.038c0-.74-.002-1.235-.043-1.615c-.04-.363-.109-.545-.2-.677c-.087-.129-.22-.25-.524-.398c-.323-.158-.762-.314-1.43-.549l-.26-.091a.75.75 0 0 1-.46-.957M5.708 6.87v2.89c0 1.489.018 2.398.13 3.047c.101.595.274.925.594 1.263c.273.288.65.472 1.365.573c.74.105 1.724.107 3.14.107h5.304c.799 0 1.33-.001 1.734-.05c.382-.047.56-.129.685-.231c.125-.102.24-.26.364-.625c.13-.385.238-.905.4-1.688l.498-2.42v-.002c.178-.89.295-1.482.322-1.926c.026-.421-.04-.569-.101-.65a.561.561 0 0 0-.177-.087a3.17 3.17 0 0 0-.672-.134c-.595-.066-1.349-.067-2.205-.067zM5.25 19.5a2.25 2.25 0 1 0 4.5 0a2.25 2.25 0 0 0-4.5 0m2.25.75a.75.75 0 1 1 0-1.5a.75.75 0 0 1 0 1.5m6.75-.75a2.25 2.25 0 1 0 4.5 0a2.25 2.25 0 0 0-4.5 0m2.25.75a.75.75 0 1 1 0-1.5a.75.75 0 0 1 0 1.5"
+          clip-rule="evenodd" />
+      </symbol>
+      
+      
   </svg>
-
+  
   
 
 <header id="header" class="site-header">
@@ -137,7 +139,7 @@
 
     <nav id="header-nav" class="navbar navbar-expand-lg py-3">
       <div class="container">
-        <a class="navbar-brand" href="http://storynest_book.test">
+        <a class="navbar-brand" href="{{ route('index') }}">
           <img src="{{ asset('assetClient/images/main-logo.png') }}" class="logo">
         </a>
         <button class="navbar-toggler d-flex d-lg-none order-3 p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#bdNavbar" aria-controls="bdNavbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -158,26 +160,24 @@
                 <a class="nav-link me-4 {{ View::getSection('active_pages_index') ?? ' ' }}" href="{{ route('index') }}">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link me-4" href="http://storynest_book.test/about">About</a>
+                <a class="nav-link me-4" href="/about">About</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link me-4 {{ View::getSection('active_pages_shop') ?? ' ' }}" href="{{ route('shop') }}">Shop</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link me-4" href="http://storynest_book.test/blog">Blogs</a>
+                <a class="nav-link me-4" href="/Blogs">Blogs</a>
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link me-4 dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Pages</a>
                 <ul class="dropdown-menu animate slide border">
                   <li>
-                    <a href="http://storynest_book.test/about" class="dropdown-item fw-light">About <span class="badge bg-primary">Pro</span></a>
+                    <a href="/about" class="dropdown-item fw-light">About <span class="badge bg-primary">Pro</span></a>
                   </li>
                   <li>
-                    <a href="http://storynest_book.test/shop" class="dropdown-item fw-light">Shop <span class="badge bg-primary">Pro</span></a>
+                    <a href="{{ route('shop') }}" class="dropdown-item fw-light">Shop <span class="badge bg-primary">Pro</span></a>
                   </li>
-                  <li>
-                    <a href="http://storynest_book.test/product" class="dropdown-item fw-light">Single Product <span class="badge bg-primary">Pro</span></a>
-                  </li>
+                  
                   <li>
                     <a href="http://storynest_book.test/cart" class="dropdown-item fw-light">Cart <span class="badge bg-primary">Pro</span></a>
                   </li>
@@ -230,6 +230,7 @@
                       <li><span class="dropdown-item-text fw-bold">{{ Auth::user()->name }}</span></li>
                       <hr class="my-1">
                       <li><a class="dropdown-item" href=""> <i class="bi bi-gear-fill"></i>  Cài đặt</a></li>
+                      <li><a class="dropdown-item" href="{{ route('orders.index') }}"> <i class="bi bi-box2"></i>  Đơn Hàng</a></li>
                       <li>
                         <form method="POST" action="{{ route('logout') }}">
                           @csrf
@@ -271,8 +272,10 @@
                                 <a href="{{ route('product.show', $item->product->id) }}">{{ $item->product->name }}</a>
                               </h5>
                               <small>{{ Str::limit($item->product->description, 50) }}</small>
-
-                              <a href="{{ route('cart.add', $item->product->id) }}" class="d-block fw-medium text-capitalize mt-2">Thêm vào giỏ hàng</a>
+                              <form action="{{ route('cart.add', $item->product->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                              <button type="submit" class="d-block fw-medium text-capitalize mt-2" style="all: unset; cursor: pointer;">Thêm vào giỏ hàng</button>
+                              </form>
                               <a href="{{ route('wishlist.remove', $item->product->id) }}" class="d-block fw-medium text-capitalize mt-2">Xóa</a>
                             </form>
                             </div>
@@ -285,9 +288,7 @@
                         </li>
                       </ul>
                 
-                      <div class="d-flex flex-wrap justify-content-center">
-                        <a href="#" class="w-100 btn btn-dark mb-1" type="submit">Thêm tất cả vào giỏ hàng</a>
-                      </div>
+                    
                     @endif
                   </div>
                 </li>
@@ -345,8 +346,8 @@
                       </li>
                     </ul>
                     <div class="d-flex flex-wrap justify-content-center">
-                      <a href="" class="w-100 btn btn-dark mb-1">View Cart</a>
-                      <a href="" class="w-100 btn btn-primary">Go to checkout</a>
+                      <a href="{{ route('cart.index') }}" class="w-100 btn btn-dark mb-1">Xem giỏ hàng</a>
+                      <a href="{{ route('checkout') }}" class="w-100 btn btn-primary">Thanh toán</a>
                     </div>
                   </div>
                 </li>

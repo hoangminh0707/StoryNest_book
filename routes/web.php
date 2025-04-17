@@ -17,6 +17,12 @@ use App\Http\Controllers\Admin\AttributeValueController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\UserAddressController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\OrderController;
+
+
+
 
 
 
@@ -43,6 +49,31 @@ Route::middleware('auth')->group(function () {
 
 });
 
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/addresses', [UserAddressController::class, 'index'])->name('addresses.index');
+    Route::post('/addresses', [UserAddressController::class, 'store'])->name('addresses.store');
+    Route::post('/addresses/set-default/{id}', [UserAddressController::class, 'setDefault'])->name('addresses.setDefault');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout');
+    Route::post('/checkout', [CheckoutController::class, 'submit'])->name('checkout.submit');
+
+
+    Route::get('/orders/success', [OrderController::class, 'success'])->name('orders.success');
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
+
+});
+
+
+
+
+
+
+
+
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/add/{id}', [CartController::class, 'addToCart'])->name('cart.add');
 Route::post('/cart/update/{product}', [CartController::class, 'update'])->name('cart.update');
@@ -61,25 +92,22 @@ Route::get('/shop', [ProductController::class, 'shop'])->name('shop');
 
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
 
+
 Route::get('/about', function () {
     return view('client.pages.about');
 });
 
 
 Route::get('/blog', function () {
-    return view('client.pages.blog');
-});
-
-Route::get('/checkout', function () {
-    return view('client.pages.checkout');
+    return view('client.pages.blog')->name('blog');
 });
 
 Route::get('/contact', function () {
-    return view('client.pages.contact');
+    return view('client.pages.contact')->name('contact');
 });
 
 Route::get('/post', function () {
-    return view('client.pages.post');
+    return view('client.pages.post')->name('post');
 });
 
 

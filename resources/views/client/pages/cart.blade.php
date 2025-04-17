@@ -44,7 +44,8 @@
          
 
           @foreach ($cartItems as $item)
-          {{-- <pre> {{ dd($item) }}</pre> --}}
+          <form action="{{ route('cart.update', $item->product_id) }}" method="POST">
+            @csrf
           <div class="cart-item border-bottom padding-small">
             <div class="row align-items-center">
               <div class="col-lg-4 col-md-3">
@@ -78,7 +79,9 @@
                             </svg>
                           </button>
                         </span>
+                       
                         <input type="text" id="quantity" name="quantity" class="form-control bg-white shadow border rounded-3 py-2 mx-2 input-number text-center" value="{{ $item->quantity }}" min="1" max="100" required="">
+                        
                         <span class="input-group-btn">
                           <button type="button" class="bg-white shadow border rounded-3 fw-light quantity-right-plus" data-type="plus" data-field="">
                             <svg width="16" height="16">
@@ -98,19 +101,28 @@
               </div>
               <div class="col-lg-1 col-md-2">
                 <div class="cart-cross-outline">
+                  <div class="d-flex align-items-center gap-2">
+                   <!-- nút cập nhật -->
+                   <button type="submit" class="btn p-0" title="Cập nhật" style="border:none; background:none;">
+                     <svg width="38" height="38"><use xlink:href="#icon-refresh"></use></svg>
+                  </button>
                   <form action="{{ route('cart.remove', $item->product_id) }}" method="POST" onsubmit="return confirm('Remove this item?')">
                     @csrf
                   <button type="submit" style="border: none; background: none;">
                     <svg class="cart-cross-outline" width="38" height="38">
                       <use xlink:href="#cart-cross-outline"></use>
                     </svg>
+                    
                   </button>
                 </form>
+
+                  </div>
 
                 </div>
               </div>
             </div>
           </div>
+        </form>
           @endforeach
 
 
@@ -135,22 +147,14 @@
                     </span>
                   </td>
                 </tr>
-                <tr class="order-total pt-2 pb-2 border-bottom">
-                  <th>Tổng cộng</th>
-                  <td data-title="Total">
-                    <span class="price-amount amount text-primary ps-5 fw-light">
-                      <bdi>
-                        <span class="price-currency-symbol">$</span>2,400.00</bdi>
-                    </span>
-                  </td>
-                </tr>
+
               </tbody>
             </table>
           </div>
           <div class="button-wrap d-flex flex-wrap gap-3">
-            <button class="btn">Cập nhật giỏ hàng</button>
-            <button class="btn">Tiếp tục mua sắm</button>
-            <button class="btn">Tiến hành thanh toán</button>
+
+            <a href="{{ route('shop') }}" class="btn">Tiếp tục mua sắm</a>
+            <a href="{{ route('checkout') }}" class="btn">Tiến hành thanh toán</a>
           </div>
         </div>
       </div>

@@ -65,14 +65,23 @@ class CartController extends Controller
     }
 
     public function update(Request $request, Product $product)
-    {
-        $cart = session()->get('cart', []);
-        if (isset($cart[$product->id])) {
-            $cart[$product->id]['quantity'] = $request->quantity;
-            session()->put('cart', $cart);
-        }
-        return back()->with('success', 'Đã cập nhật giỏ hàng!');
+{
+    $request->validate([
+        'quantity' => 'required|integer|min:1|max:100',
+    ]);
+
+    $cart = Cart::firstOrCreate(['user_id' => auth()->id()]);
+    $item = CartItem::where('cart_id', $cart->id)
+                    ->where('product_id', $product->id)
+                    ->first();
+
+    if ($item) {
+        $item->quantity = $request->quantity;
+        $item->save();
     }
+
+    return redirect()->back()->with('success', 'Giỏ hàng đã được cập nhật.');
+}
 
     public function remove($productId)
 {
