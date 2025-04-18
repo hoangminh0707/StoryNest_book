@@ -165,12 +165,9 @@ Route::patch('/shipping-methods/{id}/toggle', [ShippingMethodController::class, 
 
 //Voucher 
 Route::resource('vouchers', App\Http\Controllers\Admin\VoucherController::class);
-Route::patch('vouchers/{voucher}/toggle', [App\Http\Controllers\Admin\VoucherController::class, 'toggle'])->name('vouchers.toggle');
-
-
-// Route quản lý điều kiện áp dụng (VoucherCondition)
-Route::resource('/admin/voucher-conditions', App\Http\Controllers\Admin\VoucherConditionController::class);
-
+Route::patch('vouchers/{id}/toggle-status', [\App\Http\Controllers\Admin\VoucherController::class, 'toggleStatus'])->name('vouchers.toggle-status');
+Route::patch('vouchers/{voucher}', [\App\Http\Controllers\Admin\VoucherController::class, 'toggleStatus'])->name('vouchers.show');
+Route::patch('vouchers/{voucher}', [\App\Http\Controllers\Admin\VoucherController::class, 'update'])->name('vouchers.update');
 
 Route::resource('orders', \App\Http\Controllers\Admin\OrderController::class)->only([
     'index',

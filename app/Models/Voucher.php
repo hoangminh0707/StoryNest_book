@@ -13,14 +13,16 @@ class Voucher extends Model
     protected $fillable = [
         'code',
         'name',
-        'description', 
+        'description',
         'type',
         'value',
         'expires_at',
+        'max_discount_amount',
+        'min_order_value',
         'max_usage',
-        'usage_count', 
+        'usage_count',
         'is_active',
-        'condition_type', 
+        'condition_type',
     ];
 
     protected $casts = [
@@ -40,25 +42,7 @@ class Voucher extends Model
         return $this->hasMany(VoucherCondition::class);
     }
 
-    /**
-     * Danh sách sản phẩm được áp dụng
-     */
-    // public function applicableProducts()
-    // {
-    //     return $this->conditions()
-    //         ->where('condition_type', 'product')
-    //         ->with('product');
-    // }
 
-    /**
-     * Danh sách danh mục được áp dụng
-     */
-    // public function applicableCategories()
-    // {
-    //     return $this->conditions()
-    //         ->where('condition_type', 'category')
-    //         ->with('category');
-    // }
 
     /**
      * Kiểm tra voucher còn hiệu lực không
@@ -90,5 +74,9 @@ class Voucher extends Model
     public function getFormattedExpiresAtAttribute(): string
     {
         return $this->expires_at ? $this->expires_at->format('d/m/Y H:i') : 'Không giới hạn';
+    }
+    public function usageLogs()
+    {
+        return $this->hasMany(VoucherUsageLog::class);
     }
 }

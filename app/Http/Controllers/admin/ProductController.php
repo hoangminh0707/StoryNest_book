@@ -118,7 +118,7 @@ class ProductController extends Controller
         }
         
     
-        dd($request->all());
+        // dd($request->all());
         // Redirect về trang danh sách sản phẩm với thông báo thành công
         return redirect()->route('products.index')
             ->with('success', 'Sản phẩm và biến thể đã được tạo thành công.');
