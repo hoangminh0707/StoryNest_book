@@ -8,17 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Blog extends Model
 {
     use HasFactory;
-
-    protected $fillable = [
-        'user_id',
-        'title',
-        'content',
-        'status',
-    ];
-
-    // Quan hệ với User
-    public function user()
+    protected $fillable = ['user_id', 'title', 'content', 'status'];
+    public function comments()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasMany(Comment::class);
     }
+
+
 }
