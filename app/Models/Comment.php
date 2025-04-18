@@ -6,12 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
 {
+
     protected $fillable = [
         'user_id',
         'commentable_id',
         'commentable_type',
         'content',
         'is_approved',
+        'blog_id',
+        'name',
+        'email',
     ];
 
     // Quan hệ với User
@@ -25,4 +29,10 @@ class Comment extends Model
     {
         return $this->morphTo();
     }
+
+    public function blog()
+    {
+        return $this->belongsTo(Blog::class);
+    }
 }
+

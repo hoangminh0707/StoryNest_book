@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -7,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\UserAddress;
 use App\Models\ShippingMethod;
 use App\Models\OrderItem;
+
 
 
 class Order extends Model
@@ -55,5 +57,5 @@ class Order extends Model
     {
         return $this->hasOne(Payment::class);
     }
-    
+
 }

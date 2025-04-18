@@ -19,6 +19,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'birthdate',
         'phone',
         'address',
+
     ];
 
     protected $dates = ['email_verified_at'];
@@ -60,4 +61,3 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
 }
-

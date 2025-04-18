@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 
 // ========== ADMIN CONTROLLERS ==========
 use App\Http\Controllers\admin\AdminController;
@@ -98,6 +97,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 
+
 //
 // ─── ADMIN ROUTES ──────────────────────────────────────────────────────────────────
 //
@@ -145,9 +145,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('attributes', AttributeController::class);
     Route::resource('attribute-values', AttributeValueController::class);
 
-    // Biến thể sản phẩm & ảnh sản phẩm
-    Route::resource('product-variants', ProductVariantController::class);
-    Route::resource('product-images', ProductImageController::class);
 
     // Bình luận & đánh giá
     Route::resource('comments', CommentController::class)->only(['index', 'destroy']);

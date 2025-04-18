@@ -554,7 +554,6 @@
                                     <i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i>
                                     <span class="align-middle">Đăng xuất</span></button>
                             </form>
-
                         </div>
                     </div>
                 </div>
@@ -678,7 +677,7 @@
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link menu-link" href="{{ route('admin.product-variants.index') }}">
+                        {{-- <a class="nav-link menu-link" href="{{ route('admin.product-variants.index') }}"> --}}
                             <i class="ri-file-edit-line"></i>Biến thể
                         </a>
                     </li>

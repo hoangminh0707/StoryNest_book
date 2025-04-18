@@ -58,4 +58,3 @@ class Product extends Model
         return $this->belongsToMany(Attribute::class, 'product_attribute');
     }
 }
-

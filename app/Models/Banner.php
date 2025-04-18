@@ -9,6 +9,10 @@ class Banner extends Model
 {
     use HasFactory, SoftDeletes;
     protected $fillable = [
-        'title', 'image_url', 'link', 'order','status'
+        'title',
+        'image_url',
+        'link',
+        'order',
+        'status'
     ];
 }
