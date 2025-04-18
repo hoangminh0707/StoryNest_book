@@ -17,4 +17,11 @@ class ShippingMethod extends Model
         'image',
         'is_active',
     ];
+
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'shipping_method_id');
+    }
+
 }

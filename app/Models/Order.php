@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,7 +12,7 @@ use App\Models\OrderItem;
 class Order extends Model
 {
     use HasFactory;
-    
+
     protected $fillable = [
         'user_id',
         'user_address_id',
@@ -26,25 +25,35 @@ class Order extends Model
         'status',
     ];
 
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function userAddress()
+    {
+        return $this->belongsTo(UserAddress::class);
+    }
+
+    public function voucher()
+    {
+        return $this->belongsTo(Voucher::class);
+    }
+
+    public function shippingMethod()
+    {
+        return $this->belongsTo(ShippingMethod::class);
+    }
+
     public function orderItems()
-{
-    return $this->hasMany(OrderItem::class);
-}
+    {
+        return $this->hasMany(OrderItem::class);
+    }
 
-public function userAddress()
-{
-    return $this->belongsTo(UserAddress::class);
-}
-
-public function shippingMethod()
-{
-    return $this->belongsTo(ShippingMethod::class);
-}
-
-public function payment()
-{
-    return $this->hasOne(Payment::class);
-}
-
-
+    public function payment()
+    {
+        return $this->hasOne(Payment::class);
+    }
+    
 }

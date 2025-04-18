@@ -9,20 +9,30 @@ class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable;
 
+
     protected $fillable = [
-        'name', 'email', 'password','gender','birthdate','phone'
+        'name',
+        'email',
+        'password',
+        'avatar',
+        'gender',
+        'birthdate',
+        'phone',
+        'address',
     ];
-    
+
     protected $dates = ['email_verified_at'];
 
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
+
     ];
 
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-    
+
     public function roles()
     {
         return $this->belongsToMany(Role::class, 'user_role', 'user_id', 'role_id');
@@ -43,9 +53,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return false;
     }
 
+
     public function addresses()
-        {
-            return $this->hasMany(UserAddress::class);
-        }
+    {
+        return $this->hasMany(UserAddress::class);
+    }
 
 }
+

@@ -1,9 +1,9 @@
 <?php
-
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 
 class UserAddress extends Model
 {
@@ -20,13 +20,12 @@ class UserAddress extends Model
         'is_default',
     ];
 
-    // Một địa chỉ thuộc về 1 user
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    // Địa chỉ đầy đủ dạng chuỗi
+
     public function fullAddress()
     {
         return "{$this->address_line}, {$this->ward}, {$this->district}, {$this->city}";
@@ -36,4 +35,5 @@ class UserAddress extends Model
 {
     return $this->hasMany(Order::class, 'user_address_id');
 }
+
 }

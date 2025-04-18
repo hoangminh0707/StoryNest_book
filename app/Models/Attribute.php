@@ -14,8 +14,19 @@ class Attribute extends Model
     ];
 
     // Mối quan hệ 1-N với AttributeValue
+    
     public function attributeValues()
     {
         return $this->hasMany(AttributeValue::class);
     }
+
+    public function values()
+    {
+        return $this->hasMany(AttributeValue::class);
+    }
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'product_attribute');
+    }
+
 }

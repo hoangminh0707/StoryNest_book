@@ -10,13 +10,13 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::with('parent')->latest()->paginate(10);
-        return view('admin.categories.index', compact('categories'));
+        return view('admin.pages.categories.index', compact('categories'));
     }
 
     public function create()
     {
         $categories = Category::whereNull('parent_id')->get(); // Chỉ lấy danh mục cha
-        return view('admin.categories.create', compact('categories'));
+        return view('admin.pages.categories.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -28,13 +28,13 @@ class CategoryController extends Controller
         ]);
 
         Category::create($request->all());
-        return redirect()->route('categories.index')->with('success', 'Danh mục đã được thêm!');
+        return redirect()->route('admin.categories.index')->with('success', 'Danh mục đã được thêm!');
     }
 
     public function edit(Category $category)
     {
         $categories = Category::whereNull('parent_id')->where('id', '!=', $category->id)->get();
-        return view('admin.categories.edit', compact('category', 'categories'));
+        return view('admin.pages.categories.edit', compact('category', 'categories'));
     }
 
     public function update(Request $request, Category $category)
@@ -46,14 +46,12 @@ class CategoryController extends Controller
         ]);
 
         $category->update($request->all());
-        return redirect()->route('categories.index')->with('success', 'Danh mục đã được cập nhật!');
+        return redirect()->route('admin.categories.index')->with('success', 'Danh mục đã được cập nhật!');
     }
 
     public function destroy(Category $category)
     {
         $category->delete();
-        return redirect()->route('categories.index')->with('success', 'Danh mục đã bị xóa!');
+        return redirect()->route('admin.categories.index')->with('success', 'Danh mục đã bị xóa!');
     }
 }
-
-

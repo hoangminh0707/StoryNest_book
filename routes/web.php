@@ -1,19 +1,32 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProductController;
+
+// ========== ADMIN CONTROLLERS ==========
 use App\Http\Controllers\admin\AdminController;
 use App\Http\Controllers\admin\LoginController;
 use App\Http\Controllers\admin\RegisterController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\RolesController;
-use App\Http\Controllers\Admin\ProductController2;
+use App\Http\Controllers\Admin\ProductAdminController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductImageController;
 use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\PublisherController;
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\AttributeValueController;
+use App\Http\Controllers\Admin\AuthorController;
+use App\Http\Controllers\Admin\CommentController;
+use App\Http\Controllers\Admin\ShippingMethodController;
+use App\Http\Controllers\Admin\VoucherController;
+use App\Http\Controllers\Admin\BannerController;
+use App\Http\Controllers\Admin\BlogController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Admin\ReviewController;
+use App\Http\Controllers\Admin\PaymentController;
+
+// ========== CLIENT CONTROLLERS ==========
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CartController;
@@ -23,79 +36,12 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\VerificationController;
 use App\Http\Controllers\ProfileController;
 
+//
+// ─── CLIENT ROUTES ────────────────────────────────────────────────────────────────
+//
 
-
-
-
-
-
-
-
-
-
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
-
-Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
-Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
-Route::get('/profile/change-email', [ProfileController::class, 'showChangeEmailForm'])->name('profile.email.change.form');
-Route::post('/profile/change-email', [ProfileController::class, 'changeEmail'])->name('profile.email.change');
-
-Route::get('/profile/change-password', [ProfileController::class, 'showChangePasswordForm'])->name('profile.password.form');
-Route::post('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.password.update');
-
-
-
-Route::middleware(['auth'])->group(function () {
-    Route::get('/email/verify', [VerificationController::class, 'notice'])->name('verification.notice');
-    Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify');
-    Route::post('/email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
-});
-
-Route::middleware('auth','verified')->group(function () {
-    Route::get('/wishlist/add/{productId}', [WishlistController::class, 'add'])->name('wishlist.add');
-    Route::get('/wishlist/remove/{productId}', [WishlistController::class, 'remove'])->name('wishlist.remove');
-
-
-});
-
-
-Route::middleware(['auth'])->group(function () {
-    Route::get('/addresses', [UserAddressController::class, 'index'])->name('addresses.index');
-    Route::post('/addresses', [UserAddressController::class, 'store'])->name('addresses.store');
-    Route::post('/addresses/set-default/{id}', [UserAddressController::class, 'setDefault'])->name('addresses.setDefault');
-
-    Route::get('/addresses/{id}/edit', [UserAddressController::class, 'edit'])->name('addresses.edit');
-    Route::put('/addresses/{id}', [UserAddressController::class, 'update'])->name('addresses.update');
-    Route::delete('/addresses/{id}', [UserAddressController::class, 'destroy'])->name('addresses.destroy');
-});
-
-Route::middleware(['auth'])->group(function () {
-    Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout');
-    Route::post('/checkout', [CheckoutController::class, 'submit'])->name('checkout.submit');
-
-
-    Route::get('/orders/success', [OrderController::class, 'success'])->name('orders.success');
-    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
-    Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
-
-});
-
-
-
-
-
-
-
+Route::get('/', [ProductController::class, 'index'])->name('index');
+Route::get('/shop', [ProductController::class, 'shop'])->name('shop');
 
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/add/{id}', [CartController::class, 'addToCart'])->name('cart.add');
@@ -108,106 +54,132 @@ Route::get('/register', [AuthController::class, 'showRegister'])->name('register
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-
+// Sản phẩm (chi tiết)
 Route::middleware(['auth', 'verified'])->group(function () {
-Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
-    
+    Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
+});
+
+// Xác thực Email, Hồ sơ, Địa chỉ người dùng
+Route::middleware(['auth'])->group(function () {
+    // Email verification
+    Route::get('/email/verify', [VerificationController::class, 'notice'])->name('verification.notice');
+    Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify');
+    Route::post('/email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
+
+    // Hồ sơ cá nhân
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile/change-email', [ProfileController::class, 'showChangeEmailForm'])->name('profile.email.change.form');
+    Route::post('/profile/change-email', [ProfileController::class, 'changeEmail'])->name('profile.email.change');
+    Route::get('/profile/change-password', [ProfileController::class, 'showChangePasswordForm'])->name('profile.password.form');
+    Route::post('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.password.update');
+
+    // Địa chỉ người dùng
+    Route::get('/addresses', [UserAddressController::class, 'index'])->name('addresses.index');
+    Route::post('/addresses', [UserAddressController::class, 'store'])->name('addresses.store');
+    Route::post('/addresses/set-default/{id}', [UserAddressController::class, 'setDefault'])->name('addresses.setDefault');
+    Route::get('/addresses/{id}/edit', [UserAddressController::class, 'edit'])->name('addresses.edit');
+    Route::put('/addresses/{id}', [UserAddressController::class, 'update'])->name('addresses.update');
+    Route::delete('/addresses/{id}', [UserAddressController::class, 'destroy'])->name('addresses.destroy');
+
+    // Checkout & Orders
+    Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout');
+    Route::post('/checkout', [CheckoutController::class, 'submit'])->name('checkout.submit');
+
+    Route::get('/orders/success', [OrderController::class, 'success'])->name('orders.success');
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
+});
+
+// Wishlist
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/wishlist/add/{productId}', [WishlistController::class, 'add'])->name('wishlist.add');
+    Route::get('/wishlist/remove/{productId}', [WishlistController::class, 'remove'])->name('wishlist.remove');
 });
 
 
-Route::get('/', [ProductController::class, 'index'])->name('index');
+//
+// ─── ADMIN ROUTES ──────────────────────────────────────────────────────────────────
+//
 
-Route::get('/shop', [ProductController::class, 'shop'])->name('shop');
+Route::prefix('admin')->name('admin.')->group(function () {
+    // Đăng nhập / Đăng ký / Dashboard
+    Route::get('/', [AdminController::class, 'dashboard'])->middleware(['auth', 'role:admin'])->name('dashboard');
+    Route::get('/login', [LoginController::class, 'showLoginAdminForm'])->name('login');
+    Route::post('/login', [LoginController::class, 'login']);
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+    Route::get('/register', [RegisterController::class, 'showAdminRegistrationForm'])->name('register.form');
+    Route::post('/register', [RegisterController::class, 'registerAdmin'])->name('register');
 
-Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
+    // Quản lý người dùng
+    Route::get('/users', [UserController::class, 'index'])->name('userIndex');
+    Route::get('/users/create', [UserController::class, 'create'])->name('userCreate');
+    Route::post('/users/add', [UserController::class, 'add'])->name('userAdd');
+    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('userEdit');
+    Route::put('/users/{user}', [UserController::class, 'update'])->name('userUpdate');
+    Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('userDelete');
 
+    // Phân quyền
+    Route::get('/roles', [RolesController::class, 'index'])->name('roleIndex');
+    Route::get('/roles/create', [RolesController::class, 'create'])->name('roleCreate');
+    Route::post('/roles', [RolesController::class, 'add'])->name('addRole');
+    Route::get('/roles/{role}/edit', [RolesController::class, 'edit'])->name('roleEdit');
+    Route::put('/roles/{role}', [RolesController::class, 'update'])->name('updateRole');
+    Route::delete('/roles/{role}', [RolesController::class, 'destroy'])->name('destroyRole');
 
-Route::get('/about', function () {
-    return view('client.pages.about');
+    // Danh mục sản phẩm
+    Route::resource('categories', CategoryController::class);
+
+    // Sản phẩm
+    Route::resource('products', ProductAdminController::class);
+    Route::get('/products/{product}/edit', [ProductAdminController::class, 'edit'])->name('products.edit');
+    Route::put('/products/{product}', [ProductAdminController::class, 'update'])->name('products.update');
+    Route::delete('/products/image/{image}', [ProductAdminController::class, 'deleteImage'])->name('products.image.delete');
+    Route::delete('/products/{id}/image', [ProductAdminController::class, 'deleteImage'])->name('products.image.delete');
+
+    // Tác giả - Nhà xuất bản
+    Route::resource('publishers', PublisherController::class);
+    Route::resource('authors', AuthorController::class);
+
+    // Thuộc tính
+    Route::resource('attributes', AttributeController::class);
+    Route::resource('attribute-values', AttributeValueController::class);
+
+    // Biến thể sản phẩm & ảnh sản phẩm
+    Route::resource('product-variants', ProductVariantController::class);
+    Route::resource('product-images', ProductImageController::class);
+
+    // Bình luận & đánh giá
+    Route::resource('comments', CommentController::class)->only(['index', 'destroy']);
+    Route::patch('comments/{id}/approve', [CommentController::class, 'approve'])->name('comments.approve');
+
+    Route::resource('reviews', ReviewController::class)->only(['index', 'show', 'destroy']);
+    Route::get('reviews/{id}/approve', [ReviewController::class, 'approve'])->name('reviews.approve');
+
+    // Đơn hàng
+    Route::resource('orders', AdminOrderController::class)->only(['index', 'show', 'destroy']);
+    Route::get('orders/{order}/edit-status', [AdminOrderController::class, 'editStatus'])->name('orders.editStatus');
+    Route::put('orders/{order}/update-status', [AdminOrderController::class, 'updateStatus'])->name('orders.updateStatus');
+
+    // Thanh toán
+    Route::resource('payments', PaymentController::class)->only(['index', 'show', 'destroy']);
+    Route::post('payments/{id}/update-status', [PaymentController::class, 'updateStatus'])->name('payments.updateStatus');
+
+    // Vận chuyển
+    Route::resource('shipping-methods', ShippingMethodController::class);
+    Route::patch('shipping-methods/{id}/toggle', [ShippingMethodController::class, 'toggleStatus'])->name('shipping-methods.toggle');
+
+    // Mã giảm giá
+    Route::resource('vouchers', VoucherController::class);
+    Route::patch('vouchers/{id}/toggle-status', [VoucherController::class, 'toggleStatus'])->name('vouchers.toggle-status');
+    Route::patch('vouchers/{voucher}', [VoucherController::class, 'update'])->name('vouchers.update');
+
+    // Banner
+    Route::resource('banners', BannerController::class);
+    Route::delete('banners/bulk-delete', [BannerController::class, 'bulkDelete'])->name('banners.bulk-delete');
+    Route::patch('banners/{id}/toggle', [BannerController::class, 'toggleStatus'])->name('banners.toggle');
+
+    // Blog
+    Route::resource('blogs', BlogController::class);
+    Route::post('blogs/mass-delete', [BlogController::class, 'massDelete'])->name('blogs.massDelete');
 });
-
-
-Route::get('/blog', function () {
-    return view('client.pages.blog')->name('blog');
-});
-
-Route::get('/contact', function () {
-    return view('client.pages.contact')->name('contact');
-});
-
-Route::get('/post', function () {
-    return view('client.pages.post')->name('post');
-});
-
-
-
-
-
-Route::get('/admin', [AdminController::class, 'dashboard'])->middleware(['auth', 'role:admin'])->name('admin.dashboard');
-
-Route::get('/admin/login', [LoginController::class, 'showLoginAdminForm'])->name('admin.login');
-Route::post('/admin/login', [LoginController::class, 'login']);
-Route::post('/admin/logout', [LoginController::class, 'logout'])->name('admin.logout');
-
-
-Route::get('/admin/register', [RegisterController::class, 
-'showAdminRegistrationForm'])->name('register.admin.form');
-
-Route::post('/admin/register', [RegisterController::class, 
-'registerAdmin'])->name('register.admin');
-
-Route::get('/admin-User', [UserController::class, 'index'])->middleware(['auth', 'role:admin'])->name('admin.userIndex');
-
-Route::get('/admin-addUser', [UserController::class, 'create'])->name('admin.userCreate');
-Route::post('/admin-addUser', [UserController::class, 'add'])->name('admin.addUser');
-
-Route::get('/admin-editUser/{user}', [UserController::class, 'edit'])->name('admin.userEdit');
-Route::put('/admin-editUser/{user}', [UserController::class, 'update'])->name('admin.updateUser');
-
-Route::delete('/admin-destroyUser/{user}', [UserController::class, 'destroy'])->name('admin.destroyUser');
-
-
-Route::get('/admin-Roles', [RolesController::class, 'index'])->middleware(['auth', 'role:admin'])->name('admin.roleIndex');
-
-Route::get('/admin-addRole', [RolesController::class, 'create'])->name('admin.roleCreate');
-Route::post('/admin-addRole', [RolesController::class, 'add'])->name('admin.addRole');
-
-Route::get('/admin-editRole/{role}', [RolesController::class, 'edit'])->name('admin.roleEdit');
-Route::put('/admin-editRole/{role}', [RolesController::class, 'update'])->name('admin.updateRole');
-
-Route::delete('/admin-destroyRole/{role}', [RolesController::class, 'destroy'])->name('admin.destroyRole');
-
-
-
-// 📌 Quản lý Danh mục sản phẩm (Categories)
-Route::resource('admin/categories', CategoryController::class);
-
-// 📌 Quản lý Sản phẩm (Products)
-Route::resource('admin/products', ProductController2::class);
-Route::get('/products/{id}', [ProductController2::class, 'show'])->name('products.show');
-// Route để hiển thị form sửa sản phẩm
-Route::get('products/{product}/edit', [ProductController2::class, 'edit'])->name('products.edit');
-// Route để xử lý cập nhật sản phẩm
-Route::put('products/{product}', [ProductController2::class, 'update'])->name('products.update');
-// Route để xóa ảnh của sản phẩm
-Route::delete('products/image/{image}', [ProductController2::class, 'deleteImage'])->name('products.image.delete');
-Route::delete('products/{id}/image', [ProductController2::class, 'deleteImage'])->name('products.image.delete');
-
-
-// 📌 Quản lý Nhà xuất bản (Publishers)
-Route::resource('admin/publishers', PublisherController::class);
-
-
-
-
-
-// Các route cho biến thể sản phẩm
-Route::resource('product_variants', ProductVariantController::class);
-
-// Route cho danh sách ảnh sản phẩm
-Route::resource('product-images', ProductImageController::class);
-
-
-
-
-

@@ -14,7 +14,7 @@ class PublisherController extends Controller
     public function index()
     {
         $publishers = Publisher::latest()->paginate(10);
-        return view('admin.publishers.index', compact('publishers'));
+        return view('admin.pages.publishers.index', compact('publishers'));
     }
 
     /**
@@ -22,7 +22,7 @@ class PublisherController extends Controller
      */
     public function create()
     {
-        return view('admin.publishers.create');
+        return view('admin.pages.publishers.create');
     }
 
     /**
@@ -45,7 +45,7 @@ class PublisherController extends Controller
         // Lưu vào database
         Publisher::create($request->all());
 
-        return redirect()->route('publishers.index')->with('success', 'Thêm nhà xuất bản thành công!');
+        return redirect()->route('admin.publishers.index')->with('success', 'Thêm nhà xuất bản thành công!');
     }
 
     /**
@@ -54,7 +54,7 @@ class PublisherController extends Controller
     public function edit($id)
     {
         $publisher = Publisher::findOrFail($id);
-        return view('admin.publishers.edit', compact('publisher'));
+        return view('admin.pages.publishers.edit', compact('publisher'));
     }
 
     /**
@@ -78,7 +78,7 @@ class PublisherController extends Controller
         $publisher = Publisher::findOrFail($id);
         $publisher->update($request->all());
 
-        return redirect()->route('publishers.index')->with('success', 'Cập nhật nhà xuất bản thành công!');
+        return redirect()->route('admin.publishers.index')->with('success', 'Cập nhật nhà xuất bản thành công!');
     }
 
     /**
@@ -89,6 +89,6 @@ class PublisherController extends Controller
         $publisher = Publisher::findOrFail($id);
         $publisher->delete();
 
-        return redirect()->route('publishers.index')->with('success', 'Xóa nhà xuất bản thành công!');
+        return redirect()->route('admin.publishers.index')->with('success', 'Xóa nhà xuất bản thành công!');
     }
 }

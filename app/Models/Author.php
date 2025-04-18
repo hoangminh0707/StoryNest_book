@@ -9,8 +9,13 @@ class Author extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'bio', 'birthdate'];
+    protected $fillable = [
+        'name',
+        'bio',
+        'birthdate',
+    ];
 
+    // Mối quan hệ 1-N với Product
     public function products()
     {
         return $this->hasMany(Product::class);
