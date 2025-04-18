@@ -44,7 +44,7 @@ class UserController extends Controller
         return redirect()->back()->withErrors($validator)->withInput();
     }
 
-    // // Create user
+   
     User::create([
         'name' => $request->name,
         'email' => $request->email,
