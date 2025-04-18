@@ -14,9 +14,6 @@
           <div class="text-center">
             <h1>Cart</h1>
             <div class="breadcrumbs">
-              <span class="item">
-                <a href="index.html">Home &gt; </a>
-              </span>
               <span class="item text-decoration-underline">Cart</span>
             </div>
           </div>

@@ -136,48 +136,48 @@
           <div class="offcanvas-body">
             <ul id="navbar" class="navbar-nav text-uppercase justify-content-start justify-content-lg-center align-items-start align-items-lg-center flex-grow-1">
               <li class="nav-item">
-                <a class="nav-link me-4 active" href="http://storynest_book.test/">Home</a>
+                <a class="nav-link me-4 active" href="http://storynest_book.test/">Trang chủ</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link me-4" href="http://storynest_book.test/about">About</a>
+                <a class="nav-link me-4" href="http://storynest_book.test/about">Giới thiệu</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link me-4" href="http://storynest_book.test/shop">Shop</a>
+                <a class="nav-link me-4" href="http://storynest_book.test/shop">Cửa hàng</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link me-4" href="http://storynest_book.test/blog">Blogs</a>
+                <a class="nav-link me-4" href="http://storynest_book.test/blog">Bài viết</a>
               </li>
               <li class="nav-item dropdown">
-                <a class="nav-link me-4 dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Pages</a>
+                <a class="nav-link me-4 dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Trang</a>
                 <ul class="dropdown-menu animate slide border">
                   <li>
-                    <a href="http://storynest_book.test/about" class="dropdown-item fw-light">About <span class="badge bg-primary">Pro</span></a>
+                    <a href="http://storynest_book.test/about" class="dropdown-item fw-light">Giới thiệu <span class="badge bg-primary">Pro</span></a>
                   </li>
                   <li>
-                    <a href="http://storynest_book.test/shop" class="dropdown-item fw-light">Shop <span class="badge bg-primary">Pro</span></a>
+                    <a href="http://storynest_book.test/shop" class="dropdown-item fw-light">Cửa hàng <span class="badge bg-primary">Pro</span></a>
                   </li>
                   <li>
-                    <a href="http://storynest_book.test/product" class="dropdown-item fw-light">Single Product <span class="badge bg-primary">Pro</span></a>
+                    <a href="http://storynest_book.test/product" class="dropdown-item fw-light">Sản phẩm <span class="badge bg-primary">Pro</span></a>
                   </li>
                   <li>
-                    <a href="http://storynest_book.test/cart" class="dropdown-item fw-light">Cart <span class="badge bg-primary">Pro</span></a>
+                    <a href="http://storynest_book.test/cart" class="dropdown-item fw-light">Giỏ hàng <span class="badge bg-primary">Pro</span></a>
                   </li>
                   <li>
-                    <a href="http://storynest_book.test/checkout" class="dropdown-item fw-light">Checkout <span class="badge bg-primary">Pro</span></a>
+                    <a href="http://storynest_book.test/checkout" class="dropdown-item fw-light">Thanh toán <span class="badge bg-primary">Pro</span></a>
                   </li>
                   <li>
-                    <a href="http://storynest_book.test/blog" class="dropdown-item fw-light">Blog <span class="badge bg-primary">Pro</span></a>
+                    <a href="http://storynest_book.test/blog" class="dropdown-item fw-light">Bài viết <span class="badge bg-primary">Pro</span></a>
                   </li>
                   <li>
-                    <a href="http://storynest_book.test/post" class="dropdown-item fw-light">Single Post <span class="badge bg-primary">Pro</span></a>
+                    <a href="http://storynest_book.test/post" class="dropdown-item fw-light">Bài viết chi tiết <span class="badge bg-primary">Pro</span></a>
                   </li>
                   <li>
-                    <a href="http://storynest_book.test/contact" class="dropdown-item fw-light">Contact <span class="badge bg-primary">Pro</span></a>
+                    <a href="http://storynest_book.test/contact" class="dropdown-item fw-light">Liên hệ <span class="badge bg-primary">Pro</span></a>
                   </li>
                 </ul>
               </li>
               <li class="nav-item">
-                <a class="nav-link me-4" href="http://storynest_book.test/contact">Contact</a>
+                <a class="nav-link me-4" href="http://storynest_book.test/contact">Liên hệ</a>
               </li>
               <li class="nav-item">
               </li>

@@ -15,9 +15,6 @@
           <div class="text-center">
             <h1>Thanh toán</h1>
             <div class="breadcrumbs">
-              <span class="item">
-                <a href="index.html">Home &gt; </a>
-              </span>
               <span class="item text-decoration-underline">Thanh toán</span>
             </div>
           </div>

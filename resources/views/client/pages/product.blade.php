@@ -14,9 +14,7 @@
           <div class="text-center">
             <h1>Single-Product</h1>
             <div class="breadcrumbs">
-              <span class="item">
-                <a href="index.html">Home &gt; </a>
-              </span>
+        
               <span class="item text-decoration-underline">Single-Product</span>
             </div>
           </div>
@@ -262,7 +260,7 @@
                 <div class="review-item d-flex">
                   <div class="image-holder me-2">
                     <img src="assetClient/images/review-image2.jpg" alt="review" class="img-fluid rounded-3">
-                  </div>                    
+                  </div>
                   <div class="review-content">
                     <div class="rating text-primary">
                       <svg class="star star-fill">

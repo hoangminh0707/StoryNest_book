@@ -51,54 +51,53 @@
             </div>
             <div class="col-lg-2 col-sm-6 pb-3">
               <div class="footer-menu text-capitalize">
-                <h5 class="widget-title pb-2">Quick Links</h5>
+                <h5 class="widget-title pb-2">Liên kết nhanh</h5>
                 <ul class="menu-list list-unstyled text-capitalize">
                   <li class="menu-item mb-1">
                     <a href="#">Home</a>
                   </li>
+
                   <li class="menu-item mb-1">
-                    <a href="#">About</a>
+                    <a href="#">Cửa hàng
+                    </a>
                   </li>
                   <li class="menu-item mb-1">
-                    <a href="#">Shop</a>
+                    <a href="#">Bài viết</a>
                   </li>
                   <li class="menu-item mb-1">
-                    <a href="#">Blogs</a>
-                  </li>
-                  <li class="menu-item mb-1">
-                    <a href="#">Contact</a>
+                    <a href="#">Liên hệ</a>
                   </li>
                 </ul>
               </div>
             </div>
             <div class="col-lg-3 col-sm-6 pb-3">
               <div class="footer-menu text-capitalize">
-                <h5 class="widget-title pb-2">Help & Info Help</h5>
+                <h5 class="widget-title pb-2">Trợ giúp & Thông tin Trợ giúp</h5>
                 <ul class="menu-list list-unstyled">
                   <li class="menu-item mb-1">
-                    <a href="#">Track Your Order</a>
+                    <a href="#">Theo dõi đơn hàng của bạn</a>
                   </li>
                   <li class="menu-item mb-1">
-                    <a href="#">Returns Policies</a>
+                    <a href="#">Chính sách trả hàng</a>
                   </li>
                   <li class="menu-item mb-1">
-                    <a href="#">Shipping + Delivery</a>
+                    <a href="#">Vận chuyển + Giao hàng</a>
                   </li>
                   <li class="menu-item mb-1">
-                    <a href="#">Contact Us</a>
+                    <a href="#">Liên hệ với chúng tôi</a>
                   </li>
                   <li class="menu-item mb-1">
-                    <a href="#">Faqs</a>
+                    <a href="#">Câu hỏi thường gặp</a>
                   </li>
                 </ul>
               </div>
             </div>
             <div class="col-lg-3 col-sm-6 pb-3">
               <div class="footer-menu contact-item">
-                <h5 class="widget-title text-capitalize pb-2">Contact Us</h5>
-                <p>Do you have any queries or suggestions? <a href="mailto:"
+                <h5 class="widget-title text-capitalize pb-2">Liên hệ với chúng tôi</h5>
+                <p>Bạn có bất kỳ thắc mắc hoặc đề xuất nào không? <a href="mailto:"
                     class="text-decoration-underline">yourinfo@gmail.com</a></p>
-                <p>If you need support? Just give us a call. <a href="#" class="text-decoration-underline">+55 111 222
+                <p>Nếu bạn cần hỗ trợ? Chỉ cần gọi cho chúng tôi. <a href="#" class="text-decoration-underline">+55 111 222
                     333 44</a></p>
               </div>
             </div>

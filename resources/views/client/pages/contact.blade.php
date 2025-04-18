@@ -14,9 +14,7 @@
           <div class="text-center">
             <h1>Contact</h1>
             <div class="breadcrumbs">
-              <span class="item">
-                <a href="index.html">Home &gt; </a>
-              </span>
+
               <span class="item text-decoration-underline">Contact</span>
             </div>
           </div>
@@ -105,102 +103,6 @@
       </div>
     </div>
   </div>
-
-
-  <section id="our-store" class="padding-large pt-0">
-    <div class="container">
-      <div class="row d-flex flex-wrap align-items-center">
-        <div class="col-lg-6">
-          <div class="image-holder mb-5">
-            <img src="assetClient/images/single-image2.jpg" alt="our-store" class="img-fluid">
-          </div>
-        </div>
-        <div class="col-lg-6">
-          <div class="locations-wrap ms-lg-5">
-            <div class="display-header">
-              <h3>Our stores</h3>
-              <p class="mb-5">You can also directly buy products from our stores.</p>
-            </div>
-            <div class="location-content d-flex flex-wrap">
-              <div class="col-lg-6 col-sm-12">
-                <div class="content-box text-dark pe-4 mb-5">
-                  <h5 class="fw-bold">USA</h5>
-                  <div class="contact-address pt-3">
-                    <p>730 Glenstone Ave 65802, US</p>
-                  </div>
-                  <div class="contact-number">
-                    <p>
-                      <a href="#">+123 666 777 88</a>
-                    </p>
-                  </div>
-                  <div class="email-address">
-                    <p>
-                      <a href="#">info@yourinfo.com</a>
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-6 col-sm-12">
-                <div class="content-box">
-                  <h5 class="fw-bold">France</h5>
-                  <div class="contact-address pt-3">
-                    <p>13 Rue Montmartre 75001, Paris, France</p>
-                  </div>
-                  <div class="contact-number">
-                    <p>
-                      <a href="#">+123 222 333 44</a>
-                    </p>
-                  </div>
-                  <div class="email-address">
-                    <p>
-                      <a href="#">info@yourinfo.com</a>
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-6 col-sm-12">
-                <div class="content-box text-dark pe-4 mb-5">
-                  <h5 class="fw-bold">Canada</h5>
-                  <div class="contact-address pt-3">
-                    <p>730 Glenstone Ave 65802, US</p>
-                  </div>
-                  <div class="contact-number">
-                    <p>
-                      <a href="#">+123 666 777 88</a>
-                    </p>
-                  </div>
-                  <div class="email-address">
-                    <p>
-                      <a href="#">info@yourinfo.com</a>
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-6 col-sm-12">
-                <div class="content-box">
-                  <h5 class="fw-bold">China</h5>
-                  <div class="contact-address pt-3">
-                    <p>13 Rue Montmartre 75001, Paris, France</p>
-                  </div>
-                  <div class="contact-number">
-                    <p>
-                      <a href="#">+123 222 333 44</a>
-                    </p>
-                  </div>
-                  <div class="email-address">
-                    <p>
-                      <a href="#">info@yourinfo.com</a>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
 
   <section id="customers-reviews" class="position-relative padding-large" style="background-image: url(assetClient/images/banner-image-bg.jpg); background-size: cover; background-repeat: no-repeat; background-position: center; height: 600px;">
     <div class="container offset-md-3 col-md-6 ">
@@ -344,90 +246,49 @@
   </section>
 
 
+
+
   <section id="latest-posts" class="padding-large">
     <div class="container">
       <div class="section-title d-md-flex justify-content-between align-items-center mb-4">
-        <h3 class="d-flex align-items-center">Latest posts</h3>
-        <a href="shop.html" class="btn">View All</a>
+        <h3 class="d-flex align-items-center">Bài viết mới nhất</h3>
+        <a href="shop.html" class="btn">Xem tất cả</a>
       </div>
       <div class="row">
         <div class="col-md-3 posts mb-4">
           <img src="assetClient/images/post-item1.jpg" alt="post image" class="img-fluid rounded-3">
-          <a href="blog.html" class="fs-6 text-primary">Books</a>
-          <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">10 Must-Read Books of the Year: Our Top Picks!</a></h4>
-          <p class="mb-2">Dive into the world of cutting-edge technology with our latest blog post, where we highlight
-            five essential gadge. <span><a class="text-decoration-underline text-black-50" href="single-post.html">Read More</a></span>
+          <a href="blog.html" class="fs-6 text-primary">Sách</a>
+          <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">10 cuốn sách nhất định phải đọc trong năm: Lựa chọn hàng đầu của chúng tôi!</a></h4>
+          <p class="mb-2">Khám phá thế giới công nghệ tiên tiến với bài đăng trên blog mới nhất của chúng tôi, nơi chúng tôi nêu bật
+              năm tiện ích thiết yếu. <span><a class="text-decoration-underline text-black-50" href="single-post.html">Đọc thêm</a></span>
           </p>
         </div>
         <div class="col-md-3 posts mb-4">
           <img src="assetClient/images/post-item2.jpg" alt="post image" class="img-fluid rounded-3">
-          <a href="blog.html" class="fs-6 text-primary">Books</a>
-          <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">The Fascinating Realm of Science Fiction</a></h4>
-          <p class="mb-2">Explore the intersection of technology and sustainability in our latest blog post. Learn about
-            the innovative <span><a class="text-decoration-underline text-black-50" href="single-post.html">Read More</a></span> </p>
+          <a href="blog.html" class="fs-6 text-primary">Sách</a>
+          <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">Thế giới hấp dẫn của khoa học viễn tưởng</a></h4>
+          <p class="mb-2">Khám phá sự giao thoa giữa công nghệ và tính bền vững trong bài đăng blog mới nhất của chúng tôi. Tìm hiểu về <span><a class="text-decoration-underline text-black-50" href="single-post.html">Đọc thêm</a></span> </p>
         </div>
         <div class="col-md-3 posts mb-4">
           <img src="assetClient/images/post-item3.jpg" alt="post image" class="img-fluid rounded-3">
-          <a href="blog.html" class="fs-6 text-primary">Books</a>
-          <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">Finding Love in the Pages of a Book</a></h4>
-          <p class="mb-2">Stay ahead of the curve with our insightful look into the rapidly evolving landscape of
-            wearable technology. <span><a class="text-decoration-underline text-black-50" href="single-post.html">Read More</a></span>
+          <a href="blog.html" class="fs-6 text-primary">Sách</a>
+          <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">Tìm thấy tình yêu trong những trang sách</a></h4>
+          <p class="mb-2">Hãy đón đầu xu hướng với góc nhìn sâu sắc của chúng tôi về bối cảnh phát triển nhanh chóng của
+              công nghệ đeo được. <span><a class="text-decoration-underline text-black-50" href="single-post.html">Đọc thêm</a></span>
           </p>
         </div>
         <div class="col-md-3 posts mb-4">
           <img src="assetClient/images/post-item4.jpg" alt="post image" class="img-fluid rounded-3">
-          <a href="blog.html" class="fs-6 text-primary">Books</a>
-          <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">Reading for Mental Health: How Books Can Heal and Inspire</a></h4>
-          <p class="mb-2">In today's remote work environment, productivity is key. Discover the top apps and tools that
-            can help you stay <span><a class="text-decoration-underline text-black-50" href="single-post.html">Read More</a></span>
+          <a href="blog.html" class="fs-6 text-primary">Sách</a>
+          <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">Đọc sách để có sức khỏe tinh thần: Sách có thể chữa lành và truyền cảm hứng như thế nào</a></h4>
+          <p class="mb-2">Trong môi trường làm việc từ xa ngày nay, năng suất là chìa khóa. Khám phá các ứng dụng và công cụ hàng đầu
+              có thể giúp bạn duy trì <span><a class="text-decoration-underline text-black-50" href="single-post.html">Đọc thêm</a></span>
           </p>
         </div>
       </div>
     </div>
   </section>
 
-
-  <section id="latest-posts" class="padding-large">
-    <div class="container">
-      <div class="section-title d-md-flex justify-content-between align-items-center mb-4">
-        <h3 class="d-flex align-items-center">Latest posts</h3>
-        <a href="shop.html" class="btn">View All</a>
-      </div>
-      <div class="row">
-        <div class="col-md-3 posts mb-4">
-          <img src="assetClient/images/post-item1.jpg" alt="post image" class="img-fluid rounded-3">
-          <a href="blog.html" class="fs-6 text-primary">Books</a>
-          <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">10 Must-Read Books of the Year: Our Top Picks!</a></h4>
-          <p class="mb-2">Dive into the world of cutting-edge technology with our latest blog post, where we highlight
-            five essential gadge. <span><a class="text-decoration-underline text-black-50" href="single-post.html">Read More</a></span>
-          </p>
-        </div>
-        <div class="col-md-3 posts mb-4">
-          <img src="assetClient/images/post-item2.jpg" alt="post image" class="img-fluid rounded-3">
-          <a href="blog.html" class="fs-6 text-primary">Books</a>
-          <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">The Fascinating Realm of Science Fiction</a></h4>
-          <p class="mb-2">Explore the intersection of technology and sustainability in our latest blog post. Learn about
-            the innovative <span><a class="text-decoration-underline text-black-50" href="single-post.html">Read More</a></span> </p>
-        </div>
-        <div class="col-md-3 posts mb-4">
-          <img src="assetClient/images/post-item3.jpg" alt="post image" class="img-fluid rounded-3">
-          <a href="blog.html" class="fs-6 text-primary">Books</a>
-          <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">Finding Love in the Pages of a Book</a></h4>
-          <p class="mb-2">Stay ahead of the curve with our insightful look into the rapidly evolving landscape of
-            wearable technology. <span><a class="text-decoration-underline text-black-50" href="single-post.html">Read More</a></span>
-          </p>
-        </div>
-        <div class="col-md-3 posts mb-4">
-          <img src="assetClient/images/post-item4.jpg" alt="post image" class="img-fluid rounded-3">
-          <a href="blog.html" class="fs-6 text-primary">Books</a>
-          <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">Reading for Mental Health: How Books Can Heal and Inspire</a></h4>
-          <p class="mb-2">In today's remote work environment, productivity is key. Discover the top apps and tools that
-            can help you stay <span><a class="text-decoration-underline text-black-50" href="single-post.html">Read More</a></span>
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
 
 
 
