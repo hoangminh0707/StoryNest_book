@@ -129,8 +129,10 @@
                     @if($order->payment && $order->payment->details)
                         <div class="border p-3 mt-2 bg-light">
                             <h6 class="fw-bold">Chi tiết giao dịch</h6>
-                            <p><strong>Mã giao dịch:</strong> {{ $order->payment->details->transaction_id ?? '---' }}</p>
-                            <p><strong>Thông tin thêm:</strong> {{ $order->payment->details->payment_info ?? '---' }}</p>
+                            {{-- <p><strong>Mã giao dịch:</strong> {{ $order->payment->details->transaction_id ?? '---' }}</p>
+                            --}}
+                            {{-- <p><strong>Thông tin thêm:</strong> {{ $order->payment->details->payment_info ?? '---' }}</p>
+                            --}}
                         </div>
                     @endif
 
