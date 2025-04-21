@@ -34,7 +34,7 @@
                     <h5 class="mb-3">Chi Tiết Giao Dịch</h5>
                     @forelse ($payment->details as $detail)
                         <div class="mb-3 border p-3 rounded">
-                            <p><strong>Mã Giao Dịch:</strong> {{ $detail->transaction_id }}</p>
+                            <p><strong>Mã Giao Dịch:</strong> {{ rand() }}</p>
                             <p><strong>Thông Tin:</strong> {{ $detail->payment_info }}</p>
                             <p><strong>Ngày:</strong> {{ $detail->created_at->format('d-m-Y H:i') }}</p>
                         </div>
