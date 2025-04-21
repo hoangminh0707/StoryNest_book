@@ -29,7 +29,7 @@
                     <table class="table table-bordered align-middle text-center">
                         <thead class="table-light">
                             <tr>
-                                <th>ID</th>
+                                <th>STT</th>
                                 <th>Họ và tên</th>
                                 <th>Email</th>
                                 <th>Avatar</th>
@@ -42,9 +42,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($users as $user)
+                            @forelse ($users as $index => $user)
                                 <tr>
-                                    <td>{{ $user->id }}</td>
+                                    <td>{{ $index + 1 }}</td>
                                     <td>{{ $user->name }}</td>
                                     <td>{{ $user->email }}</td>
                                     <td>

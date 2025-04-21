@@ -16,7 +16,7 @@ class AdminController extends Controller
 
     $user = Auth::user();
     $role = Role::all();
-    return view('admin.pages.dashboards', compact('user'));
+    return view('admin.pages.dashboards', compact('user',));
 }
 
 

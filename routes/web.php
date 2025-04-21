@@ -1,5 +1,5 @@
 <?php
-
+use Illuminate\Support\Facades\Route;
 
 // ========== ADMIN CONTROLLERS ==========
 use App\Http\Controllers\admin\AdminController;
@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\PaymentController;
+use App\Http\Controllers\Admin\PaymentMethodController;
 
 // ========== CLIENT CONTROLLERS ==========
 use App\Http\Controllers\ProductController;
@@ -134,8 +135,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('products', ProductAdminController::class);
     Route::get('/products/{product}/edit', [ProductAdminController::class, 'edit'])->name('products.edit');
     Route::put('/products/{product}', [ProductAdminController::class, 'update'])->name('products.update');
-    Route::delete('/products/image/{image}', [ProductAdminController::class, 'deleteImage'])->name('products.image.delete');
-    Route::delete('/products/{id}/image', [ProductAdminController::class, 'deleteImage'])->name('products.image.delete');
+    Route::delete('/products/images/{id}', [ProductAdminController::class, 'destroyImage'])->name('products.images.destroy');
 
     // Tác giả - Nhà xuất bản
     Route::resource('publishers', PublisherController::class);
@@ -150,8 +150,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('comments', CommentController::class)->only(['index', 'destroy']);
     Route::patch('comments/{id}/approve', [CommentController::class, 'approve'])->name('comments.approve');
 
+
     Route::resource('reviews', ReviewController::class)->only(['index', 'show', 'destroy']);
-    Route::get('reviews/{id}/approve', [ReviewController::class, 'approve'])->name('reviews.approve');
+    Route::patch('reviews/{id}/approve', [ReviewController::class, 'approve'])->name('reviews.approve');
 
     // Đơn hàng
     Route::resource('orders', AdminOrderController::class)->only(['index', 'show', 'destroy']);
@@ -161,10 +162,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // Thanh toán
     Route::resource('payments', PaymentController::class)->only(['index', 'show', 'destroy']);
     Route::post('payments/{id}/update-status', [PaymentController::class, 'updateStatus'])->name('payments.updateStatus');
-
+    Route::patch('payment-methods/{id}/toggle', [PaymentMethodController::class, 'toggle'])->name('payment-methods.toggle');
     // Vận chuyển
     Route::resource('shipping-methods', ShippingMethodController::class);
-    Route::patch('shipping-methods/{id}/toggle', [ShippingMethodController::class, 'toggleStatus'])->name('shipping-methods.toggle');
+    Route::post('shipping-methods/{id}/toggle-status', [ShippingMethodController::class, 'toggleStatus'])->name('shipping-methods.toggle-status');
 
     // Mã giảm giá
     Route::resource('vouchers', VoucherController::class);
@@ -179,4 +180,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // Blog
     Route::resource('blogs', BlogController::class);
     Route::post('blogs/mass-delete', [BlogController::class, 'massDelete'])->name('blogs.massDelete');
+
+    //Payment_method
+    Route::resource('payment-methods', PaymentMethodController::class);
+    Route::post('payment-methods/{paymentMethod}/toggle-status', [\App\Http\Controllers\Admin\PaymentMethodController::class, 'toggleStatus'])->name('payment-methods.toggle-status');
+
+
 });

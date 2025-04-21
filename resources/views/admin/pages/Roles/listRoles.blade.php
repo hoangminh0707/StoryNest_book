@@ -21,16 +21,16 @@
                         <table class="table table-hover table-bordered align-middle mb-0">
                             <thead class="table-light text-center">
                                 <tr>
-                                    <th width="50">ID</th>
+                                    <th width="50">STT</th>
                                     <th>Tên Vai Trò</th>
                                     <th>Mô Tả</th>
                                     <th width="180">Hành Động</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($roles as $role)
+                                @forelse($roles as $index => $role)
                                     <tr>
-                                        <td class="text-center">{{ $role->id }}</td>
+                                        <td class="text-center">{{ $index + 1 }}</td>
                                         <td>{{ $role->name }}</td>
                                         <td>{{ $role->description }}</td>
                                         <td class="text-center">

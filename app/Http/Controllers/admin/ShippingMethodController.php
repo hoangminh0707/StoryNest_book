@@ -100,13 +100,12 @@ class ShippingMethodController extends Controller
         return redirect()->route('admin.shipping-methods.index')->with('success', 'Xóa phương thức vận chuyển thành công!');
     }
 
-    // Kích hoạt / Vô hiệu hóa
     public function toggleStatus($id)
-    {
-        $method = ShippingMethod::findOrFail($id);
-        $method->is_active = !$method->is_active;
-        $method->save();
+{
+    $method = ShippingMethod::findOrFail($id);
+    $method->is_active = !$method->is_active;
+    $method->save();
 
-        return redirect()->route('admin.shipping-methods.index')->with('success', 'Cập nhật trạng thái thành công!');
-    }
+    return back()->with('success', 'Trạng thái phương thức vận chuyển đã được cập nhật.');
+}
 }

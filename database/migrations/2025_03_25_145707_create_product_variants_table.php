@@ -14,8 +14,6 @@ return new class extends Migration
         Schema::create('product_variants', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('product_id');
-            $table->string('sku')->unique(); // SKU riêng cho từng biến thể
-            $table->string('variant_name');
             $table->decimal('variant_price', 10, 2);
             $table->integer('stock_quantity')->default(0);
             $table->timestamps(); 

@@ -36,7 +36,7 @@
                     <table class="table table-bordered table-hover align-middle text-center">
                         <thead class="table-light">
                             <tr>
-                                <th>ID</th>
+                                <th>STT</th>
                                 <th>Tên</th>
                                 <th>Quốc Gia</th>
                                 <th>Địa Chỉ</th>
@@ -45,9 +45,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($publishers as $publisher)
+                            @forelse($publishers as $index => $publisher)
                                 <tr>
-                                    <td>{{ $publisher->id }}</td>
+                                    <td>{{ $index + 1 }}</td>
                                     <td>{{ $publisher->name }}</td>
                                     <td>{{ $publisher->nationality }}</td>
                                     <td>{{ $publisher->address }}</td>

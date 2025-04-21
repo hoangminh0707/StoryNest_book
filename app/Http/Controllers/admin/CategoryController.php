@@ -51,6 +51,7 @@ class CategoryController extends Controller
 
     public function destroy(Category $category)
     {
+        $category->voucherConditions()->delete();
         $category->delete();
         return redirect()->route('admin.categories.index')->with('success', 'Danh mục đã bị xóa!');
     }

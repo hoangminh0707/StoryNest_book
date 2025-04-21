@@ -9,7 +9,7 @@
                 <h5 class="mb-0">Chỉnh Sửa Phương Thức Vận Chuyển</h5>
             </div>
             <div class="card-body">
-                <form action="{{ route('shipping-methods.update', $method->id) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.shipping-methods.update', $method->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
@@ -58,7 +58,7 @@
 
                     {{-- Nút submit --}}
                     <div class="d-flex justify-content-end">
-                        <a href="{{ route('shipping-methods.index') }}" class="btn btn-secondary me-2">Quay lại</a>
+                        <a href="{{ route('admin.shipping-methods.index') }}" class="btn btn-secondary me-2">Quay lại</a>
                         <button type="submit" class="btn btn-primary">Cập nhật</button>
                     </div>
 

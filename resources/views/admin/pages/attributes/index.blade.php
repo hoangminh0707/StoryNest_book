@@ -12,16 +12,16 @@
                     <table class="table table-striped table-bordered">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>STT</th>
                                 <th>Tên Thuộc Tính</th>
                                 <th>Ngày Tạo</th>
                                 <th>Hành Động</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($attributes as $attribute)
+                            @foreach ($attributes as $index => $attribute)
                                 <tr>
-                                    <td>{{ $attribute->id }}</td>
+                                    <td>{{ $index + 1 }}</td>
                                     <td>{{ $attribute->name }}</td>
                                     <td>{{ $attribute->created_at->format('d-m-Y') }}</td>
                                     <td>
@@ -48,7 +48,7 @@
     <div class="row mt-4">
         <div class="col-lg-12">
             <div class="card">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between">
                     <h5 class="card-title mb-3">Danh Sách Giá Trị Thuộc Tính</h5>
                     <a href="{{ route('admin.attribute-values.create') }}" class="btn btn-primary">Thêm Giá Trị</a>
                 </div>
@@ -56,7 +56,7 @@
                     <table class="table table-striped table-bordered">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>STT</th>
                                 <th>ID Thuộc Tính</th>
                                 <th>Giá Trị</th>
                                 <th>Ngày Tạo</th>
@@ -64,9 +64,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($attributeValues as $value)
+                            @foreach ($attributeValues as $index => $value)
                                 <tr>
-                                    <td>{{ $value->id }}</td>
+                                    <td>{{ $index + 1 }}</td>
                                     <td>{{ $value->attribute->name }}</td> <!-- Lấy tên thuộc tính từ bảng 'attributes' -->
                                     <td>{{ $value->value }}</td> <!-- Giá trị thuộc tính -->
                                     <td>{{ $value->created_at->format('d-m-Y') }}</td> <!-- Ngày tạo -->

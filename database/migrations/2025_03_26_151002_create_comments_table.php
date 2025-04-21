@@ -18,10 +18,7 @@ return new class extends Migration
             $table->string('commentable_type'); // Kiểu đối tượng (Product, Post,...)
             $table->text('content'); // Nội dung bình luận
             $table->boolean('is_approved')->default(false); // Kiểm duyệt bình luận
-<<<<<<< HEAD
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-=======
->>>>>>> 14673bfb27f2db267b1c8c9e64597f4c3dbee2de
             $table->timestamps(); // created_at & updated_at
         });
     }
