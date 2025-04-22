@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Blog;
 use Illuminate\Http\Request;
 
-class BlogController extends Controller
+class BlogControllerClient extends Controller
 {
     /**
      * API: Trả về danh sách các bài viết (JSON)
@@ -20,10 +20,9 @@ class BlogController extends Controller
         return view('client.pages.blog', compact('blogs'));
     }
     public function show($id)
-{
-    $blog = Blog::findOrFail($id); // Tìm blog theo ID, nếu không có sẽ trả 404
+    {
+        $blog = Blog::findOrFail($id); // Tìm blog theo ID, nếu không có sẽ trả 404
 
-    return view('client.pages.post', compact('blog'));
+        return view('client.pages.post', compact('blog'));
+    }
 }
-}
-

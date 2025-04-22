@@ -20,6 +20,7 @@ class VerificationController extends Controller
     {
         $user = Auth::user();
 
+
         if (!$user || $user->getKey() != $id) {
             abort(403);
         }
@@ -57,7 +58,7 @@ class VerificationController extends Controller
             'verificationUrl' => $verificationUrl
         ], function ($message) use ($user) {
             $message->to($user->email)
-                    ->subject('Xác minh địa chỉ email');
+                ->subject('Xác minh địa chỉ email');
         });
 
         return back()->with('success', 'Email xác minh đã được gửi!');

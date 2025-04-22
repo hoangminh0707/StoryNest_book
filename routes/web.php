@@ -35,6 +35,8 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\VerificationController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Client\BlogControllerClient;
+
 
 //
 // ─── CLIENT ROUTES ────────────────────────────────────────────────────────────────
@@ -43,21 +45,19 @@ use App\Http\Controllers\ProfileController;
 Route::get('/', [ProductController::class, 'index'])->name('index');
 Route::get('/shop', [ProductController::class, 'shop'])->name('shop');
 
-Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-Route::post('/cart/add/{id}', [CartController::class, 'addToCart'])->name('cart.add');
-Route::post('/cart/update/{product}', [CartController::class, 'update'])->name('cart.update');
-Route::post('/cart/remove/{product}', [CartController::class, 'remove'])->name('cart.remove');
-
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Sản phẩm (chi tiết)
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
-});
+// Blog - Client
+Route::get('/blog', [BlogControllerClient::class, 'index'])->name('blogs.index');
+Route::get('/blog/{id}', [BlogControllerClient::class, 'show'])->name('blogs.show');
+
+
+
+
 
 // Xác thực Email, Hồ sơ, Địa chỉ người dùng
 Route::middleware(['auth'])->group(function () {
@@ -82,6 +82,31 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/addresses/{id}', [UserAddressController::class, 'update'])->name('addresses.update');
     Route::delete('/addresses/{id}', [UserAddressController::class, 'destroy'])->name('addresses.destroy');
 
+
+    // Sản phẩm (chi tiết)
+    Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
+
+
+    // Bình luận cho bài viết
+    Route::post('/blogs/{blog}/comments', [CommentController::class, 'store'])->name('comments.store');
+
+
+    //Giỏ hàng
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/add/{id}', [CartController::class, 'addToCart'])->name('cart.add');
+    Route::post('/cart/update/{product}', [CartController::class, 'update'])->name('cart.update');
+    Route::post('/cart/remove/{product}', [CartController::class, 'remove'])->name('cart.remove');
+
+
+});
+
+// Người dùng phải đăng nhập và xác thực email để sử dụng
+Route::middleware(['auth', 'verified'])->group(function () {
+
+    // Wishlist
+    Route::get('/wishlist/add/{productId}', [WishlistController::class, 'add'])->name('wishlist.add');
+    Route::get('/wishlist/remove/{productId}', [WishlistController::class, 'remove'])->name('wishlist.remove');
+
     // Checkout & Orders
     Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout');
     Route::post('/checkout', [CheckoutController::class, 'submit'])->name('checkout.submit');
@@ -89,12 +114,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/orders/success', [OrderController::class, 'success'])->name('orders.success');
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
-});
-
-// Wishlist
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/wishlist/add/{productId}', [WishlistController::class, 'add'])->name('wishlist.add');
-    Route::get('/wishlist/remove/{productId}', [WishlistController::class, 'remove'])->name('wishlist.remove');
 });
 
 
@@ -183,7 +202,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     //Payment_method
     Route::resource('payment-methods', PaymentMethodController::class);
-    Route::post('payment-methods/{paymentMethod}/toggle-status', [\App\Http\Controllers\Admin\PaymentMethodController::class, 'toggleStatus'])->name('payment-methods.toggle-status');
+    Route::post('payment-methods/{paymentMethod}/toggle-status', [PaymentMethodController::class, 'toggleStatus'])->name('payment-methods.toggle-status');
 
 
 });
