@@ -6,7 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Blog;
 use App\Models\Comment;
 use Illuminate\Http\Request;
+<<<<<<< HEAD:app/Http/Controllers/Client/CommentClientController.php
 use Illuminate\Support\Facades\Validator;
+=======
+use Validator;
+>>>>>>> 3f05e77d06abcbb2e3e48cd6c37e4abf8e08c01e:app/Http/Controllers/Client/CommentController.php
 
 
 class CommentClientController extends Controller
