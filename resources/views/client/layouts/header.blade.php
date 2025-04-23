@@ -124,22 +124,7 @@
 
 <header id="header" class="site-header">
 
-  <div class="top-info border-bottom d-none d-md-block ">
-    <div class="container-fluid">
-      <div class="row g-0">
-        <div class="col-md-4">
-          <p class="fs-6 my-2 text-center">Need any help? Call us <a href="#">112233344455</a></p>
-        </div>
-        <div class="col-md-4 border-start border-end">
-          <p class="fs-6 my-2 text-center">Summer sale discount off 60% off! <a class="text-decoration-underline"
-              href="{{ route('shop') }}">Shop Now</a></p>
-        </div>
-        <div class="col-md-4">
-          <p class="fs-6 my-2 text-center">2-3 business days delivery &amp; free returns</p>
-        </div>
-      </div>
-    </div>
-  </div>
+
 
   <nav id="header-nav" class="navbar navbar-expand-lg py-3">
     <div class="container">
@@ -165,21 +150,21 @@
             class="navbar-nav text-uppercase justify-content-start justify-content-lg-center align-items-start align-items-lg-center flex-grow-1">
             <li class="nav-item">
               <a class="nav-link me-4 {{ View::getSection('active_pages_index') ?? ' ' }}"
-                href="{{ route('index') }}">Home</a>
+                href="{{ route('index') }}">Trang chủ</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link me-4" href="/about">About</a>
+              <a class="nav-link me-4" href="/about">Giới thiệu</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link me-4 {{ View::getSection('active_pages_shop') ?? ' ' }}"
-                href="{{ route('shop') }}">Shop</a>
+              <a class="nav-link me-4 {{ View::getSection('active_pages_shop') ?? ' ' }}" href="{{ route('shop') }}">Cửa
+                hàng</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link me-4" href="/Blogs">Blogs</a>
+              <a class="nav-link me-4" href="{{ route('blogs.index') }}">Bài viết</a>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link me-4 dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
-                aria-expanded="false">Pages</a>
+                aria-expanded="false">Danh Mục</a>
               <ul class="dropdown-menu animate slide border">
                 <li>
                   <a href="/about" class="dropdown-item fw-light">About <span class="badge bg-primary">Pro</span></a>

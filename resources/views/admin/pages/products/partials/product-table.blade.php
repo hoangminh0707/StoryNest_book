@@ -9,6 +9,7 @@
             <th>Loại</th>
             <th>Biến thể</th>
             <th>Giá</th>
+            <th>Số lượng</th>
             <th>Trạng thái</th>
             <th>Ngày tạo</th>
             <th>Hành động</th>
@@ -21,10 +22,13 @@
                     <input type="checkbox" class="product-checkbox form-check-input" data-product-id="{{ $product->id }}">
                 </td>
                 <td>
-                    @if($product->thumbnail)
-                        <img src="{{ asset('storage/' . $product->thumbnail->image_path) }}" alt="Thumbnail" width="60">
+                    @php
+                        $thumbnail = $product->images->firstWhere('is_thumbnail', true);
+                    @endphp
+                    @if($thumbnail)
+                        <img src="{{ asset($thumbnail->image_path) }}" alt="Thumbnail" width="80">
                     @else
-                        <em>Không có</em>
+                        <span>Không có ảnh</span>
                     @endif
                 </td>
                 <td>{{ $product->name }}</td>
@@ -61,13 +65,28 @@
                             @foreach($product->variants as $variant)
                                 <li>
 
-                                    <span class="text-muted">Giá:</span> {{ number_format($variant->variant_price, 0, ',', '.') }} đ
+                                    <span class="text-muted">Giá:</span> {{ number_format($variant->stock_quantity , 0, ',', '.') }} đ
                                 </li>
                             @endforeach
                         </ul>
                     @else
                         <!-- Hiển thị giá của sản phẩm khi không có biến thể -->
                         <span>{{ number_format($product->price, 0, ',', '.') }} đ</span>
+                    @endif
+                </td>
+                <td>
+                    @if($product->product_type === 'variable' && $product->variants->count())
+                        <ul class="list-unstyled mb-0">
+                            @foreach($product->variants as $variant)
+                                <li>
+
+                                <span class="text-muted">Số lượng:</span> {{ $variant->stock_quantity }}
+                                </li>
+                            @endforeach
+                        </ul>
+                    @else
+                        <!-- Hiển thị giá của sản phẩm khi không có biến thể -->
+                        <span>Số lượng: {{ $product->quantity }}</span>
                     @endif
                 </td>
                 <td>

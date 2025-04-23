@@ -56,6 +56,9 @@ class BlogController extends Controller
             'content' => $request->content,
             'status' => $request->status,
         ]);
+        if ($request->hasFile('image')) {
+            $request->Blog->image_url = $request->file('image')->store('blogs', 'public');
+        }
 
         // Chuyển hướng về trang danh sách bài viết và thông báo thành công
         return redirect()->route('admin.blogs.index')->with('success', 'Thêm bài viết thành công.');

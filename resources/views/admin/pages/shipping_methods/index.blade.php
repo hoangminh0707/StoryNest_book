@@ -17,7 +17,7 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="card-title mb-0">Danh Sách Phương Thức Vận Chuyển</h5>
-                <a href="{{ route('shipping-methods.create') }}" class="btn btn-primary">
+                <a href="{{ route('admin.shipping-methods.create') }}" class="btn btn-primary">
                     <i class="mdi mdi-plus"></i> Thêm Mới
                 </a>
             </div>
@@ -26,7 +26,7 @@
                 <table class="table table-bordered table-hover align-middle text-center">
                     <thead class="table-light">
                         <tr>
-                            <th>ID</th>
+                            <th>STT</th>
                             <th>Ảnh</th>
                             <th>Tên</th>
                             <th>Nhà Cung Cấp</th>
@@ -37,9 +37,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($shippingMethods as $method)
+                        @forelse($shippingMethods as $index => $method)
                         <tr>
-                            <td>{{ $method->id }}</td>
+                            <td>{{ $index + 1 }}</td>
 
                             {{-- Ảnh --}}
                             <td>
@@ -53,34 +53,29 @@
                             <td>{{ $method->name }}</td>
                             <td>{{ $method->provider ?? 'N/A' }}</td>
                             <td>{{ number_format($method->default_fee, 0, ',', '.') }}₫</td>
-                            <td>
-                                <span class="badge {{ $method->is_active ? 'bg-success' : 'bg-secondary' }}">
-                                    {{ $method->is_active ? 'Đang hoạt động' : 'Vô hiệu hóa' }}
-                                </span>
+                            <td class="text-center">
+                                <form action="{{ route('admin.shipping-methods.toggle-status', $method->id) }}"
+                                    method="POST" class="d-inline">
+                                    @csrf
+                                    <div class="form-check form-switch d-flex justify-content-center mb-0">
+                                        <input class="form-check-input" type="checkbox" name="is_active"
+                                            onchange="this.form.submit()" {{ $method->is_active ? 'checked' : '' }}>
+                                    </div>
+                                </form>
                             </td>
                             <td>{{ $method->created_at->format('d-m-Y') }}</td>
                             <td>
                                 <div class="d-flex flex-wrap justify-content-center gap-1">
-                                    {{-- Toggle trạng thái --}}
-                                    <form action="{{ route('shipping-methods.toggle', $method->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc muốn thay đổi trạng thái?')">
-                                        @csrf
-                                        @method('PATCH')
-                                        <button type="submit" class="btn btn-sm btn-outline-primary">
-                                            {{ $method->is_active ? 'Vô hiệu hóa' : 'Kích hoạt' }}
-                                        </button>
-                                    </form>
-
                                     {{-- Sửa --}}
-                                    <a href="{{ route('shipping-methods.edit', $method->id) }}" class="btn btn-sm btn-warning">
-                                        Sửa
+                                    <a href="{{ route('admin.shipping-methods.edit', $method->id) }}" class="btn btn-sm btn-warning">
+                                        <i class="mdi mdi-pencil"></i>
                                     </a>
-
                                     {{-- Xóa --}}
-                                    <form action="{{ route('shipping-methods.destroy', $method->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc muốn xóa?')">
+                                    <form action="{{ route('admin.shipping-methods.destroy', $method->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc muốn xóa?')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-danger">
-                                            Xóa
+                                            <i class="mdi mdi-delete"></i>
                                         </button>
                                     </form>
                                 </div>

@@ -6,24 +6,7 @@
 
 @section('content')
 
-  <section class="hero-section position-relative padding-large"
-    style="background-image: url(assetClient/images/banner-image-bg-1.jpg); background-size: cover; background-repeat: no-repeat; background-position: center; height: 400px;">
-    <div class="hero-content">
-    <div class="container">
-      <div class="row">
-      <div class="text-center">
-        <h1>Thông tin sản phẩm</h1>
-        <div class="breadcrumbs">
-        <span class="item">
-          <a href="index.html">Home &gt; </a>
-        </span>
-        <span class="item text-decoration-underline">Sản phẩm</span>
-        </div>
-      </div>
-      </div>
-    </div>
-    </div>
-  </section>
+
 
 
   <section class="single-product padding-large">

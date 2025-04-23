@@ -24,7 +24,7 @@
                     <table class="table table-striped table-bordered align-middle text-center">
                         <thead class="table-light">
                             <tr>
-                                <th>ID</th>
+                                <th>STT</th>
                                 <th>Tên Danh Mục</th>
                                 <th>Mô Tả</th>
                                 <th>Danh Mục Cha</th>
@@ -34,9 +34,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($categories as $category)
+                            @forelse($categories as $index => $category)
                                 <tr>
-                                    <td>{{ $category->id }}</td>
+                                    <td>{{ $index + 1 }}</td>
                                     <td>{{ $category->name }}</td>
                                     <td>{{ Str::limit($category->description, 50) }}</td>
                                     <td>{{ $category->parent ? $category->parent->name : 'N/A' }}</td>

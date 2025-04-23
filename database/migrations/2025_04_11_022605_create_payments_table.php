@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id(); // ID thanh toán
             $table->unsignedBigInteger('order_id'); // Liên kết đến đơn hàng
             $table->decimal('amount', 10, 2); // Số tiền thanh toán
-            $table->string('payment_method'); // Phương thức thanh toán (VD: credit_card, paypal, bank_transfer)
+            $table->unsignedBigInteger('payment_method');
             $table->enum('status', ['pending', 'completed', 'failed'])->default('pending'); // Trạng thái thanh toán
             $table->timestamps();
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');

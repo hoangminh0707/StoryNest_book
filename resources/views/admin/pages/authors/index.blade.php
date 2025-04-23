@@ -36,7 +36,7 @@
                     <table class="table table-bordered table-hover align-middle text-center">
                         <thead class="table-light">
                             <tr>
-                                <th>ID</th>
+                                <th>STT</th>
                                 <th>Tên</th>
                                 <th>Tiểu Sử</th>
                                 <th>Ngày Sinh</th>
@@ -45,9 +45,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($authors as $author)
+                            @forelse($authors as $index => $author)
                                 <tr>
-                                    <td>{{ $author->id }}</td>
+                                    <td>{{ $index + 1 }}</td>
                                     <td>{{ $author->name }}</td>
                                     <td>{{ Str::limit($author->bio, 50) }}</td>
                                     <td>{{ $author->birthdate ? \Carbon\Carbon::parse($author->birthdate)->format('d-m-Y') : 'N/A' }}

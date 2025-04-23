@@ -1,5 +1,5 @@
 <?php
-
+use Illuminate\Support\Facades\Route;
 
 // ========== ADMIN CONTROLLERS ==========
 use App\Http\Controllers\admin\AdminController;
@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\PaymentController;
+use App\Http\Controllers\Admin\PaymentMethodController;
 
 // ========== CLIENT CONTROLLERS ==========
 use App\Http\Controllers\ProductController;
@@ -34,6 +35,8 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\VerificationController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Client\BlogControllerClient;
+
 
 //
 // ─── CLIENT ROUTES ────────────────────────────────────────────────────────────────
@@ -42,21 +45,19 @@ use App\Http\Controllers\ProfileController;
 Route::get('/', [ProductController::class, 'index'])->name('index');
 Route::get('/shop', [ProductController::class, 'shop'])->name('shop');
 
-Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-Route::post('/cart/add/{id}', [CartController::class, 'addToCart'])->name('cart.add');
-Route::post('/cart/update/{product}', [CartController::class, 'update'])->name('cart.update');
-Route::post('/cart/remove/{product}', [CartController::class, 'remove'])->name('cart.remove');
-
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Sản phẩm (chi tiết)
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
-});
+// Blog - Client
+Route::get('/blog', [BlogControllerClient::class, 'index'])->name('blogs.index');
+Route::get('/blog/{id}', [BlogControllerClient::class, 'show'])->name('blogs.show');
+
+
+
+
 
 // Xác thực Email, Hồ sơ, Địa chỉ người dùng
 Route::middleware(['auth'])->group(function () {
@@ -81,6 +82,31 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/addresses/{id}', [UserAddressController::class, 'update'])->name('addresses.update');
     Route::delete('/addresses/{id}', [UserAddressController::class, 'destroy'])->name('addresses.destroy');
 
+
+    // Sản phẩm (chi tiết)
+    Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
+
+
+    // Bình luận cho bài viết
+    Route::post('/blogs/{blog}/comments', [CommentController::class, 'store'])->name('comments.store');
+
+
+    //Giỏ hàng
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/add/{id}', [CartController::class, 'addToCart'])->name('cart.add');
+    Route::post('/cart/update/{product}', [CartController::class, 'update'])->name('cart.update');
+    Route::post('/cart/remove/{product}', [CartController::class, 'remove'])->name('cart.remove');
+
+
+});
+
+// Người dùng phải đăng nhập và xác thực email để sử dụng
+Route::middleware(['auth', 'verified'])->group(function () {
+
+    // Wishlist
+    Route::get('/wishlist/add/{productId}', [WishlistController::class, 'add'])->name('wishlist.add');
+    Route::get('/wishlist/remove/{productId}', [WishlistController::class, 'remove'])->name('wishlist.remove');
+
     // Checkout & Orders
     Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout');
     Route::post('/checkout', [CheckoutController::class, 'submit'])->name('checkout.submit');
@@ -88,12 +114,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/orders/success', [OrderController::class, 'success'])->name('orders.success');
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
-});
-
-// Wishlist
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/wishlist/add/{productId}', [WishlistController::class, 'add'])->name('wishlist.add');
-    Route::get('/wishlist/remove/{productId}', [WishlistController::class, 'remove'])->name('wishlist.remove');
 });
 
 
@@ -134,8 +154,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('products', ProductAdminController::class);
     Route::get('/products/{product}/edit', [ProductAdminController::class, 'edit'])->name('products.edit');
     Route::put('/products/{product}', [ProductAdminController::class, 'update'])->name('products.update');
-    Route::delete('/products/image/{image}', [ProductAdminController::class, 'deleteImage'])->name('products.image.delete');
-    Route::delete('/products/{id}/image', [ProductAdminController::class, 'deleteImage'])->name('products.image.delete');
+    Route::delete('/products/images/{id}', [ProductAdminController::class, 'destroyImage'])->name('products.images.destroy');
 
     // Tác giả - Nhà xuất bản
     Route::resource('publishers', PublisherController::class);
@@ -150,8 +169,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('comments', CommentController::class)->only(['index', 'destroy']);
     Route::patch('comments/{id}/approve', [CommentController::class, 'approve'])->name('comments.approve');
 
+
     Route::resource('reviews', ReviewController::class)->only(['index', 'show', 'destroy']);
-    Route::get('reviews/{id}/approve', [ReviewController::class, 'approve'])->name('reviews.approve');
+    Route::patch('reviews/{id}/approve', [ReviewController::class, 'approve'])->name('reviews.approve');
 
     // Đơn hàng
     Route::resource('orders', AdminOrderController::class)->only(['index', 'show', 'destroy']);
@@ -161,10 +181,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // Thanh toán
     Route::resource('payments', PaymentController::class)->only(['index', 'show', 'destroy']);
     Route::post('payments/{id}/update-status', [PaymentController::class, 'updateStatus'])->name('payments.updateStatus');
-
+    Route::patch('payment-methods/{id}/toggle', [PaymentMethodController::class, 'toggle'])->name('payment-methods.toggle');
     // Vận chuyển
     Route::resource('shipping-methods', ShippingMethodController::class);
-    Route::patch('shipping-methods/{id}/toggle', [ShippingMethodController::class, 'toggleStatus'])->name('shipping-methods.toggle');
+    Route::post('shipping-methods/{id}/toggle-status', [ShippingMethodController::class, 'toggleStatus'])->name('shipping-methods.toggle-status');
 
     // Mã giảm giá
     Route::resource('vouchers', VoucherController::class);
@@ -179,4 +199,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // Blog
     Route::resource('blogs', BlogController::class);
     Route::post('blogs/mass-delete', [BlogController::class, 'massDelete'])->name('blogs.massDelete');
+
+    //Payment_method
+    Route::resource('payment-methods', PaymentMethodController::class);
+    Route::post('payment-methods/{paymentMethod}/toggle-status', [PaymentMethodController::class, 'toggleStatus'])->name('payment-methods.toggle-status');
+
+
 });

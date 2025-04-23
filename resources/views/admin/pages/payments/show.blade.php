@@ -17,7 +17,7 @@
                         <dd class="col-sm-8">{{ number_format($payment->amount, 0, ',', '.') }}₫</dd>
 
                         <dt class="col-sm-4">Phương Thức:</dt>
-                        <dd class="col-sm-8">{{ $payment->payment_method }}</dd>
+                        <dd class="col-sm-8">{{ $payment->paymentMethod->name ?? 'Không xác định' }}</dd>
 
                         <dt class="col-sm-4">Trạng Thái:</dt>
                         <dd class="col-sm-8">

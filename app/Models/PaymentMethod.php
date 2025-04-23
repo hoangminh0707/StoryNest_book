@@ -20,4 +20,8 @@ class PaymentMethod extends Model
     protected $casts = [
         'is_active' => 'boolean',
     ];
+    public function payments()
+    {
+        return $this->hasMany(Payment::class, 'payment_method');
+    }
 }
