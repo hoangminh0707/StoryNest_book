@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Attribute;
 use App\Models\AttributeValue;
 
-class AttributeValueController extends Controller
+class AttributeValueAdminController extends Controller
 {
     // Hiển thị danh sách giá trị thuộc tính + thuộc tính cha
     public function index()

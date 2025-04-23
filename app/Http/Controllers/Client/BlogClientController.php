@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+
 use App\Models\Blog;
 use Illuminate\Http\Request;
 
-class BlogControllerClient extends Controller
+class BlogClientController extends Controller
 {
     /**
      * API: Trả về danh sách các bài viết (JSON)

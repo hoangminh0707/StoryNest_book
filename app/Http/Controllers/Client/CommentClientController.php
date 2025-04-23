@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Blog;
 use App\Models\Comment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
-class CommentController extends Controller
+
+class CommentClientController extends Controller
 {
     // Lưu bình luận
     public function store(Request $request, $blog_id)
@@ -41,4 +43,3 @@ class CommentController extends Controller
         return back()->with('success', 'Bình luận của bạn đã được gửi!');
     }
 }
-

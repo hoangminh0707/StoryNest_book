@@ -6,15 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Models\Blog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Contracts\View\View;
 
-class BlogController extends Controller
+class BlogAdminController extends Controller
 {
     /**
      * Hiển thị danh sách bài viết.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): View
     {
         // Lấy danh sách bài viết, sắp xếp theo thứ tự mới nhất và phân trang
         $blogs = Blog::latest()->paginate(10);
@@ -28,7 +29,7 @@ class BlogController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): View
     {
         // Trả về view tạo bài viết mới
         return view('admin.pages.blogs.create');
@@ -40,7 +41,7 @@ class BlogController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): View
     {
         // Xác thực dữ liệu đầu vào
         $request->validate([

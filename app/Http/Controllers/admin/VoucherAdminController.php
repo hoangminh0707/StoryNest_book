@@ -9,7 +9,7 @@ use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
-class VoucherController extends Controller
+class VoucherAdminController extends Controller
 {
     public function index(Request $request)
     {

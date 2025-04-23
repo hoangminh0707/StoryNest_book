@@ -8,7 +8,7 @@ use App\Models\OrderItem;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class OrderController extends Controller
+class OrderAdminController extends Controller
 {
     /**
      * Danh sách đơn hàng (với tìm kiếm, filter).

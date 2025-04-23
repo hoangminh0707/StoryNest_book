@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Banner;
 use Illuminate\Http\Request;
 
-class BannerController extends Controller
+class BannerAdminController extends Controller
 {
     // Hiển thị danh sách banner
     public function index()

@@ -6,7 +6,7 @@ use App\Models\Comment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class CommentController extends Controller
+class CommentAdminController extends Controller
 {
     // Hiển thị danh sách bình luận với tìm kiếm và phân trang
     public function index(Request $request)

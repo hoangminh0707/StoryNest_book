@@ -5,7 +5,7 @@ use App\Models\Author;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class AuthorController extends Controller
+class AuthorAdminController extends Controller
 {
     public function index()
     {

@@ -10,23 +10,23 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use App\Models\Role;
 
-class UserController extends Controller
+class UserAdminController extends Controller
 {
     // Hiển thị danh sách người dùng + tìm kiếm
     public function index(Request $request)
     {
         $query = User::with('roles');
-    
+
         if ($request->has('search')) {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'LIKE', '%' . $search . '%')
-                  ->orWhere('email', 'LIKE', '%' . $search . '%');
+                    ->orWhere('email', 'LIKE', '%' . $search . '%');
             });
         }
-    
+
         $users = $query->latest()->paginate(10); // phân trang 10 người dùng mỗi trang
-    
+
         return view('admin.pages.user.listUser', compact('users'));
     }
 
@@ -41,16 +41,16 @@ class UserController extends Controller
     public function add(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name'      => 'required|string|max:255',
-            'email'     => 'required|email|max:255|unique:users',
-            'password'  => 'required|string|min:8|confirmed',
-            'avatar'    => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'gender'    => 'required|in:male,female,other',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'gender' => 'required|in:male,female,other',
             'birthdate' => 'required|date',
-            'phone'     => 'nullable|string|max:15',
-            'address'   => 'nullable|string|max:255',
-            'roles'     => 'required|array',
-            'roles.*'   => 'exists:roles,id',
+            'phone' => 'nullable|string|max:15',
+            'address' => 'nullable|string|max:255',
+            'roles' => 'required|array',
+            'roles.*' => 'exists:roles,id',
         ]);
 
         if ($validator->fails()) {
@@ -81,15 +81,15 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $rules = [
-            'name'      => 'required|string|max:255',
-            'email'     => 'required|email|unique:users,email,' . $user->id,
-            'gender'    => 'required|in:male,female,other',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'gender' => 'required|in:male,female,other',
             'birthdate' => 'required|date',
-            'phone'     => 'nullable|string|max:15',
-            'address'   => 'nullable|string|max:255',
-            'roles'     => 'required|array',
-            'roles.*'   => 'exists:roles,id',
-            'avatar'    => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'phone' => 'nullable|string|max:15',
+            'address' => 'nullable|string|max:255',
+            'roles' => 'required|array',
+            'roles.*' => 'exists:roles,id',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ];
 
         if ($request->filled('password')) {

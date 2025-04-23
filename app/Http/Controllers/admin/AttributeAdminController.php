@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 
 
-class AttributeController extends Controller
+class AttributeAdminController extends Controller
 {
     // Hiển thị danh sách thuộc tính và giá trị thuộc tính
     public function index()

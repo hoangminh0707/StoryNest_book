@@ -7,7 +7,7 @@ use App\Models\PaymentMethod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class PaymentMethodController extends Controller
+class PaymentMethodAdminController extends Controller
 {
     // Danh sách phương thức thanh toán
     public function index()
@@ -33,28 +33,28 @@ class PaymentMethodController extends Controller
             'image' => 'nullable|image',
             'is_active' => 'nullable|boolean',
         ]);
-    
+
         // Tạo mới đối tượng PaymentMethod với dữ liệu từ form
         $paymentMethod = new PaymentMethod();
-        
+
         // Gán các giá trị từ form vào đối tượng PaymentMethod sử dụng $fillable
         $paymentMethod->fill($request->only(['name', 'code', 'description', 'is_active']));
-    
+
         // Xử lý hình ảnh (nếu có)
         if ($request->hasFile('image')) {
             // Lưu hình ảnh vào thư mục 'payment-methods' trong storage công khai
             $imagePath = $request->file('image')->store('payment-methods', 'public');
             $paymentMethod->image = $imagePath;  // Lưu đường dẫn vào database
         }
-    
+
         // Lưu phương thức thanh toán vào cơ sở dữ liệu
         $paymentMethod->save();
-    
+
         // Chuyển hướng về trang danh sách phương thức thanh toán và thông báo thành công
         return redirect()->route('admin.payments.index')->with('success', 'Phương thức thanh toán đã được thêm.');
     }
-    
-    
+
+
 
     // Toggle trạng thái phương thức thanh toán
     public function toggleStatus(PaymentMethod $paymentMethod)
@@ -78,10 +78,10 @@ class PaymentMethodController extends Controller
         $method = PaymentMethod::findOrFail($id);
 
         $request->validate([
-            'name'        => 'required|string|max:255',
-            'code'        => 'required|string|max:100|unique:payment_methods,code,' . $method->id,
+            'name' => 'required|string|max:255',
+            'code' => 'required|string|max:100|unique:payment_methods,code,' . $method->id,
             'description' => 'nullable|string',
-            'image'       => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
         ]);
 
         $data = $request->only(['name', 'code', 'description']);

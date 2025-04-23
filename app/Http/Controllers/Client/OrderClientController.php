@@ -1,12 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Client;
+
+use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 
-class OrderController extends Controller
+class OrderClientController extends Controller
 {
 
     public function index()
@@ -21,16 +23,16 @@ class OrderController extends Controller
 
 
     public function show($id)
-{
-    $order = Order::with(['orderItems', 'userAddress', 'shippingMethod', 'payment'])->findOrFail($id);
+    {
+        $order = Order::with(['orderItems', 'userAddress', 'shippingMethod', 'payment'])->findOrFail($id);
 
-    return view('client.pages.orders.show', compact('order'));
-}
+        return view('client.pages.orders.show', compact('order'));
+    }
 
 
 
     public function success()
     {
-            return view('client.pages.orders.success');
+        return view('client.pages.orders.success');
     }
 }

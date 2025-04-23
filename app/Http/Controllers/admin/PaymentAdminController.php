@@ -7,7 +7,7 @@ use App\Models\Payment;
 use App\Models\PaymentMethod;
 use Illuminate\Http\Request;
 
-class PaymentController extends Controller
+class PaymentAdminController extends Controller
 {
     // Hiển thị danh sách thanh toán
     public function index()

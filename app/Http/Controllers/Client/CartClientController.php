@@ -1,6 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Client;
+
+
+use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
@@ -8,7 +11,7 @@ use App\Models\Cart;
 use App\Models\CartItem;
 use Illuminate\Support\Facades\Auth;
 
-class CartController extends Controller
+class CartClientController extends Controller
 {
     public function index()
     {
@@ -16,15 +19,18 @@ class CartController extends Controller
             ->where('user_id', Auth::id())
             ->first();
 
-            $query = Product::with(['author', 'images' => function($query) {
+        $query = Product::with([
+            'author',
+            'images' => function ($query) {
                 $query->where('is_thumbnail', true);
-            }]);
+            }
+        ]);
 
-            $products = $query->paginate(12);
+        $products = $query->paginate(12);
         $cartItems = $cart ? $cart->items : collect();
         $total = $cartItems->sum(fn($item) => $item->price * $item->quantity);
-    
-        return view('client.pages.cart', compact('cartItems', 'total','products'));
+
+        return view('client.pages.cart', compact('cartItems', 'total', 'products'));
     }
 
     public function addToCart(Request $request, $id)
@@ -37,19 +43,19 @@ class CartController extends Controller
         $variantId = $request->input('product_variant_id');
         $quantity = $request->input('quantity', 1);
         $price = $request->input('price');
-    
+
         // Tìm hoặc tạo cart cho user
         $cart = Cart::firstOrCreate(
             ['user_id' => auth()->id()],
             ['created_at' => now(), 'updated_at' => now()]
         );
-    
+
         // Tìm item trùng để cập nhật số lượng
         $item = CartItem::where('cart_id', $cart->id)
-                        ->where('product_id', $product->id)
-                        ->where('product_variant_id', $variantId)
-                        ->first();
-    
+            ->where('product_id', $product->id)
+            ->where('product_variant_id', $variantId)
+            ->first();
+
         if ($item) {
             $item->quantity += $quantity;
             $item->save();
@@ -65,39 +71,39 @@ class CartController extends Controller
     }
 
     public function update(Request $request, Product $product)
-{
-    $request->validate([
-        'quantity' => 'required|integer|min:1|max:100',
-    ]);
+    {
+        $request->validate([
+            'quantity' => 'required|integer|min:1|max:100',
+        ]);
 
-    $cart = Cart::firstOrCreate(['user_id' => auth()->id()]);
-    $item = CartItem::where('cart_id', $cart->id)
-                    ->where('product_id', $product->id)
-                    ->first();
+        $cart = Cart::firstOrCreate(['user_id' => auth()->id()]);
+        $item = CartItem::where('cart_id', $cart->id)
+            ->where('product_id', $product->id)
+            ->first();
 
-    if ($item) {
-        $item->quantity = $request->quantity;
-        $item->save();
+        if ($item) {
+            $item->quantity = $request->quantity;
+            $item->save();
+        }
+
+        return redirect()->back()->with('success', 'Giỏ hàng đã được cập nhật.');
     }
-
-    return redirect()->back()->with('success', 'Giỏ hàng đã được cập nhật.');
-}
 
     public function remove($productId)
-{
-    $user = auth()->user();
-    if (!$user) {
-        return redirect()->route('login')->with('error', 'Vui lòng đăng nhập.');
-    }
+    {
+        $user = auth()->user();
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Vui lòng đăng nhập.');
+        }
 
-    $cart = Cart::where('user_id', $user->id)->first();
+        $cart = Cart::where('user_id', $user->id)->first();
 
-    if ($cart) {
-        CartItem::where('cart_id', $cart->id)
+        if ($cart) {
+            CartItem::where('cart_id', $cart->id)
                 ->where('product_id', $productId)
                 ->delete();
-    }
+        }
 
-    return redirect()->back()->with('success', 'Đã xóa sản phẩm khỏi giỏ hàng.');
-}
+        return redirect()->back()->with('success', 'Đã xóa sản phẩm khỏi giỏ hàng.');
+    }
 }

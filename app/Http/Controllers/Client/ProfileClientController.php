@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Client;
+
+use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +18,7 @@ use App\Models\OrderItem;
 
 
 
-class ProfileController extends Controller
+class ProfileClientController extends Controller
 {
     public function index()
     {
@@ -26,14 +28,14 @@ class ProfileController extends Controller
             abort(403, 'Bạn chưa đăng nhập');
         }
 
-        
+
         $totalSpent = Order::where('user_id', $user->id)
-        ->where('status', 'confirmed')
-        ->sum('total_amount');
+            ->where('status', 'confirmed')
+            ->sum('total_amount');
 
         $totalProducts = OrderItem::whereHas('order', function ($q) use ($user) {
             $q->where('user_id', $user->id)
-              ->where('status', 'confirmed');
+                ->where('status', 'confirmed');
         })->sum('quantity');
 
         $completedOrders = Order::where('user_id', $user->id)
@@ -65,29 +67,29 @@ class ProfileController extends Controller
         if ($request->hasFile('avatar')) {
             // Làm sạch email để dùng làm tên file (vd: user-email-com)
             $cleanEmail = Str::slug($user->email);
-        
+
             // Lấy phần mở rộng của file (jpg, png, ...)
             $extension = $request->file('avatar')->getClientOriginalExtension();
-        
+
             // Tạo tên file mới (ví dụ: user-email-com.jpg)
             $filename = "{$cleanEmail}.{$extension}";
-        
+
             // Đường dẫn lưu trữ trong thư mục storage/app/public/avatars
             $pathInStorage = "avatars/{$filename}";
-        
+
             // Lưu file (storeAs tự tạo file vào storage/app/public/avatars)
             $request->file('avatar')->storeAs('avatars', $filename);
-        
+
             // Nếu user đã có avatar cũ, xóa file cũ đi
             if ($user->avatar && $user->avatar !== $pathInStorage && Storage::exists('public/' . $user->avatar)) {
                 Storage::delete('public/' . $user->avatar);
             }
-        
+
             // Lưu tên file mới vào database (avatar = 'avatars/...')
             $user->avatar = $pathInStorage;
             $user->save();
         }
-        
+
 
         return back()->with('success', 'Cập nhật thông tin thành công!');
     }
@@ -95,76 +97,76 @@ class ProfileController extends Controller
 
 
     public function showChangeEmailForm()
-{
-    $user = Auth::user();
-    
-    if (!$user->can_change_email) {
-        return redirect()->route('profile.index')->with('error', 'Bạn chỉ được đổi email một lần.');
+    {
+        $user = Auth::user();
+
+        if (!$user->can_change_email) {
+            return redirect()->route('profile.index')->with('error', 'Bạn chỉ được đổi email một lần.');
+        }
+
+        return view('client.pages.profile.change-email', compact('user'));
     }
 
-    return view('client.pages.profile.change-email', compact('user'));
-}
+    public function changeEmail(Request $request)
+    {
+        $user = Auth::user();
 
-public function changeEmail(Request $request)
-{
-    $user = Auth::user();
+        if (!$user->can_change_email) {
+            return redirect()->route('profile.index')->with('error', 'Bạn không còn quyền đổi email.');
+        }
 
-    if (!$user->can_change_email) {
-        return redirect()->route('profile.index')->with('error', 'Bạn không còn quyền đổi email.');
-    }
+        $request->validate([
+            'email' => 'required|email|unique:users,email',
+        ]);
 
-    $request->validate([
-        'email' => 'required|email|unique:users,email',
-    ]);
+        $user->email = $request->email;
+        $user->email_verified_at = null;
+        $user->can_change_email = false;
+        $user->save();
 
-    $user->email = $request->email;
-    $user->email_verified_at = null;
-    $user->can_change_email = false;
-    $user->save();
+        // Gửi lại email xác minh
+        $verificationUrl = URL::temporarySignedRoute(
+            'verification.verify',
+            now()->addMinutes(60),
+            ['id' => $user->id, 'hash' => sha1($user->getEmailForVerification())]
+        );
 
-    // Gửi lại email xác minh
-    $verificationUrl = URL::temporarySignedRoute(
-        'verification.verify',
-        now()->addMinutes(60),
-        ['id' => $user->id, 'hash' => sha1($user->getEmailForVerification())]
-    );
-
-    Mail::raw("Xác minh email của bạn: $verificationUrl", function ($message) use ($user) {
-        $message->to($user->email)
+        Mail::raw("Xác minh email của bạn: $verificationUrl", function ($message) use ($user) {
+            $message->to($user->email)
                 ->subject('Xác minh địa chỉ email');
-    });
+        });
 
-    return redirect()->route('profile.index')->with('success', 'Email đã được cập nhật và email xác minh đã được gửi.');
-}
+        return redirect()->route('profile.index')->with('success', 'Email đã được cập nhật và email xác minh đã được gửi.');
+    }
 
 
-  // Hiển thị form đổi mật khẩu
-  public function showChangePasswordForm()
-  {
-      return view('client.pages.profile.change-password');
-  }
+    // Hiển thị form đổi mật khẩu
+    public function showChangePasswordForm()
+    {
+        return view('client.pages.profile.change-password');
+    }
 
-  // Xử lý đổi mật khẩu
-  public function changePassword(Request $request)
-  {
-      $request->validate([
-          'current_password' => ['required'],
-          'new_password' => ['required', 'min:8', 'confirmed'],
-      ]);
+    // Xử lý đổi mật khẩu
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => ['required'],
+            'new_password' => ['required', 'min:8', 'confirmed'],
+        ]);
 
-      $user = Auth::user();
+        $user = Auth::user();
 
-      // Kiểm tra mật khẩu hiện tại
-      if (!Hash::check($request->current_password, $user->password)) {
-          return back()->withErrors(['current_password' => 'Mật khẩu hiện tại không đúng']);
-      }
+        // Kiểm tra mật khẩu hiện tại
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'Mật khẩu hiện tại không đúng']);
+        }
 
-      // Cập nhật mật khẩu mới
-      $user->password = Hash::make($request->new_password);
-      $user->save();
+        // Cập nhật mật khẩu mới
+        $user->password = Hash::make($request->new_password);
+        $user->save();
 
-      return back()->with('success', 'Đổi mật khẩu thành công!');
-  }
+        return back()->with('success', 'Đổi mật khẩu thành công!');
+    }
 
 
 }

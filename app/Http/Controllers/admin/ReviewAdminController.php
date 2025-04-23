@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Review;
 use Illuminate\Http\Request;
 
-class ReviewController extends Controller
+class ReviewAdminController extends Controller
 {
     // Hiển thị danh sách đánh giá
     public function index()

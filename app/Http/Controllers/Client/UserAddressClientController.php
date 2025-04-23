@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Client;
+
+use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use App\Models\UserAddress;
 
-class UserAddressController extends Controller
+class UserAddressClientController extends Controller
 {
     // UserAddressController.php
     public function index()
@@ -14,7 +16,7 @@ class UserAddressController extends Controller
         $addresses = $user->addresses()->orderByDesc('is_default')->get();
         return view('client.pages.profile.address', compact('addresses'));
     }
-    
+
     public function store(Request $request)
     {
         $request->validate([
@@ -25,14 +27,14 @@ class UserAddressController extends Controller
             'district' => 'required',
             'ward' => 'required',
         ]);
-    
+
         $user = auth()->user();
-    
+
         // Nếu chọn là mặc định thì cập nhật các địa chỉ khác về 0
         if ($request->is_default) {
             $user->addresses()->update(['is_default' => 0]);
         }
-    
+
         $user->addresses()->create([
             'full_name' => $request->full_name,
             'phone' => $request->phone,
@@ -42,57 +44,57 @@ class UserAddressController extends Controller
             'ward' => $request->ward,
             'is_default' => $request->has('is_default'),
         ]);
-    
+
         return redirect()->route('addresses.index')->with('success', 'Thêm địa chỉ thành công');
     }
-    
+
     public function setDefault($id)
     {
         $user = auth()->user();
-    
+
         $user->addresses()->update(['is_default' => 0]);
-    
+
         $address = $user->addresses()->findOrFail($id);
         $address->update(['is_default' => 1]);
-    
+
         return back()->with('success', 'Cập nhật địa chỉ mặc định thành công');
     }
-    
 
-            public function edit($id)
-        {
-            $address = UserAddress::findOrFail($id);
-            return view('client.pages.profile.address-edit', compact('address'));
+
+    public function edit($id)
+    {
+        $address = UserAddress::findOrFail($id);
+        return view('client.pages.profile.address-edit', compact('address'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $address = UserAddress::findOrFail($id);
+
+        $validated = $request->validate([
+            'full_name' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
+            'address_line' => 'required|string|max:255',
+            'city' => 'required|string',
+            'district' => 'required|string',
+            'ward' => 'required|string',
+        ]);
+
+        $address->update($validated);
+        return redirect()->route('addresses.index')->with('success', 'Đã cập nhật địa chỉ thành công.');
+    }
+
+    public function destroy($id)
+    {
+        $address = UserAddress::findOrFail($id);
+
+        if ($address->orders()->exists()) {
+            return redirect()->back()->with('error', 'Không thể xoá địa chỉ đã được dùng để đặt hàng.');
         }
 
-        public function update(Request $request, $id)
-        {
-            $address = UserAddress::findOrFail($id);
+        $address->delete();
 
-            $validated = $request->validate([
-                'full_name' => 'required|string|max:255',
-                'phone' => 'required|string|max:20',
-                'address_line' => 'required|string|max:255',
-                'city' => 'required|string',
-                'district' => 'required|string',
-                'ward' => 'required|string',
-            ]);
-
-            $address->update($validated);
-            return redirect()->route('addresses.index')->with('success', 'Đã cập nhật địa chỉ thành công.');
-        }
-
-        public function destroy($id)
-        {
-            $address = UserAddress::findOrFail($id);
-
-            if ($address->orders()->exists()) {
-                return redirect()->back()->with('error', 'Không thể xoá địa chỉ đã được dùng để đặt hàng.');
-            }
-
-            $address->delete();
-
-            return redirect()->back()->with('success', 'Xoá địa chỉ thành công.');
-        }
+        return redirect()->back()->with('success', 'Xoá địa chỉ thành công.');
+    }
 
 }

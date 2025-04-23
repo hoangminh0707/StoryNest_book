@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Client;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -8,30 +10,34 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 
-class AuthController extends Controller
+class AuthClientController extends Controller
 {
-    public function showLogin() {
+    public function showLogin()
+    {
         return view('client.pages.auth.login');
     }
 
-    public function login(Request $request) {
+    public function login(Request $request)
+    {
         $credentials = $request->only('email', 'password');
-    
+
         if (Auth::attempt($credentials)) {
             return redirect()->intended('/')->with('success', 'Đăng nhập thành công!');
         }
-    
+
         return back()->withErrors([
             'email' => 'Email hoặc mật khẩu không đúng.',
         ]);
     }
-    
 
-    public function showRegister() {
+
+    public function showRegister()
+    {
         return view('client.pages.auth.register');
     }
 
-    public function register(Request $request) {
+    public function register(Request $request)
+    {
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
@@ -43,7 +49,7 @@ class AuthController extends Controller
 
         $user = User::create([
             'name' => $request->name,
-            'email'    => $request->email,
+            'email' => $request->email,
             'password' => Hash::make($request->password),
             'avatar' => $request->avatar ?? null,
             'gender' => $request->gender,
@@ -51,18 +57,19 @@ class AuthController extends Controller
             'phone' => $request->phone,
         ]);
 
-         // 2. Thêm vào bảng user_role (role mặc định = 0)
+        // 2. Thêm vào bảng user_role (role mặc định = 0)
         DB::table('user_role')->insert([
-        'user_id' => $user->id,
-        'role_id' => 0,
-        'created_at' => now(),
-        'updated_at' => now(),
+            'user_id' => $user->id,
+            'role_id' => 0,
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
         return redirect()->route('login')->with('success', 'Đăng ký thành công!');
     }
 
-    public function logout(Request $request) {
+    public function logout(Request $request)
+    {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
@@ -70,4 +77,3 @@ class AuthController extends Controller
         return redirect('/login');
     }
 }
-

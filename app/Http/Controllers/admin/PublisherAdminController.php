@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Publisher;
 
-class PublisherController extends Controller
+class PublisherAdminController extends Controller
 {
     /**
      * Hiển thị danh sách nhà xuất bản.

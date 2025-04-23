@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\ShippingMethod;
 use Illuminate\Support\Facades\Storage;
 
-class ShippingMethodController extends Controller
+class ShippingMethodAdminController extends Controller
 {
     // Danh sách phương thức vận chuyển
     public function index(Request $request)
@@ -101,11 +101,11 @@ class ShippingMethodController extends Controller
     }
 
     public function toggleStatus($id)
-{
-    $method = ShippingMethod::findOrFail($id);
-    $method->is_active = !$method->is_active;
-    $method->save();
+    {
+        $method = ShippingMethod::findOrFail($id);
+        $method->is_active = !$method->is_active;
+        $method->save();
 
-    return back()->with('success', 'Trạng thái phương thức vận chuyển đã được cập nhật.');
-}
+        return back()->with('success', 'Trạng thái phương thức vận chuyển đã được cập nhật.');
+    }
 }

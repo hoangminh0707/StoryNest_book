@@ -9,7 +9,7 @@
 // use App\Models\Category;
 // use Illuminate\Http\Request;
 
-// class VoucherConditionController extends Controller
+// class VoucherConditionAdminController extends Controller
 // {
 //     /**
 //      * Hiển thị danh sách điều kiện theo voucher

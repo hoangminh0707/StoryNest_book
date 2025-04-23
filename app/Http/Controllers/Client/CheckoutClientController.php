@@ -1,7 +1,8 @@
 <?php
 
-// app/Http/Controllers/CheckoutController.php
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Client;
+
+use App\Http\Controllers\Controller;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ use App\Models\PaymentDetail;
 use App\Models\PaymentMethod;
 
 
-class CheckoutController extends Controller
+class CheckoutClientController extends Controller
 {
     public function show()
     {
@@ -36,7 +37,7 @@ class CheckoutController extends Controller
         $cart = Cart::where('user_id', $user->id)->first();
         $cartItems = $cart ? $cart->cartItems()->with('product')->get() : collect();
 
-        return view('client.pages.checkout', compact('userAddresses', 'shippingMethods', 'cartItems','paymentMethods'));
+        return view('client.pages.checkout', compact('userAddresses', 'shippingMethods', 'cartItems', 'paymentMethods'));
     }
 
 
@@ -47,30 +48,30 @@ class CheckoutController extends Controller
             'shipping_method_id' => 'required|exists:shipping_methods,id',
             'payment_method' => 'required|in:cod,bank',
         ]);
-    
+
         $user = Auth::user();
-    
+
         $cart = Cart::with('cartItems.product')->where('user_id', $user->id)->first();
         if (!$cart || $cart->cartItems->isEmpty()) {
             return back()->with('error', 'Giỏ hàng của bạn đang trống.');
         }
 
-           // Thử debug tại đây
+        // Thử debug tại đây
         //    dd($cart->cartItems);
-    
+
         DB::beginTransaction();
-    
+
         try {
             $cartItems = $cart->cartItems;
             $shippingMethod = ShippingMethod::findOrFail($request->shipping_method_id);
             $shippingFee = $shippingMethod->default_fee;
-    
+
             $totalProductAmount = $cartItems->sum(function ($item) {
                 return $item->price * $item->quantity;
             });
-    
+
             $finalAmount = $totalProductAmount + $shippingFee;
-    
+
             // Tạo đơn hàng
             $order = Order::create([
                 'user_id' => $user->id,
@@ -86,11 +87,11 @@ class CheckoutController extends Controller
 
             // Tạo các mục trong đơn hàng
             foreach ($cartItems as $item) {
-                 // Kiểm tra nếu sản phẩm không tồn tại (phòng lỗi null)
-                 if (!$item->product) {
+                // Kiểm tra nếu sản phẩm không tồn tại (phòng lỗi null)
+                if (!$item->product) {
                     throw new \Exception("Sản phẩm ID {$item->product_id} không tồn tại hoặc đã bị xóa.");
                 }
-                
+
                 OrderItem::create([
                     'order_id' => $order->id,
                     'product_id' => $item->product_id,
@@ -111,23 +112,20 @@ class CheckoutController extends Controller
             ]);
 
 
-         
-    
+
+
             // Xóa giỏ hàng
             $cart->cartItems()->delete();
             $cart->delete();
-    
+
             DB::commit();
-    
+
             return redirect()->route('orders.success')->with('success', 'Đơn hàng của bạn đã được đặt thành công!');
-            } catch (\Exception $e) {
-                DB::rollBack();
-                \Log::error('Lỗi khi đặt hàng: ' . $e->getMessage());
-                return back()->with('error', 'Có lỗi xảy ra khi đặt hàng. Vui lòng thử lại.');
-            }
-}
+        } catch (\Exception $e) {
+            DB::rollBack();
+            \Log::error('Lỗi khi đặt hàng: ' . $e->getMessage());
+            return back()->with('error', 'Có lỗi xảy ra khi đặt hàng. Vui lòng thử lại.');
+        }
+    }
 
 }
-
-
-

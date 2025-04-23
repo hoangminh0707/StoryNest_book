@@ -6,11 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Role;
 
-class RolesController extends Controller
+class RolesAdminController extends Controller
 {
     public function index()
     {
-        
+
         $roles = Role::all();
         return view('admin.pages.Roles.listRoles', compact('roles'));
     }
@@ -31,7 +31,7 @@ class RolesController extends Controller
 
         return redirect()->route('admin.roleIndex')->with('success', 'Role created successfully.');
     }
-   
+
     public function edit($id)
     {
         $role = Role::findOrFail($id);
@@ -53,13 +53,12 @@ class RolesController extends Controller
     }
 
 
-    public function destroy($id){
-           $role = Role::findOrFail($id);
-         $role->delete();
+    public function destroy($id)
+    {
+        $role = Role::findOrFail($id);
+        $role->delete();
 
         return redirect()->route('admin.roleIndex')->with('success', 'Role deleted successfully.');
     }
 
 }
-
-
