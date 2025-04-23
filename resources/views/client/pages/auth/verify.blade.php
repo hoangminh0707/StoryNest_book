@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <title>Xác minh email</title>
 </head>
+
 <body style="background-color: #f4f4f4; padding: 40px 0; font-family: Arial, sans-serif;">
-    <table align="center" width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: auto; background: white; border-radius: 8px; overflow: hidden;">
+    <table align="center" width="100%" cellpadding="0" cellspacing="0"
+        style="max-width: 600px; margin: auto; background: white; border-radius: 8px; overflow: hidden;">
         <tr>
             <td style="text-align: center; padding: 30px 0;">
                 {{-- Thay bằng logo của bạn --}}
@@ -39,9 +42,10 @@
         </tr>
         <tr>
             <td style="background-color: #f0f0f0; padding: 20px; text-align: center; font-size: 12px; color: #888;">
-                &copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.
+                &copy; {{ date('Y') }} StoryNest Book. All rights reserved.
             </td>
         </tr>
     </table>
 </body>
+
 </html>

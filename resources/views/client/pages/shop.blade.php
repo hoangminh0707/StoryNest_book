@@ -64,13 +64,27 @@
         <span class="price text-primary fw-bold mb-2 fs-5">{{ number_format($product->price) }}
         <strong>VND</strong></span>
         <div class="card-concern position-absolute start-0 end-0 d-flex gap-2">
-        <button type="button" href="#" class="btn btn-dark" data-bs-toggle="tooltip" data-bs-placement="top"
-        data-bs-title="Tooltip on top">
-        <svg class="cart">
+        @auth
+
+      <form action="{{ route('cart.add', $product->id) }}" method="POST" style="display:inline;">
+      @csrf
+      <button type="submit" href="#" class="btn btn-dark" data-bs-toggle="tooltip" data-bs-placement="top"
+      data-bs-title="Tooltip on top">
+      <svg class="cart">
         <use xlink:href="#cart"></use>
-        </svg>
-        </button>
-        <a href="#" class="btn btn-dark">
+      </svg>
+      </button>
+      </form>
+    @endauth
+        @guest
+      <a href="#" onclick="showLoginAlert()" class="btn btn-dark" data-bs-toggle="tooltip"
+      data-bs-placement="top" data-bs-title="Tooltip on top">
+      <svg class="cart">
+      <use xlink:href="#cart"></use>
+      </svg>
+      </a>
+    @endguest
+        <a href="{{ route('wishlist.add', $product->id) }}" class="btn btn-dark">
         <span>
         <svg class="wishlist">
           <use xlink:href="#heart"></use>
