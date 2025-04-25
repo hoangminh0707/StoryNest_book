@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Auth;
 
 class CartClientController extends Controller
@@ -32,25 +33,32 @@ class CartClientController extends Controller
 
         return view('client.pages.cart', compact('cartItems', 'total', 'products'));
     }
-
     public function addToCart(Request $request, $id)
     {
         if (!Auth::check()) {
             return response()->json(['redirect' => route('login')], 401);
         }
+
         $product = Product::findOrFail($id);
         $userId = Auth::id();
         $variantId = $request->input('product_variant_id');
         $quantity = $request->input('quantity', 1);
-        $price = $request->input('price');
 
-        // Tìm hoặc tạo cart cho user
+        // Nếu có variant, dùng giá của variant
+        if ($variantId) {
+            $variant = ProductVariant::findOrFail($variantId);
+            $price = $variant->variant_price;
+        } else {
+            $price = $product->price;
+        }
+
+        // Tìm hoặc tạo giỏ hàng
         $cart = Cart::firstOrCreate(
-            ['user_id' => auth()->id()],
+            ['user_id' => $userId],
             ['created_at' => now(), 'updated_at' => now()]
         );
 
-        // Tìm item trùng để cập nhật số lượng
+        // Kiểm tra item trùng (cùng product và variant)
         $item = CartItem::where('cart_id', $cart->id)
             ->where('product_id', $product->id)
             ->where('product_variant_id', $variantId)
@@ -63,12 +71,15 @@ class CartClientController extends Controller
             CartItem::create([
                 'cart_id' => $cart->id,
                 'product_id' => $product->id,
-                'quantity' => $request->input('quantity', 1),
-                'price' => $product->price, // đảm bảo $product->price không null
+                'product_variant_id' => $variantId,
+                'quantity' => $quantity,
+                'price' => $price,
             ]);
         }
+
         return redirect()->back()->with('success', 'Đã thêm vào giỏ hàng');
     }
+
 
     public function update(Request $request, Product $product)
     {

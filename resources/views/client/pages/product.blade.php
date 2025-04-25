@@ -6,6 +6,19 @@
 
 @section('content')
 
+  <style>
+    .select-item.active {
+    border: 2px solid #007bff;
+    border-radius: 6px;
+    background-color: #e9f2ff;
+    }
+  </style>
+
+
+  @php
+    $hasVariants = $variants->count() > 0;
+@endphp
+
 
 
 
@@ -67,9 +80,9 @@
       <div class="product-info ps-lg-5 pt-3 pt-lg-0">
         <div class="element-header">
         <h1 class="product-title">{{ $product->name}}</h1>
-        <div class="product-price d-flex align-items-center mt-2">
-          <span class="fs-2 fw-light text-primary me-2">{{ number_format($product->price)}}</span>
-          <del>{{ number_format($product->price + rand(10000, 100000))}}</del>
+        <div class="product-price price d-flex align-items-center mt-2">
+          <span class="fs-2 fw-light text-primary me-2"
+          id="product-price">{{ number_format($product->price)}}</span>
         </div>
         <div class="rating text-warning d-flex align-items-center mb-2">
           <svg class="star star-fill">
@@ -92,121 +105,129 @@
         <p>{{ $product->description}}</p>
         <hr>
         <div class="cart-wrap">
-        <div class="color-options product-select my-3">
-          <div class="color-toggle" data-option-index="0">
-          <h4 class="item-title text-decoration-underline text-capitalize">Color</h4>
-          <ul class="select-list list-unstyled d-flex mb-0">
-            <li class="select-item me-3" data-val="Green" title="Green">
-            <a href="#">Gray</a>
-            </li>
-            <li class="select-item me-3" data-val="Orange" title="Orange">
-            <a href="#">Blue</a>
-            </li>
-            <li class="select-item me-3" data-val="Red" title="Red">
-            <a href="#">White</a>
-            </li>
-          </ul>
-          </div>
+        @foreach ($groupedAttributes as $attributeName => $attributeValues)
+      <div class="product-select my-3">
+        <div class="color-toggle" data-option-index="0">
+        <h4 class="item-title text-decoration-underline text-capitalize">{{ $attributeName }}</h4>
+        <ul class="select-list list-unstyled d-flex mb-0" data-attribute-name="{{ $attributeName }}">
+        @foreach ($attributeValues as $valueId => $value)
+      <li class="select-item me-3" data-val="{{ $value }}" data-id="{{ $valueId }}" title="{{ $value }}">
+      <a href="javascript:void(0)">{{ $value }}</a>
+      </li>
+    @endforeach
+        </ul>
         </div>
-        <div class="swatch product-select" data-option-index="1">
-          <h4 class="item-title text-decoration-underline text-capitalize">Size</h4>
-          <ul class="select-list list-unstyled d-flex mb-0">
-          <li data-value="S" class="select-item me-3">
-            <a href="#">S</a>
-          </li>
-          <li data-value="M" class="select-item me-3">
-            <a href="#">M</a>
-          </li>
-          <li data-value="L" class="select-item me-3">
-            <a href="#">L</a>
-          </li>
-          </ul>
+      </div>
+    @endforeach
+
+
         </div>
         <div class="product-quantity my-3">
-          <div class="item-title">
-          <l>2 in stock</l>
-          </div>
-          <form action="{{ route('cart.add', $product->id) }}" method="POST" style="display:inline;">
-          @csrf
-          <div class="stock-button-wrap mt-2 d-flex flex-wrap align-items-center">
-            <div class="product-quantity">
-            <div class="input-group product-qty align-items-center" style="max-width: 150px;">
-              <span class="input-group-btn">
-              <button type="button" class="bg-white shadow border rounded-3 fw-light quantity-left-minus"
-                data-type="minus" data-field="">
-                <svg width="16" height="16">
-                <use xlink:href="#minus"></use>
-                </svg>
-              </button>
-              </span>
-              <input type="text" id="quantity" name="quantity"
-              class="form-control bg-white shadow border rounded-3 py-2 mx-2 input-number text-center"
-              value="1" min="1" max="100" required="">
-              <span class="input-group-btn">
-              <button type="button" class="bg-white shadow border rounded-3 fw-light quantity-right-plus"
-                data-type="plus" data-field="">
-                <svg width="16" height="16">
-                <use xlink:href="#plus"></use>
-                </svg>
-              </button>
-              </span>
-            </div>
-            </div>
-          </div>
-        </div>
-        <div class="action-buttons my-3 d-flex flex-wrap gap-3">
-          <a href="#" class="btn">Order now</a>
-          <form action="{{ route('cart.add', $product->id) }}" method="POST" style="display:inline;">
-          @csrf
-          <button type="submit" class="btn btn-dark">Add to cart</button>
-          </form>
+        <div class="item-title">
+          @if($vouchers->count())
+        <div class="mt-4">
+        @foreach($vouchers as $voucher)
 
-          <a href="{{ route('wishlist.add', $product->id) }}" class="btn btn-dark">
+      <div class="d-flex align-items-center badge bg-info">
+
+      {{ $voucher->code }} -
+      {{ ucfirst($voucher->type == 'percent' ? $voucher->value . '%' : number_format($voucher->value, 0, ',', '.') . '₫') }}
+      </strong>
+      </div>
+
+
+    @endforeach
+        </div>
+      @endif
+
+
+
+        </div>
+        <form action="{{ route('cart.add', $product->id) }}" method="POST" style="display:inline;">
+          @csrf
+          <input type="hidden" name="price" id="product_price">
+          <input type="hidden" name="product_variant_id" id="product_variant_id">
+
+          <div class="stock-button-wrap mt-2 d-flex flex-wrap align-items-center">
+          <div class="product-quantity">
+            <div class="input-group product-qty align-items-center" style="max-width: 150px;">
+            <span class="input-group-btn">
+              <button type="button" class="bg-white shadow border rounded-3 fw-light quantity-left-minus"
+              data-type="minus" data-field="">
+              <svg width="16" height="16">
+                <use xlink:href="#minus"></use>
+              </svg>
+              </button>
+            </span>
+            <input type="text" id="quantity" name="quantity"
+              class="form-control bg-white shadow border rounded-3 py-2 mx-2 input-number text-center" value="1"
+              min="1" max="100" required="">
+            <span class="input-group-btn">
+              <button type="button" class="bg-white shadow border rounded-3 fw-light quantity-right-plus"
+              data-type="plus" data-field="">
+              <svg width="16" height="16">
+                <use xlink:href="#plus"></use>
+              </svg>
+              </button>
+            </span>
+            </div>
+          </div>
+          </div>
+        </div>
+
+        <div class="action-buttons my-3 d-flex flex-wrap gap-3">
+        <button type="submit" class="btn btn-dark" id="add-to-cart-btn" {{ $hasVariants ? 'disabled' : '' }}>
+          Thêm vào giỏ hàng
+        </button>
+
+        </form>
+
+        <a href="{{ route('wishlist.add', $product->id) }}" class="btn btn-dark">
           <svg class="heart" width="21" height="21">
-            <use xlink:href="#heart"></use>
+          <use xlink:href="#heart"></use>
           </svg>
-          </a>
+        </a>
         </div>
-        </div>
-        <hr>
-        <div class="meta-product my-3">
+      </div>
+      <hr>
+      <div class="meta-product my-3">
         <div class="meta-item d-flex mb-1">
-          <span class="fw-medium me-2">SKU:</span>
-          <ul class="select-list list-unstyled d-flex mb-0">
+        <span class="fw-medium me-2">SKU:</span>
+        <ul class="select-list list-unstyled d-flex mb-0">
           <li data-value="S" class="select-item">1223</li>
-          </ul>
+        </ul>
         </div>
         <div class="meta-item d-flex mb-1">
-          <span class="fw-medium me-2">Category:</span>
-          <ul class="select-list list-unstyled d-flex mb-0">
+        <span class="fw-medium me-2">Category:</span>
+        <ul class="select-list list-unstyled d-flex mb-0">
           <li data-value="S" class="select-item">
-            <a href="#">Romance</a>,
+          <a href="#">Romance</a>,
           </li>
           <li data-value="S" class="select-item">
-            <a href="#">Sci-Fi</a>,
+          <a href="#">Sci-Fi</a>,
           </li>
           <li data-value="S" class="select-item">
-            <a href="#">Fiction</a>
+          <a href="#">Fiction</a>
           </li>
-          </ul>
+        </ul>
         </div>
         <div class="meta-item d-flex mb-1">
-          <span class="fw-medium me-2">Tags:</span>
-          <ul class="select-list list-unstyled d-flex mb-0">
+        <span class="fw-medium me-2">Tags:</span>
+        <ul class="select-list list-unstyled d-flex mb-0">
           <li data-value="S" class="select-item">
-            <a href="#">Revenge</a>,
+          <a href="#">Revenge</a>,
           </li>
           <li data-value="S" class="select-item">
-            <a href="#">Vampire</a>,
+          <a href="#">Vampire</a>,
           </li>
           <li data-value="S" class="select-item">
-            <a href="#">Life</a>
+          <a href="#">Life</a>
           </li>
-          </ul>
-        </div>
+        </ul>
         </div>
       </div>
       </div>
+    </div>
     </div>
     </div>
   </section>
@@ -692,86 +713,89 @@
   </section>
 
 
-  <section id="instagram">
-    <div class="container">
-    <div class="text-center mb-4">
-      <h3>Instagram</h3>
-    </div>
-    <div class="row">
-      <div class="col-md-2">
-      <figure class="instagram-item position-relative rounded-3">
-        <a href="https://templatesjungle.com/" class="image-link position-relative">
-        <div class="icon-overlay position-absolute d-flex justify-content-center">
-          <svg class="instagram">
-          <use xlink:href="#instagram"></use>
-          </svg>
-        </div>
-        <img src="assetClient/images/insta-item1.jpg" alt="instagram" class="img-fluid rounded-3 insta-image">
-        </a>
-      </figure>
-      </div>
-      <div class="col-md-2">
-      <figure class="instagram-item position-relative rounded-3">
-        <a href="https://templatesjungle.com/" class="image-link position-relative">
-        <div class="icon-overlay position-absolute d-flex justify-content-center">
-          <svg class="instagram">
-          <use xlink:href="#instagram"></use>
-          </svg>
-        </div>
-        <img src="assetClient/images/insta-item2.jpg" alt="instagram" class="img-fluid rounded-3 insta-image">
-        </a>
-      </figure>
-      </div>
-      <div class="col-md-2">
-      <figure class="instagram-item position-relative rounded-3">
-        <a href="https://templatesjungle.com/" class="image-link position-relative">
-        <div class="icon-overlay position-absolute d-flex justify-content-center">
-          <svg class="instagram">
-          <use xlink:href="#instagram"></use>
-          </svg>
-        </div>
-        <img src="assetClient/images/insta-item3.jpg" alt="instagram" class="img-fluid rounded-3 insta-image">
-        </a>
-      </figure>
-      </div>
-      <div class="col-md-2">
-      <figure class="instagram-item position-relative rounded-3">
-        <a href="https://templatesjungle.com/" class="image-link position-relative">
-        <div class="icon-overlay position-absolute d-flex justify-content-center">
-          <svg class="instagram">
-          <use xlink:href="#instagram"></use>
-          </svg>
-        </div>
-        <img src="assetClient/images/insta-item4.jpg" alt="instagram" class="img-fluid rounded-3 insta-image">
-        </a>
-      </figure>
-      </div>
-      <div class="col-md-2">
-      <figure class="instagram-item position-relative rounded-3">
-        <a href="https://templatesjungle.com/" class="image-link position-relative">
-        <div class="icon-overlay position-absolute d-flex justify-content-center">
-          <svg class="instagram">
-          <use xlink:href="#instagram"></use>
-          </svg>
-        </div>
-        <img src="assetClient/images/insta-item5.jpg" alt="instagram" class="img-fluid rounded-3 insta-image">
-        </a>
-      </figure>
-      </div>
-      <div class="col-md-2">
-      <figure class="instagram-item position-relative rounded-3">
-        <a href="https://templatesjungle.com/" class="image-link position-relative">
-        <div class="icon-overlay position-absolute d-flex justify-content-center">
-          <svg class="instagram">
-          <use xlink:href="#instagram"></use>
-          </svg>
-        </div>
-        <img src="assetClient/images/insta-item6.jpg" alt="instagram" class="img-fluid rounded-3 insta-image">
-        </a>
-      </figure>
-      </div>
-    </div>
-    </div>
-  </section>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('add-to-cart-form');
+    const variantInput = document.getElementById('product_variant_id');
+    const priceInput = document.getElementById('product_price');
+    const addToCartBtn = document.getElementById('add-to-cart-btn');
+    const hasVariants = {{ $variants->count() > 0 ? 'true' : 'false' }};
+    const productVariants = @json($variants);
+
+    // Bắt sự kiện click vào biến thể
+    document.querySelectorAll('.select-list').forEach(list => {
+      list.addEventListener('click', function (e) {
+      const clickedItem = e.target.closest('.select-item');
+      if (!clickedItem) return;
+
+      // Bỏ active khỏi tất cả
+      list.querySelectorAll('.select-item').forEach(item => {
+        item.classList.remove('active');
+      });
+
+      // Thêm active vào item vừa chọn
+      clickedItem.classList.add('active');
+
+      updatePriceBySelectedAttributes();
+      });
+    });
+
+    function updatePriceBySelectedAttributes() {
+      let selectedAttrValueIds = [];
+
+      document.querySelectorAll('.select-list .select-item.active').forEach(item => {
+      const attrValueId = parseInt(item.getAttribute('data-id'));
+      if (!isNaN(attrValueId)) {
+        selectedAttrValueIds.push(attrValueId);
+      }
+      });
+
+      // Tìm biến thể khớp
+      let matchedVariant = productVariants.find(variant => {
+      const variantAttrIds = variant.attribute_values.map(attr => attr.id).sort();
+      return JSON.stringify(variantAttrIds) === JSON.stringify(selectedAttrValueIds.sort());
+      });
+
+      if (matchedVariant) {
+      variantInput.value = matchedVariant.id;
+      priceInput.value = matchedVariant.variant_price;
+
+      document.getElementById('product-price').textContent =
+        new Intl.NumberFormat('vi-VN').format(matchedVariant.variant_price);
+
+      // Cho phép thêm vào giỏ
+      addToCartBtn.disabled = false;
+      } else {
+      document.getElementById('product-price').textContent = 'Không có biến thể phù hợp';
+      variantInput.value = '';
+      priceInput.value = '';
+      addToCartBtn.disabled = true;
+      }
+    }
+
+    // Ngăn submit nếu chưa chọn biến thể
+    form.addEventListener('submit', function (e) {
+      if (hasVariants && !variantInput.value) {
+      e.preventDefault();
+      alert('Vui lòng chọn biến thể sản phẩm trước khi thêm vào giỏ hàng!');
+      }
+    });
+    });
+
+
+    // Khởi tạo tooltips khi trang được tải
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+
+
+
+  </script>
+
+
+
+
+
 
 @endsection
