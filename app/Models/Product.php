@@ -93,5 +93,12 @@ class Product extends Model
         return $this->hasMany(Wishlist::class);
     }
 
+    public function vouchers()
+    {
+        return $this->belongsToMany(Voucher::class, 'voucher_conditions', 'product_id', 'voucher_id')
+            ->where('condition_type', 'product');
+    }
+
+
 
 }
