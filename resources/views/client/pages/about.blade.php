@@ -101,7 +101,7 @@
         </a>
         <div class="image">
 
-        <img src="assetClient/images/2_ctkm_t4_154_840x320.png" class="img-fluid rounded-3 single-image">
+        <img src="assetClient/images/category2.jpg" class="img-fluid rounded-3 single-image">
         </div>
       </div>
       </div>

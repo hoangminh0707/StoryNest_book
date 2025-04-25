@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
-use App\Models\Category;
+use App\Models\categories;
 use App\Models\Author;
 use App\Models\ProductVariant;
 use Carbon\Carbon;
@@ -27,7 +27,7 @@ class ProductClientController extends Controller
             }
         ])->get();
 
-        $categories = Category::all();
+        $categories = categories::all();
 
         return view('client.pages.index', compact('products', 'categories'));
     }
@@ -66,7 +66,7 @@ class ProductClientController extends Controller
 
 
         $authors = Author::all();
-        $categories = Category::all();
+        $categories = categories::all();
 
         return view('client.pages.shop', compact('products', 'categories', 'authors'));
     }
@@ -83,7 +83,7 @@ class ProductClientController extends Controller
             }
         ])->get();
 
-        $categories = Category::all();
+        $categories = categories::all();
 
         $product = Product::with(['author', 'categories', 'images'])->findOrFail($id);
 
@@ -163,6 +163,10 @@ class ProductClientController extends Controller
         return view('client.pages.product', compact('product', 'thumbnail', 'otherImages', 'products', 'categories', 'variants', 'groupedAttributes', 'vouchers'));
 
 
+    }
+    public function about()
+    {
+        return view('client.pages.about');
     }
 
 

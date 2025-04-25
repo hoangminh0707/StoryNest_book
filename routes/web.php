@@ -53,6 +53,9 @@ Route::get('/register', [AuthClientController::class, 'showRegister'])->name('re
 Route::post('/register', [AuthClientController::class, 'register']);
 Route::post('/logout', [AuthClientController::class, 'logout'])->name('logout');
 
+Route::get('/about', [ProductClientController::class, 'about'])->name('about');// Blog - Client
+Route::get('/blog', [BlogClientController::class, 'index'])->name('blogs.index');
+Route::get('/blog/{id}', [BlogClientController::class, 'show'])->name('blogs.show');
 // Blog - Client
 Route::get('/blog', [BlogClientController::class, 'index'])->name('blogs.index');
 Route::get('/blog/{id}', [BlogClientController::class, 'show'])->name('blogs.show');
