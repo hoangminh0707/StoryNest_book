@@ -23,9 +23,8 @@ class Product extends Model
     // Mối quan hệ với Category
     public function categories()
     {
-        return $this->belongsToMany(Category::class, 'category_product', 'product_id', 'category_id');
+        return $this->belongsToMany(Categories::class, 'category_product', 'product_id', 'category_id');
     }
-
     // Mối quan hệ với Author
     public function author()
     {
