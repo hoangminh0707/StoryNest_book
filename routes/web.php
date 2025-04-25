@@ -51,7 +51,7 @@ Route::get('/register', [AuthController::class, 'showRegister'])->name('register
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Blog - Client
+Route::get('/about', [ProductController::class, 'about'])->name('about');// Blog - Client
 Route::get('/blog', [BlogControllerClient::class, 'index'])->name('blogs.index');
 Route::get('/blog/{id}', [BlogControllerClient::class, 'show'])->name('blogs.show');
 

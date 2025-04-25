@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
-use App\Models\Category;
+use App\Models\categories;
 use App\Models\Author;
 
 
@@ -22,7 +22,7 @@ class ProductController extends Controller
             }
         ])->get();
 
-        $categories = Category::all();
+        $categories = categories::all();
 
         return view('client.pages.index', compact('products', 'categories'));
     }
@@ -56,7 +56,7 @@ class ProductController extends Controller
 
 
         $authors = Author::all();
-        $categories = Category::all();
+        $categories = categories::all();
 
         return view('client.pages.shop', compact('products', 'categories', 'authors'));
     }
@@ -72,7 +72,7 @@ class ProductController extends Controller
             }
         ])->get();
 
-        $categories = Category::all();
+        $categories = categories::all();
 
         $product = Product::with(['author', 'categories', 'images'])->findOrFail($id);
         $thumbnail = $product->images->where('is_thumbnail', 1)->first();
@@ -80,6 +80,10 @@ class ProductController extends Controller
 
         return view('client.pages.product', compact('product', 'thumbnail', 'otherImages', 'products', 'Category'));
 
+    }
+    public function about()
+    {
+        return view('client.pages.about');
     }
 
 

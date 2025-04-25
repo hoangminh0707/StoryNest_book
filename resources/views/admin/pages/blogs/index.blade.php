@@ -38,6 +38,7 @@
                     <table class="table table-bordered table-hover align-middle text-center">
                         <thead class="table-light">
                             <tr>
+                                <th>STT</th>
                                 <th>Tiêu Đề</th>
                                 <th>Tác Giả</th>
                                 <th>Trạng Thái</th>
@@ -46,8 +47,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($blogs as $blog)
+                            @forelse($blogs as $index => $blog)
                                 <tr>
+                                    <td>{{ $index +1 }}</td>
                                     <td>{{ Str::limit($blog->title, 50) }}</td>
                                     <td>{{ $blog->user->name ?? 'Không rõ' }}</td>
                                     <td>

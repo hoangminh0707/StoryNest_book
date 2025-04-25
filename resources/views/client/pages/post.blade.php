@@ -51,7 +51,7 @@
       </div>
 
       <!-- Comment Form -->
-      <section>
+      {{-- <section>
 
         <!-- Hiển thị các bình luận -->
         <div class="comments-section mt-4">
@@ -114,6 +114,6 @@
   </div>
   </div>
   </div>
-  </section>
+  </section> --}}
 
 @endsection

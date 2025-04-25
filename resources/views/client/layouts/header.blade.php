@@ -153,7 +153,7 @@
                 href="{{ route('index') }}">Trang chủ</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link me-4" href="/about">Giới thiệu</a>
+              <a class="nav-link me-4" href="http://storynest_book.test/about">Giới thiệu</a>
             </li>
             <li class="nav-item">
               <a class="nav-link me-4 {{ View::getSection('active_pages_shop') ?? ' ' }}" href="{{ route('shop') }}">Cửa
