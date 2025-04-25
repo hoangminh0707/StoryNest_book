@@ -172,7 +172,9 @@ class ProductAdminController extends Controller
         ])->findOrFail($id); // Tìm sản phẩm hoặc trả về lỗi 404 nếu không tìm thấy
         // dd($product->categories);
 
-        return view('admin.pages.products.show', compact('product'));
+        $thumbnail = $product->images->where('is_thumbnail', 1)->first();
+
+        return view('admin.pages.products.show', compact('product', 'thumbnail'));
     }
 
 
@@ -214,7 +216,11 @@ class ProductAdminController extends Controller
 
     public function update(Request $request, $id)
     {
-        dd($request->all());
+
+        \Log::info('Variants:', $request->variants);
+
+
+
         $request->validate([
             'product_type' => 'required|in:simple,variable',
             'name' => 'required|string|max:255',
@@ -306,7 +312,7 @@ class ProductAdminController extends Controller
             }
 
 
-        
+
 
             if ($request->product_type === 'variable') {
                 $existingVariantIds = $product->variants->pluck('id')->toArray(); // Lấy các ID biến thể hiện tại

@@ -129,7 +129,7 @@
   <nav id="header-nav" class="navbar navbar-expand-lg py-3">
     <div class="container">
       <a class="navbar-brand" href="{{ route('index') }}">
-        <img src="{{ asset('assetClient/images/main-logo.png') }}" class="logo">
+        <img src="https://i.ibb.co/HDdt9T0j/STORYNEST-BOOK-2.png" class="logo" style="with: 150px; height: 70px; ">
       </a>
       <button class="navbar-toggler d-flex d-lg-none order-3 p-2" type="button" data-bs-toggle="offcanvas"
         data-bs-target="#bdNavbar" aria-controls="bdNavbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -140,7 +140,7 @@
       <div class="offcanvas offcanvas-end" tabindex="-1" id="bdNavbar" aria-labelledby="bdNavbarOffcanvasLabel">
         <div class="offcanvas-header px-4 pb-0">
           <a class="navbar-brand" href="{{ route('index') }}">
-            <img src="{{ asset('assetClient/images/main-logo.png') }}" class="logo">
+            <img src="https://i.ibb.co/HDdt9T0j/STORYNEST-BOOK-2.png" class="logo" style="with: 150px; height: 70px; ">
           </a>
           <button type="button" class="btn-close btn-close-black" data-bs-dismiss="offcanvas" aria-label="Close"
             data-bs-target="#bdNavbar"></button>
@@ -174,22 +174,8 @@
                       class="badge bg-primary">Pro</span></a>
                 </li>
 
-                <li>
-                  <a href="http://storynest_book.test/cart" class="dropdown-item fw-light">Cart <span
-                      class="badge bg-primary">Pro</span></a>
-                </li>
-                <li>
-                  <a href="http://storynest_book.test/checkout" class="dropdown-item fw-light">Checkout <span
-                      class="badge bg-primary">Pro</span></a>
-                </li>
-                <li>
-                  <a href="http://storynest_book.test/blog" class="dropdown-item fw-light">Blog <span
-                      class="badge bg-primary">Pro</span></a>
-                </li>
-                <li>
-                  <a href="http://storynest_book.test/post" class="dropdown-item fw-light">Single Post <span
-                      class="badge bg-primary">Pro</span></a>
-                </li>
+
+
                 <li>
                   <a href="http://storynest_book.test/contact" class="dropdown-item fw-light">Contact <span
                       class="badge bg-primary">Pro</span></a>
