@@ -20,13 +20,7 @@ class ProductClientController extends Controller
 
     public function index()
     {
-        $products = Product::with([
-            'author',
-            'images' => function ($query) {
-                $query->where('is_thumbnail', true);
-            }
-        ])->get();
-
+        $products = Product::with(['author', 'images'])->get();
         $categories = categories::all();
 
         return view('client.pages.index', compact('products', 'categories'));

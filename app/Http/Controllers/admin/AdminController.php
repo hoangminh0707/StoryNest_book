@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Product;
-use App\Models\Category;
+use App\Models\Categories;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -63,7 +63,7 @@ class AdminController extends Controller
 
 
 
-        $topCategories = Category::withCount([
+        $topCategories = Categories::withCount([
             'products as total_sales' => function ($query) use ($fromDate, $toDate) {
                 // Lọc sản phẩm bán được theo đơn hàng trong khoảng ngày
                 $query->whereHas('orderItems', function ($query) use ($fromDate, $toDate) {
