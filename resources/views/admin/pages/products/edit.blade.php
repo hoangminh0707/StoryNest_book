@@ -3,274 +3,335 @@
 @section('title', 'Chỉnh sửa sản phẩm')
 
 @section('content')
-    <div class="container">
-        <h1 class="mb-4">Chỉnh sửa sản phẩm</h1>
 
-        @if(session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-        @elseif(session('error'))
-            <div class="alert alert-danger">{{ session('error') }}</div>
-        @endif
 
-        <form action="{{ route('admin.products.update', $product->id) }}" method="POST" enctype="multipart/form-data"
-            id="productForm">
-            @csrf
-            @method('PUT')
+    @if(session('success'))
+    <div class="alert alert-success">{{ session('success') }}</div>
+    @elseif(session('error'))
+    <div class="alert alert-danger">{{ session('error') }}</div>
+    @endif
 
-            <div class="mb-3">
-                <label for="name" class="form-label">Tên sản phẩm</label>
-                <input type="text" name="name" id="name" value="{{ old('name', $product->name) }}" class="form-control"
-                    required>
+    <form action="{{ route('admin.products.update', $product->id) }}" method="POST" enctype="multipart/form-data"
+        id="productForm">
+        @csrf
+        @method('PUT')
+        <!-- tên sp  -->
+        <div class="card">
+        <div class="card-body">
+        <div class="mb-3">
+            <label for="name" class="form-label">Tên sản phẩm <span class="text-danger">*</span></label>
+            <input type="text" name="name" id="name" value="{{ old('name', $product->name) }}" class="form-control"
+                required>
+                @error('name')
+                <div class="text-danger mt-1">{{ $message }}</div>
+                @enderror
+        </div>
+
+        <!-- mô tả  -->
+        <div class="mb-4">
+            <label for="description" class="form-label">Mô Tả Sản Phẩm <span class="text-danger">*</span></label>
+            <textarea name="description" id="description" class="form-control" rows="4"
+                placeholder="Mô tả sản phẩm của bạn như thế nào? Hãy sáng tạo và hấp dẫn!"
+                required>{{ old('description', $product->description) }}</textarea>
+            <div class="text-end">
+                <small id="charCount" class="text-muted">0/300 ký tự</small>
             </div>
+        </div>
 
-            <!-- <div class="mb-3">
-                <label for="product_type" class="form-label">Loại sản phẩm</label>
-                <select name="product_type" id="product_type" class="form-select" required>
-                    <option value="simple" {{ old('product_type', $product->product_type) === 'simple' ? 'selected' : '' }}>Sản phẩm đơn giản</option>
-                    <option value="variable" {{ old('product_type', $product->product_type) === 'variable' ? 'selected' : '' }}>Sản phẩm biến thể</option>
-                </select>
+
+        {{-- Chọn danh mục --}}
+      @php
+        // Đệ quy in option
+        function renderCategoryOptions($cats, $level = 0) {
+          foreach($cats as $c) {
+            $indent = str_repeat('— ', $level);
+            echo "<option value=\"{$c->id}\" data-parent=\"{$c->parent_id}\">"
+              . $indent . e($c->name) .
+            "</option>";
+            if ($c->childrenRecursive->count()) {
+              renderCategoryOptions($c->childrenRecursive, $level+1);
+            }
+          }
+        }
+      @endphp
+
+      <div class="mb-2 d-flex justify-content-between align-items-center">
+        <label class="form-label mb-0">Danh mục <span class="text-danger">*</span></label>
+       
+      </div>
+      <div class="mb-4">
+        <select id="category_select" class="form-select" >
+          <option value="">-- Chọn danh mục --</option>
+          @foreach($categories as $root)
+            @php renderCategoryOptions(collect([$root])); @endphp
+          @endforeach
+        </select>
+        <div class="text-end mt-2">
+        <small id="selected-count" class="text-muted {{ count($selectedCategoryIds) == 0 ? 'text-danger' : '' }}">
+             Đã chọn: {{ count($selectedCategoryIds) }}
+        </small>
+
             </div>
+            @error('category_ids')
+             <div class="text-danger mt-1">{{ $message }}</div>
+             @enderror
+      </div>
 
-            <div id="simpleFields" style="{{ old('product_type', $product->product_type) === 'simple' ? '' : 'display:none;' }}">
-                <div class="mb-3">
-                    <label for="price" class="form-label">Giá</label>
-                    <input type="number" name="price" id="price" value="{{ old('price', $product->price) }}" class="form-control">
+      {{-- Các tag đã chọn --}}
+      <div class="mb-3 d-flex flex-wrap gap-2" id="selected-categories">
+        @foreach($categories->flatten()->whereIn('id', $selectedCategoryIds) as $cat)
+          <div class="badge bg-primary d-inline-flex align-items-center" data-id="{{ $cat->id }}">
+            {{ $cat->name }}
+            <button type="button"
+                    class="btn-close btn-close-white ms-2"
+                    aria-label="Remove"
+                    data-id="{{ $cat->id }}"
+                    style="font-size:.7rem;"></button>
+          </div>
+        @endforeach
+      </div>
+
+      <input type="hidden" name="category_ids" id="category_ids_input"
+             value="{{ json_encode($selectedCategoryIds) }}">
+
+
+        <!-- tác giả  -->
+        <div class="mb-3">
+            <label for="author_id" class="form-label">Tác giả</label>
+            <select name="author_id" id="author_id" class="form-select">
+                <option value="">-- Chọn tác giả --</option>
+                @foreach($authors as $author)
+                <option value="{{ $author->id }}" {{ old('author_id', $product->author_id) == $author->id ? 'selected' : '' }}>
+                    {{ $author->name }}
+                </option>
+                @endforeach
+            </select>
+        </div>
+
+        <!-- nhà suất bản  -->
+        <div class="mb-3">
+            <label for="publisher_id" class="form-label">Nhà xuất bản</label>
+            <select name="publisher_id" id="publisher_id" class="form-select">
+                <option value="">-- Chọn nhà xuất bản --</option>
+                @foreach($publishers as $publisher)
+                <option value="{{ $publisher->id }}" {{ old('publisher_id', $product->publisher_id) == $publisher->id ? 'selected' : '' }}>
+                    {{ $publisher->name }}
+                </option>
+                @endforeach
+            </select>
+        </div>
+
+
+
+        <!-- Ảnh chính (Thumbnail)  -->
+        <div class="mb-4">
+            <label for="thumbnail-input" class="form-label fw-bold">
+                Ảnh chính <span class="text-danger">*</span>
+            </label>
+
+            {{-- Thumbnail hiện tại --}}
+            @php $thumb = $product->images->where('is_thumbnail', true)->first(); @endphp
+            <div id="current-thumbnail" class="mb-3">
+                @if($thumb)
+                <img src="{{ Storage::url($thumb->image_path) }}" alt="Thumbnail hiện tại" width="120" class="rounded border">
+                @endif
+            </div>
+            {{-- Preview ảnh chính mới --}}
+            <div class="mb-3" id="thumbnail-preview"></div>
+
+            {{-- Chọn thumbnail mới --}}
+            <input type="file" name="thumbnail" id="thumbnail-input" class="form-control" accept="image/*">
+
+
+        </div>
+
+        <!-- Ảnh phụ (Gallery)  -->
+        <div class="mb-4">
+            <label for="gallery-input" class="form-label fw-bold">Ảnh phụ</label>
+
+            {{-- Ảnh phụ hiện tại --}}
+            @php $gallery = $product->images->where('is_thumbnail', false); @endphp
+            <div class="d-flex flex-wrap gap-3" id="current-gallery">
+                @foreach($gallery as $img)
+                <div class="position-relative" id="gallery-item-{{ $img->id }}">
+                    <img src="{{ Storage::url($img->image_path) }}" width="100" class="rounded border">
+                    <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0"
+                        onclick="removeGalleryImage({{ $img->id }})">
+                        &times;
+                    </button>
+                    <!-- <input type="hidden" name="delete_gallery[]" value="{{ $img->id }}" id="delete-input-{{ $img->id }}"> -->
                 </div>
-
-                <div class="mb-3">
-                    <label for="quantity" class="form-label">Số lượng</label>
-                    <input type="number" name="quantity" id="quantity" value="{{ old('quantity', $product->quantity) }}" class="form-control">
-                </div>
-            </div> -->
-
-            {{-- Dropdown chọn danh mục --}}
-            <div class="mb-4">
-                <label for="category_select" class="form-label">Danh Mục <span class="text-danger">*</span></label>
-                <select id="category_select" class="form-select">
-                    <option value="">-- Chọn danh mục --</option>
-                    @foreach($categories as $category)
-                        @if(!in_array($category->id, $selectedCategoryIds))
-                            <option value="{{ $category->id }}" data-name="{{ $category->name }}">
-                                {{ $category->name }}
-                            </option>
-                        @endif
-                    @endforeach
-                </select>
+                @endforeach
             </div>
+            {{-- Preview ảnh phụ mới --}}
+            <div class="m-3 d-flex flex-wrap gap-3" id="gallery-preview"></div>
+            {{-- Chọn ảnh phụ mới --}}
+            <input type="file" name="gallery[]" id="gallery-input" class="form-control mt-3" accept="image/*" multiple>
+        </div>
 
-            {{-- Thẻ danh mục đã chọn --}}
-            <div class="mb-3" id="selected-categories">
-                @foreach($categories->whereIn('id', $selectedCategoryIds) as $cat)
-                    <div class="category-tag" data-id="{{ $cat->id }}">
-                        {{ $cat->name }}
-                        <span class="remove-tag" data-id="{{ $cat->id }}">&times;</span>
+
+
+        <!-- trạng thái  -->
+        <div class="mb-4">
+            <label for="status" class="form-label">Trạng thái <span class="text-danger">*</span></label>
+            <select name="status" class="form-control" required>
+                <option value="published" {{ old('status', $product->status) == 'published' ? 'selected' : '' }}>Đã xuất
+                    bản</option>
+                <option value="draft" {{ old('status', $product->status) == 'draft' ? 'selected' : '' }}>Nháp</option>
+            </select>
+        </div>
+
+        <!-- Loại sản phẩm (Đơn / Biến thể) -->
+        <div class="mb-4">
+            <label for="product_type" class="form-label">Loại Sản Phẩm <span class="text-danger">*</span></label>
+            <select name="product_type" id="product_type" class="form-select" required>
+                <option value="simple" {{ old('product_type', $product->product_type) == 'simple' ? 'selected' : '' }}>Đơn
+                </option>
+                <option value="variable" {{ old('product_type', $product->product_type) == 'variable' ? 'selected' : '' }}>Biến thể</option>
+            </select>
+        </div>
+
+        <!-- Khi chọn loại 'variable' -->
+        <div id="variable-section"
+            style="display: {{ old('product_type', $product->product_type) == 'variable' ? 'block' : 'none' }};">
+            <div id="variable-selector">
+                @foreach($attributes as $attribute)
+                <div class="mb-3">
+                    <label class="form-label">{{ $attribute->name }}</label>
+                    <div class="d-flex flex-wrap gap-2">
+                        @foreach($attribute->values as $value)
+                        <button type="button" class="btn btn-outline-primary btn-sm attribute-value-btn"
+                            data-attribute-id="{{ $attribute->id }}" data-attribute-name="{{ $attribute->name }}"
+                            data-value-id="{{ $value->id }}" data-value-name="{{ $value->value }}">
+                            {{ $value->value }}
+                        </button>
+                        @endforeach
                     </div>
+                </div>
                 @endforeach
             </div>
 
-            {{-- Input ẩn để submit --}}
-            <input type="hidden" name="category_ids" id="category_ids_input"
-                value="{{ json_encode($selectedCategoryIds) }}">
+            <div id="variable-result-section"
+                style="display: {{ old('product_type', $product->product_type) == 'variable' && ($product->variants->count() || old('variants')) ? 'block' : 'none' }};">
+                <h5 class="mt-4">Danh sách biến thể</h5>
+                <div id="variable-list" class="space-y-3">
+                    @if(old('variants') || $product->variants->count())
+                    @foreach(old('variants', $product->variants) as $index => $variant)
+                    <div class="row align-items-center mb-2">
+                        <div class="col-md-4">
+                            <strong>
+                                @php
+                                // Kiểm tra xem variant có phải là mảng không
+                                if (is_array($variant)) {
+                                $variantName = implode(' - ', array_map(function ($valueId) {
+                                return \App\Models\AttributeValue::find($valueId)->value ?? 'N/A';
+                                }, $variant['attribute_values']));
+                                } else {
+                                // Nếu là đối tượng, lấy tên biến thể
+                                $variantName = $variant->attributeValues->pluck('value')->implode(' - ');
+                                }
+                                @endphp
+                                {{ $variantName }}
+                            </strong>
+                            @if(!is_array($variant))
+                            @foreach($variant->attributeValues ?? [] as $value)
+                            <input type="hidden" name="variants[{{ $index }}][attribute_values][]"
+                                value="{{ $value->id }}">
+                            @endforeach
+                            @else
+                            @foreach($variant['attribute_values'] as $valueId)
+                            <input type="hidden" name="variants[{{ $index }}][attribute_values][]"
+                                value="{{ $valueId }}">
+                            @endforeach
+                            @endif
+                        </div>
+                        <div class="col-md-2">
+                        <div class="form-group mb-2">
+                            <label for="variant_price_{{ $index }}" class="small mb-1">Giá<span class="text-danger"> *</span></label>
+                            <input type="number"
+                                id="variant_price_{{ $index }}"
+                                name="variants[{{ $index }}][variant_price]"
+                                class="form-control"
+                                placeholder="Giá"
+                                value="{{ old("variants.$index.variant_price", is_array($variant) ? (isset($variant['variant_price']) ? (int) $variant['variant_price'] : '') : (isset($variant->variant_price) ? (int) $variant->variant_price : '')) }}"
+                                min="1"
+                                step="1" required
+                            >
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="form-group mb-2">
+                            <label for="stock_quantity_{{ $index }}" class="small mb-1">Số lượng<span class="text-danger"> *</span></label>
+                            <input type="number"
+                                id="stock_quantity_{{ $index }}"
+                                name="variants[{{ $index }}][stock_quantity]"
+                                class="form-control"
+                                placeholder="SL"
+                                value="{{ old("variants.$index.stock_quantity", is_array($variant) ? (isset($variant['stock_quantity']) ? (int) $variant['stock_quantity'] : '') : (isset($variant->stock_quantity) ? (int) $variant->stock_quantity : '')) }}"
+                                min="1"
+                                step="1" required
+                            >
+                        </div>
+                    </div>
 
 
-            <div class="mb-3">
-                <label for="author_id" class="form-label">Tác giả</label>
-                <select name="author_id" id="author_id" class="form-select">
-                    <option value="">-- Chọn tác giả --</option>
-                    @foreach($authors as $author)
-                        <option value="{{ $author->id }}" {{ old('author_id', $product->author_id) == $author->id ? 'selected' : '' }}>
-                            {{ $author->name }}
-                        </option>
+                    </div>
                     @endforeach
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label for="publisher_id" class="form-label">Nhà xuất bản</label>
-                <select name="publisher_id" id="publisher_id" class="form-select">
-                    <option value="">-- Chọn nhà xuất bản --</option>
-                    @foreach($publishers as $publisher)
-                        <option value="{{ $publisher->id }}" {{ old('publisher_id', $product->publisher_id) == $publisher->id ? 'selected' : '' }}>
-                            {{ $publisher->name }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Trạng thái</label>
-                <select name="status" class="form-select" required>
-                    <option value="published" {{ $product->status === 'published' ? 'selected' : '' }}>Công khai</option>
-                    <option value="draft" {{ $product->status === 'draft' ? 'selected' : '' }}>Bản nháp</option>
-                </select>
-            </div>
-
-            {{-- Ảnh chính (Thumbnail) --}}
-            <div class="mb-4">
-                <label for="thumbnail-input" class="form-label fw-bold">
-                    Ảnh chính <span class="text-danger">*</span>
-                </label>
-
-                {{-- Thumbnail hiện tại --}}
-                @php $thumb = $product->images->where('is_thumbnail', true)->first(); @endphp
-                <div id="current-thumbnail" class="mb-3">
-                    @if($thumb)
-                        <img src="{{ asset($thumb->image_path) }}" alt="Thumbnail hiện tại" width="120" class="rounded border">
                     @endif
                 </div>
-                {{-- Preview ảnh chính mới --}}
-                <div class="mb-3" id="thumbnail-preview"></div>
-
-                {{-- Chọn thumbnail mới --}}
-                <input type="file" name="thumbnail" id="thumbnail-input" class="form-control" accept="image/*">
-
-
             </div>
 
-            {{-- Ảnh phụ (Gallery) --}}
+        </div>
+
+        <!-- Khi chọn loại 'simple' -->
+        <div id="price-quantity-section"
+            style="display: {{ old('product_type', $product->product_type) == 'simple' ? 'block' : 'none' }};">
             <div class="mb-4">
-                <label for="gallery-input" class="form-label fw-bold">Ảnh phụ</label>
-
-                {{-- Ảnh phụ hiện tại --}}
-                @php $gallery = $product->images->where('is_thumbnail', false); @endphp
-                <div class="d-flex flex-wrap gap-3" id="current-gallery">
-                    @foreach($gallery as $img)
-                        <div class="position-relative" id="gallery-item-{{ $img->id }}">
-                            <img src="{{ asset($img->image_path) }}" width="100" class="rounded border">
-                            <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0"
-                                onclick="removeGalleryImage({{ $img->id }})">
-                                &times;
-                            </button>
-                            <!-- <input type="hidden" name="delete_gallery[]" value="{{ $img->id }}" id="delete-input-{{ $img->id }}"> -->
-                        </div>
-                    @endforeach
-                </div>
-                {{-- Preview ảnh phụ mới --}}
-                <div class="m-3 d-flex flex-wrap gap-3" id="gallery-preview"></div>
-                {{-- Chọn ảnh phụ mới --}}
-                <input type="file" name="gallery[]" id="gallery-input" class="form-control mt-3" accept="image/*" multiple>
+                <label for="price" class="form-label">Giá <span class="text-danger">*</span></label>
+                <input type="number" name="price" id="price" class="form-control"
+                    value="{{ old('price', rtrim(rtrim($product->price, '0'), '.')) }}" min="1" placeholder="Nhập giá sản phẩm">
             </div>
-
-
-
-
             <div class="mb-4">
-                <label for="status" class="form-label">Trạng thái <span class="text-danger">*</span></label>
-                <select name="status" class="form-control" required>
-                    <option value="published" {{ old('status', $product->status) == 'published' ? 'selected' : '' }}>Đã xuất
-                        bản</option>
-                    <option value="draft" {{ old('status', $product->status) == 'draft' ? 'selected' : '' }}>Nháp</option>
-                </select>
+                <label for="quantity" class="form-label">Số Lượng <span class="text-danger">*</span></label>
+                <input type="number" name="quantity" id="quantity" class="form-control"
+                    value="{{ old('quantity', $product->quantity) }}" min="1" placeholder="Nhập số lượng sản phẩm">
             </div>
+        </div>
+        </div>
+        <div class="card-footer ">
+        <button type="submit" class="btn btn-primary">Cập nhật sản phẩm</button>
+        <a href="{{ route('admin.products.index') }}" class="btn btn-secondary">Quay lại</a>
+        </div>
+        </div>
+    </form>
 
-            <!-- Loại sản phẩm (Đơn / Biến thể) -->
-            <div class="mb-4">
-                <label for="product_type" class="form-label">Loại Sản Phẩm <span class="text-danger">*</span></label>
-                <select name="product_type" id="product_type" class="form-select" required>
-                    <option value="simple" {{ old('product_type', $product->product_type) == 'simple' ? 'selected' : '' }}>Đơn
-                    </option>
-                    <option value="variable" {{ old('product_type', $product->product_type) == 'variable' ? 'selected' : '' }}>Biến thể</option>
-                </select>
-            </div>
-
-            <!-- Khi chọn loại 'variable' -->
-            <div id="variable-section"
-                style="display: {{ old('product_type', $product->product_type) == 'variable' ? 'block' : 'none' }};">
-                <div id="variable-selector">
-                    @foreach($attributes as $attribute)
-                        <div class="mb-3">
-                            <label class="form-label">{{ $attribute->name }}</label>
-                            <div class="d-flex flex-wrap gap-2">
-                                @foreach($attribute->values as $value)
-                                    <button type="button" class="btn btn-outline-primary btn-sm attribute-value-btn"
-                                        data-attribute-id="{{ $attribute->id }}" data-attribute-name="{{ $attribute->name }}"
-                                        data-value-id="{{ $value->id }}" data-value-name="{{ $value->value }}">
-                                        {{ $value->value }}
-                                    </button>
-                                @endforeach
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-
-                <div id="variable-result-section"
-                    style="display: {{ old('product_type', $product->product_type) == 'variable' && ($product->variants->count() || old('variants')) ? 'block' : 'none' }};">
-                    <h5 class="mt-4">Danh sách biến thể</h5>
-                    <div id="variable-list" class="space-y-3">
-                        @if(old('variants') || $product->variants->count())
-                                        @foreach(old('variants', $product->variants) as $index => $variant)
-                                                        <div class="row align-items-center mb-2">
-                                                            <div class="col-md-4">
-                                                                <strong>
-                                                                    @php
-                                                                        // Kiểm tra xem variant có phải là mảng không
-                                                                        if (is_array($variant)) {
-                                                                            $variantName = implode(' - ', array_map(function ($valueId) {
-                                                                                return \App\Models\AttributeValue::find($valueId)->value ?? 'N/A';
-                                                                            }, $variant['attribute_values']));
-                                                                        } else {
-                                                                            // Nếu là đối tượng, lấy tên biến thể
-                                                                            $variantName = $variant->attributeValues->pluck('value')->implode(' - ');
-                                                                        }
-                                                                    @endphp
-                                                                    {{ $variantName }}
-                                                                </strong>
-                                                                @if(!is_array($variant))
-                                                                    @foreach($variant->attributeValues ?? [] as $value)
-                                                                        <input type="hidden" name="variants[{{ $index }}][attribute_values][]"
-                                                                            value="{{ $value->id }}">
-                                                                    @endforeach
-                                                                @else
-                                                                    @foreach($variant['attribute_values'] as $valueId)
-                                                                        <input type="hidden" name="variants[{{ $index }}][attribute_values][]"
-                                                                            value="{{ $valueId }}">
-                                                                    @endforeach
-                                                                @endif
-                                                            </div>
-                                                            <div class="col-md-2">
-                                                                <input type="number" name="variants[{{ $index }}][variant_price]" class="form-control"
-                                                                    placeholder="Giá"
-                                                                    value="{{ old("variants.$index.variant_price", is_array($variant) ? ($variant['variant_price'] ?? '') : $variant->variant_price) }}">
-
-                                                            </div>
-
-                                                            <div class="col-md-2">
-                                                                <input type="number" name="variants[{{ $index }}][stock_quantity]" class="form-control" placeholder="SL"
-                                                                    value="{{ old("variants.$index.stock_quantity", is_array($variant) ? ($variant['stock_quantity'] ?? '') : $variant->stock_quantity) }}">
-                                                            </div>
-
-                                                        </div>
-                                        @endforeach
-                        @endif
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Khi chọn loại 'simple' -->
-            <div id="price-quantity-section"
-                style="display: {{ old('product_type', $product->product_type) == 'simple' ? 'block' : 'none' }};">
-                <div class="mb-4">
-                    <label for="price" class="form-label">Giá <span class="text-danger">*</span></label>
-                    <input type="number" name="price" id="price" class="form-control"
-                        value="{{ old('price', $product->price) }}" min="0" placeholder="Nhập giá sản phẩm">
-                </div>
-                <div class="mb-4">
-                    <label for="quantity" class="form-label">Số Lượng <span class="text-danger">*</span></label>
-                    <input type="number" name="quantity" id="quantity" class="form-control"
-                        value="{{ old('quantity', $product->quantity) }}" min="0" placeholder="Nhập số lượng sản phẩm">
-                </div>
-            </div>
-
-
-            <button type="submit" class="btn btn-primary">Cập nhật sản phẩm</button>
-            <a href="{{ route('admin.products.index') }}" class="btn btn-secondary">Quay lại</a>
-        </form>
-    </div>
 @endsection
+<!-- mô tả  -->
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener('DOMContentLoaded', function() {
+        const descriptionTextarea = document.getElementById('description');
+        const charCount = document.getElementById('charCount');
+
+        // Cập nhật số lượng ký tự
+        descriptionTextarea.addEventListener('input', function() {
+            const length = descriptionTextarea.value.length;
+            charCount.textContent = `${length}/300 ký tự`;
+
+            // Đổi màu nếu quá giới hạn
+            if (length > 300) {
+                charCount.classList.add('text-danger');
+            } else {
+                charCount.classList.remove('text-danger');
+            }
+        });
+    });
+</script>
+
+<!-- ảnh -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
         const typeSelect = document.getElementById('product_type');
         const simpleFields = document.getElementById('simpleFields');
         const variantFields = document.getElementById('variantFields');
@@ -290,17 +351,17 @@
     });
 
 
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function() {
         // Ảnh chính
         const thumbnailInput = document.getElementById('thumbnail-input');
         const thumbnailPreview = document.getElementById('thumbnail-preview');
 
         if (thumbnailInput) {
-            thumbnailInput.addEventListener('change', function (e) {
+            thumbnailInput.addEventListener('change', function(e) {
                 thumbnailPreview.innerHTML = '';
                 if (e.target.files && e.target.files[0]) {
                     const reader = new FileReader();
-                    reader.onload = function (event) {
+                    reader.onload = function(event) {
                         const img = document.createElement('img');
                         img.src = event.target.result;
                         img.width = 120;
@@ -317,12 +378,12 @@
         const galleryPreview = document.getElementById('gallery-preview');
 
         if (galleryInput) {
-            galleryInput.addEventListener('change', function (e) {
+            galleryInput.addEventListener('change', function(e) {
                 galleryPreview.innerHTML = '';
                 const files = e.target.files;
                 for (let i = 0; i < files.length; i++) {
                     const reader = new FileReader();
-                    reader.onload = function (event) {
+                    reader.onload = function(event) {
                         const img = document.createElement('img');
                         img.src = event.target.result;
                         img.width = 100;
@@ -337,110 +398,99 @@
 
     // Xóa ảnh phụ hiện tại
     function removeGalleryImage(id) {
-        const item = document.getElementById('gallery-item-' + id);
+        // Tìm đúng thẻ gallery-item chứa ảnh
+        const item = document.getElementById(`gallery-item-${id}`);
         if (item) {
-            const img = item.querySelector('img');
-            if (img) img.style.opacity = '0.4';
+            // Thêm input ẩn để lưu ID ảnh cần xóa
+            const deleteInput = document.createElement('input');
+            deleteInput.type = 'hidden';
+            deleteInput.name = 'delete_gallery[]';
+            deleteInput.value = id;
 
-            const button = item.querySelector('button');
-            if (button) {
-                button.innerText = 'Đã chọn xóa';
-                button.classList.remove('btn-danger');
-                button.classList.add('btn-secondary');
-                button.disabled = true;
-            }
+            // Gắn input ẩn vào form hoặc khu vực nào submit lên server
+            document.getElementById('current-gallery').appendChild(deleteInput);
 
-            // Tạo input hidden để gửi ID ảnh cần xóa
-            const hiddenInput = document.createElement('input');
-            hiddenInput.type = 'hidden';
-            hiddenInput.name = 'delete_gallery[]';
-            hiddenInput.value = id;
-            hiddenInput.id = 'delete-input-' + id;
-            item.appendChild(hiddenInput);
-
+            // Xóa ảnh khỏi giao diện
+            item.remove();
         }
     }
-
 </script>
+
+<!-- danh mục -->
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const select = document.getElementById('category_select');
-        const tagContainer = document.getElementById('selected-categories');
-        const hiddenInput = document.getElementById('category_ids_input');
+document.addEventListener('DOMContentLoaded', () => {
+  const selectEl = document.getElementById('category_select');
+  const wrapper = document.getElementById('selected-categories');
+  const hidden = document.getElementById('category_ids_input');
+  const counter = document.getElementById('selected-count');
+  let selected = {{ json_encode($selectedCategoryIds) }};
 
-        // Khởi tạo danh mục đã chọn từ input ẩn
-        let selectedCategories = [];
-        try {
-            selectedCategories = JSON.parse(hiddenInput.value) || [];
-        } catch (e) {
-            selectedCategories = [];
-        }
-
-        // Cập nhật lại hidden input
-        function updateHiddenInput() {
-            hiddenInput.value = JSON.stringify(selectedCategories);
-        }
-
-        // Tạo thẻ danh mục hiển thị
-        function createCategoryTag(id, name) {
+        function refreshUI() {
+            wrapper.innerHTML = '';
+            selected.forEach(id => {
+            const opt = selectEl.querySelector(`option[value="${id}"]`);
+            const name = opt ? opt.textContent.trim() : '';
+            // tag
             const tag = document.createElement('div');
-            tag.className = 'category-tag';
+            tag.className = 'badge bg-primary d-inline-flex align-items-center me-1 mb-1';
             tag.dataset.id = id;
             tag.innerHTML = `
                 ${name}
-                <span class="remove-tag" data-id="${id}">&times;</span>
+                <button type="button" class="btn-close btn-close-white ms-2" aria-label="Remove" data-id="${id}" style="font-size:.7rem;"></button>
             `;
-            tagContainer.appendChild(tag);
+            wrapper.appendChild(tag);
+            // ẩn option
+            if (opt) opt.hidden = true;
+            });
+            hidden.value = JSON.stringify(selected);
+            counter.innerText = `Đã chọn: ${selected.length}`;
         }
 
-        // Khi chọn từ dropdown
-        select.addEventListener('change', function () {
-            const selectedOption = this.options[this.selectedIndex];
-            const id = selectedOption.value;
-            const name = selectedOption.dataset.name;
-
-            if (id && !selectedCategories.includes(id)) {
-                selectedCategories.push(id);
-                createCategoryTag(id, name);
-                selectedOption.remove();
-                updateHiddenInput();
+  // chọn
+        selectEl.addEventListener('change', e => {
+            const val = e.target.value;
+            if (!val) return;
+            // luôn thêm chính nó
+            if (!selected.includes(val)) selected.push(val);
+            // và auto thêm con
+            Array.from(selectEl.options).forEach(opt => {
+            if (opt.dataset.parent == val && !selected.includes(opt.value)) {
+                selected.push(opt.value);
             }
-
-            this.selectedIndex = 0;
+            });
+            selectEl.selectedIndex = 0;
+            refreshUI();
         });
 
-        // Xử lý xoá thẻ danh mục
-        tagContainer.addEventListener('click', function (e) {
-            if (e.target.classList.contains('remove-tag')) {
-                const id = e.target.dataset.id;
-                const tag = e.target.closest('.category-tag');
-                const name = tag.textContent.trim().replace('×', '');
-
-                // Xoá khỏi mảng
-                selectedCategories = selectedCategories.filter(item => item !== id);
-
-                // Xoá khỏi DOM
-                tag.remove();
-
-                // Thêm lại option vào select
-                const option = document.createElement('option');
-                option.value = id;
-                option.text = name;
-                option.dataset.name = name;
-                select.appendChild(option);
-
-                // Sắp xếp lại dropdown
-                const options = Array.from(select.options).slice(1); // Bỏ option đầu
-                options.sort((a, b) => a.text.localeCompare(b.text));
-                options.forEach(opt => select.appendChild(opt));
-
-                updateHiddenInput();
+  // xóa qua nút x
+        wrapper.addEventListener('click', e => {
+            if (!e.target.matches('.btn-close')) return;
+            const id = e.target.dataset.id;
+            // xóa chính nó và con đệ quy
+            function removeRec(id) {
+            selected = selected.filter(x => x != id);
+            Array.from(selectEl.options)
+                .filter(o => o.dataset.parent == id)
+                .forEach(o => removeRec(o.value));
             }
+            removeRec(id);
+            // hiện lại tất cả options
+            Array.from(selectEl.options).forEach(o => o.hidden = false);
+            refreshUI();
+            });
+
+        // init
+        refreshUI();
         });
-    });
+        
+        
 </script>
+
+
+
+<!-- biến thể  -->
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function() {
         const productTypeSelect = document.getElementById('product_type');
         const variableSection = document.getElementById('variable-section');
         const simpleSection = document.getElementById('price-quantity-section');
@@ -454,7 +504,7 @@
         toggleProductType(currentType);
 
         // Xử lý thay đổi loại sản phẩm
-        productTypeSelect.addEventListener('change', function () {
+        productTypeSelect.addEventListener('change', function() {
             toggleProductType(this.value);
         });
 
@@ -477,7 +527,7 @@
 
         // Xử lý chọn/deselect giá trị thuộc tính
         document.querySelectorAll('.attribute-value-btn').forEach(button => {
-            button.addEventListener('click', function () {
+            button.addEventListener('click', function() {
                 const attrId = this.dataset.attributeId;
                 const valId = this.dataset.valueId;
                 const valName = this.dataset.valueName;
@@ -569,21 +619,5 @@
 </script>
 
 
-<style>
-    .category-tag {
-        display: inline-block;
-        padding: 5px 10px;
-        margin: 4px;
-        background-color: #e9ecef;
-        border-radius: 20px;
-        font-size: 14px;
-        position: relative;
-    }
 
-    .remove-tag {
-        margin-left: 8px;
-        cursor: pointer;
-        color: red;
-        font-weight: bold;
-    }
-</style>
+

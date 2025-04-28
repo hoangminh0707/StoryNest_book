@@ -1,78 +1,110 @@
 @extends('client.layouts.app')
+
 @section('title', 'Blog')
 
 @section('content')
-
-  <!-- Hero Section -->
-  <section class="hero-section position-relative padding-large"
-    style="background-image: url('{{ asset('assetClient/images/banner-image-bg-1.jpg') }}'); background-size: cover; background-repeat: no-repeat; background-position: center; height: 400px;">
-    <div class="hero-content">
-    <div class="container">
-      <div class="row">
-      <div class="text-center">
-        <h1>Bài viết</h1>
-        <div class="breadcrumbs">
-        <span class="item">
-          <a href="/">Home &gt;</a>
-        </span>
-        <span class="item text-decoration-underline">Bài viết</span>
+<div class="breadcrumb-area">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="breadcrumb-wrap">
+          <nav aria-label="breadcrumb">
+            <ul class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{{ url('/') }}"><i class="fa fa-home"></i></a></li>
+              <li class="breadcrumb-item active" aria-current="page">blog</li>
+            </ul>
+          </nav>
         </div>
       </div>
-      </div>
     </div>
-    </div>
-  </section>
-  <section class="breadcrumb-section">
-    {{-- <h2 class="sr-only">Site Breadcrumb</h2> --}}
-    <div class="container">
-    <div class="breadcrumb-contents">
-      <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-        <li class="breadcrumb-item active">Blog</li>
-      </ol>
-      </nav>
-    </div>
-    </div>
-  </section>
-  <!-- Blog Section -->
-  <section class="inner-page-sec-padding-bottom space-db--30">
-    <div class="container">
-    <div class="row space-db-lg--60 space-db--30">
-      <div class="col-lg-12">
-      <div class="row">
-        @foreach ($blogs as $blog)
-      <div class="col-md-4 mb-4">
-      <div class="blog-card card-style-grid">
-        <a href="{{ route('blogs.show', $blog->id) }}">
-        @if ($blog->image)
-      <img src="{{ Storage::url($blog->image) }}" alt="Blog image" class="img-fluid"
-      style="max-width: 100%; height: auto;">
-    @else
-    <img src="https://via.placeholder.com/400x250.png?text=No+Image" alt="No Image" class="img-fluid"
-    style="max-width: 100%; height: auto;">
-  @endif
+  </div>
+</div>
 
-        <h4>{{ $blog->title }}</h4>
-        </a>
+<div class="blog-main-wrapper section-padding">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="blog-item-wrapper">
+          <!-- blog item wrapper end -->
+          <div class="row mbn-30">
+            @foreach($blogs as $blog)
+            <div class="col-md-6">
+              <!-- blog post item start -->
+              <div class="blog-post-item mb-30">
+                <figure class="blog-thumb">
+                  <!-- Kiểm tra nếu có hình ảnh -->
+                  @if($blog->image_url)
+                  <a href="{{ route('client.blog.show', $blog->id) }}">
+                    <img src="{{ Storage::url($blog->image_url) }}" alt="blog image">
+                  </a>
+                  @else
+                  <!-- Nếu không có hình ảnh, có thể thêm một hình ảnh mặc định hoặc để trống -->
+                  <a href="{{ route('client.blog.show', $blog->id) }}">
+                    <img src="{{ asset('assetsClient/img/blog/default-image.jpg') }}" alt="blog image" style="width: 300px; height: 200px; object-fit: cover;">
+                  </a>
+                  @endif
+                </figure>
+                <div class="blog-content">
+                  <div class="blog-meta">
+                    @if($blog->status != 'draft')
+                    <!-- Hiển thị ngày tháng và tác giả nếu bài viết không phải là nháp -->
+                    <p>
+                      {{ optional($blog->created_at)->format('d/m/Y') }} |
+                      <a href="#">{{ $blog->user->name ?? 'Unknown' }}</a>
+                    </p>
+                    @else
+                    <!-- Nếu là nháp, không hiển thị gì hoặc có thể hiển thị thông báo -->
 
-        {{-- Hiển thị ảnh --}}
-        <p>{{ Str::limit($blog->content, 100) }}...</p> <!-- Trích đoạn nội dung -->
-        <p><strong>Status:</strong> {{ $blog->status }}</p>
-        <hr>
-      </div>
-      </div>
-    @endforeach
-      </div>
+                    @endif
+                  </div>
 
-      {{-- Pagination --}}
-      <div class="pagination justify-content-center">
-        {{ $blogs->links() }}
-      </div>
 
+                  <h4 class="blog-title">
+                    <!-- Tiêu đề bài viết -->
+                    <a href="{{ route('client.blog.show', $blog->id) }}">{{ $blog->title }}</a>
+                  </h4>
+                </div>
+              </div>
+              <!-- blog post item end -->
+            </div>
+            @endforeach
+          </div>
+          <!-- blog item wrapper end -->
+
+          <!-- start pagination area -->
+          <div class="paginatoin-area text-center">
+            <ul class="pagination-box">
+              <!-- Previous Page Link -->
+              <li class="{{ $blogs->onFirstPage() ? 'disabled' : '' }}">
+                <a class="previous" href="{{ $blogs->previousPageUrl() }}">
+                  <i class="pe-7s-angle-left"></i>
+                </a>
+              </li>
+
+              <!-- Pagination Links -->
+              @foreach ($blogs->getUrlRange(1, $blogs->lastPage()) as $page => $url)
+              <li class="{{ $page == $blogs->currentPage() ? 'active' : '' }}">
+                <a href="{{ $url }}">{{ $page }}</a>
+              </li>
+              @endforeach
+
+              <!-- Next Page Link -->
+              <li class="{{ $blogs->hasMorePages() ? '' : 'disabled' }}">
+                <a class="next" href="{{ $blogs->nextPageUrl() }}">
+                  <i class="pe-7s-angle-right"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+
+          <!-- end pagination area -->
+        </div>
       </div>
     </div>
-    </div>
-  </section>
+  </div>
+</div>
+
+
 
 @endsection

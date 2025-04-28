@@ -39,6 +39,7 @@
                         <thead class="table-light">
                             <tr>
                                 <th>STT</th>
+                                <th>Hình ảnh</th>
                                 <th>Tiêu Đề</th>
                                 <th>Tác Giả</th>
                                 <th>Trạng Thái</th>
@@ -50,6 +51,10 @@
                             @forelse($blogs as $index => $blog)
                                 <tr>
                                     <td>{{ $index +1 }}</td>
+                                    <td>@if ($blog->image_url)
+                                        <img src="{{ asset('storage/' . $blog->image_url) }}" alt="{{ $blog->title }}" style="width:100px;">
+                                    @endif
+                                    </td>
                                     <td>{{ Str::limit($blog->title, 50) }}</td>
                                     <td>{{ $blog->user->name ?? 'Không rõ' }}</td>
                                     <td>

@@ -104,32 +104,3 @@
 
 
 @endsection
-
-@section('scripts')
-    <script>
-        // Xử lý khi chọn/deselect tất cả
-        document.getElementById('select-all').addEventListener('change', function () {
-            let checkboxes = document.querySelectorAll('.product-checkbox');
-            checkboxes.forEach(checkbox => {
-                checkbox.checked = this.checked;
-            });
-        });
-
-        // Xử lý khi chọn một checkbox cụ thể
-        document.querySelectorAll('.product-checkbox').forEach(checkbox => {
-            checkbox.addEventListener('change', function () {
-                let selectAllCheckbox = document.getElementById('select-all');
-                let totalCheckboxes = document.querySelectorAll('.product-checkbox').length;
-                let checkedCheckboxes = document.querySelectorAll('.product-checkbox:checked').length;
-
-                // Nếu tất cả checkbox được chọn, chọn checkbox "chọn tất cả"
-                if (totalCheckboxes === checkedCheckboxes) {
-                    selectAllCheckbox.checked = true;
-                } else {
-                    selectAllCheckbox.checked = false;
-                }
-            });
-        });
-    </script>
-
-@endsection

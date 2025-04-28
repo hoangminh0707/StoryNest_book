@@ -9,8 +9,6 @@ use App\Http\Controllers\admin\UserAdminController;
 use App\Http\Controllers\admin\RolesAdminController;
 use App\Http\Controllers\Admin\ProductAdminController;
 use App\Http\Controllers\Admin\CategoryAdminController;
-use App\Http\Controllers\Admin\ProductImageAdminController;
-use App\Http\Controllers\Admin\ProductVariantAdminController;
 use App\Http\Controllers\Admin\PublisherAdminController;
 use App\Http\Controllers\Admin\AttributeAdminController;
 use App\Http\Controllers\Admin\AttributeValueAdminController;
@@ -20,7 +18,7 @@ use App\Http\Controllers\Admin\ShippingMethodAdminController;
 use App\Http\Controllers\Admin\VoucherAdminController;
 use App\Http\Controllers\Admin\BannerAdminController;
 use App\Http\Controllers\Admin\BlogAdminController;
-use App\Http\Controllers\Admin\OrderAdminController as AdminOrderController;
+use App\Http\Controllers\Admin\OrderAdminController;
 use App\Http\Controllers\Admin\ReviewAdminController;
 use App\Http\Controllers\Admin\PaymentAdminController;
 use App\Http\Controllers\Admin\PaymentMethodAdminController;
@@ -94,6 +92,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Bình luận cho bài viết
     Route::post('/blogs/{blog}/comments', [CommentClientController::class, 'store'])->name('comments.store');
+    Route::get('/blog/{id}', [BlogClientController::class, 'show'])->name('client.blog.show');
 
 
     //Giỏ hàng
@@ -160,6 +159,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/products/{product}/edit', [ProductAdminController::class, 'edit'])->name('products.edit');
     Route::put('/products/{product}', [ProductAdminController::class, 'update'])->name('products.update');
     Route::delete('/products/images/{id}', [ProductAdminController::class, 'destroyImage'])->name('products.images.destroy');
+    Route::post('/products/bulk-delete', [ProductAdminController::class, 'bulkDelete'])->name('products.bulkDelete');
+
 
     // Tác giả - Nhà xuất bản
     Route::resource('publishers', PublisherAdminController::class);
@@ -202,6 +203,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::patch('banners/{id}/toggle', [BannerAdminController::class, 'toggleStatus'])->name('banners.toggle');
 
     // Blog
+    Route::post('blogs/upload', [BlogAdminController::class, 'upload'])->name('blogs.upload');
     Route::resource('blogs', BlogAdminController::class);
     Route::post('blogs/mass-delete', [BlogAdminController::class, 'massDelete'])->name('blogs.massDelete');
 
