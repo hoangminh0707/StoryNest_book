@@ -40,15 +40,41 @@
             </div>
 
             <!-- Danh mục sản phẩm -->
+            @php
+            // Hàm đệ quy render option
+            function renderCategoryOptions($cats, $level = 0) {
+            foreach($cats as $c) {
+            $indent = str_repeat('— ', $level);
+            echo "<option value=\"{$c->id}\" data-parent=\"{$c->parent_id}\">"
+                . $indent . e($c->name) .
+                "</option>";
+            if ($c->childrenRecursive->count()) {
+            renderCategoryOptions($c->childrenRecursive, $level+1);
+            }
+            }
+            }
+            @endphp
+
+            <div class="mb-2 d-flex justify-content-between align-items-center">
+                <label class="form-label mb-0">Danh mục</label>
+                <small id="selected-count" class="text-muted">Đã chọn: 0</small>
+            </div>
+
             <div class="mb-4">
-                <label for="category_select" class="form-label">Danh Mục <span class="text-danger">*</span></label>
                 <select id="category_select" class="form-select">
                     <option value="">-- Chọn danh mục --</option>
-                    @foreach($categories as $category)
-                    <option value="{{ $category->id }}" data-name="{{ $category->name }}">{{ $category->name }}</option>
+                    @foreach($categories as $root)
+                    @php renderCategoryOptions(collect([$root])); @endphp
                     @endforeach
                 </select>
             </div>
+
+            {{-- Nơi hiển thị tag đã chọn --}}
+            <div class="mb-3 d-flex flex-wrap gap-2" id="selected-categories"></div>
+
+            {{-- Input ẩn để submit --}}
+            <input type="hidden" name="category_ids" id="category_ids_input" value="[]">
+
 
             <!-- Khu vực hiển thị thẻ danh mục đã chọn -->
             <div class="mb-3" id="selected-categories">
@@ -152,22 +178,19 @@
             <div id="price-quantity-section" style="display: none;">
                 <div class="mb-4">
                     <label for="price" class="form-label">Giá <span class="text-danger">*</span></label>
-                    <input type="number" name="price" id="price" class="form-control" value="{{ old('price') }}" min="0"
-                        placeholder="Nhập giá sản phẩm">
+                    <input type="number" name="price" id="price" class="form-control" value="{{ old('price') }}" min="1"
+                        placeholder="Nhập giá sản phẩm" required>
                 </div>
                 <div class="mb-4">
                     <label for="quantity" class="form-label">Số Lượng <span class="text-danger">*</span></label>
                     <input type="number" name="quantity" id="quantity" class="form-control"
-                        value="{{ old('quantity') }}" min="0" placeholder="Nhập số lượng sản phẩm">
+                        value="{{ old('quantity') }}" min="1" placeholder="Nhập số lượng sản phẩm" required>
                 </div>
             </div>
-
-
-
         </div>
 
         <!-- Nút gửi và hủy -->
-        <div class="card-footer text-end">
+        <div class="card-footer ">
             <button type="submit" class="btn btn-success">Lưu</button>
             <a href="{{ route('admin.products.index') }}" class="btn btn-secondary">Hủy</a>
         </div>
@@ -338,76 +361,85 @@
             reader.readAsDataURL(file);
         });
     });
-
-
-
-
-
-
-
 </script>
+<!-- danh mục  -->
 <script>
-    const select = document.getElementById('category_select');
-    const tagContainer = document.getElementById('selected-categories');
-    const hiddenInput = document.getElementById('category_ids_input');
-    let selectedCategories = [];
+    document.addEventListener('DOMContentLoaded', () => {
+        const selectEl = document.getElementById('category_select');
+        const wrapper = document.getElementById('selected-categories');
+        const hidden = document.getElementById('category_ids_input');
+        const counter = document.getElementById('selected-count');
 
-    select.addEventListener('change', function () {
-        const selectedOption = this.options[this.selectedIndex];
-        const id = selectedOption.value;
-        const name = selectedOption.dataset.name;
+        let selected = []; // lúc tạo mới, chưa chọn gì
 
-        if (id && !selectedCategories.includes(id)) {
-            // Thêm vào mảng đã chọn
-            selectedCategories.push(id);
+        function refreshUI() {
+            wrapper.innerHTML = '';
+            selectEl.querySelectorAll('option').forEach(o => o.hidden = false);
 
-            // Tạo thẻ danh mục
-            const tag = document.createElement('div');
-            tag.className = 'category-tag';
-            tag.dataset.id = id;
-            tag.innerHTML = `${name} <span class="remove-tag" data-id="${id}">&times;</span>`;
-            tagContainer.appendChild(tag);
+            selected.forEach(id => {
+                const opt = selectEl.querySelector(`option[value="${id}"]`);
+                if (!opt) return;
+                // ẩn option
+                opt.hidden = true;
 
-            // Xoá option khỏi dropdown
-            selectedOption.remove();
+                // tạo tag
+                const tag = document.createElement('div');
+                tag.className = 'badge bg-primary d-inline-flex align-items-center me-1 mb-1';
+                tag.dataset.id = id;
+                tag.innerHTML = `
+        ${opt.textContent.trim()}
+        <button type="button" class="btn-close btn-close-white ms-2"
+                aria-label="Remove" data-id="${id}"
+                style="font-size:.7rem;"></button>
+      `;
+                wrapper.appendChild(tag);
+            });
 
-            // Cập nhật input ẩn
-            hiddenInput.value = JSON.stringify(selectedCategories);
+            hidden.value = JSON.stringify(selected);
+            counter.innerText = `Đã chọn: ${selected.length}`;
         }
 
-        this.selectedIndex = 0;
-    });
+        // Chọn option
+        selectEl.addEventListener('change', e => {
+            const id = e.target.value;
+            if (!id || selected.includes(id)) return;
 
-    // Xử lý xoá thẻ danh mục
-    tagContainer.addEventListener('click', function (e) {
-        if (e.target.classList.contains('remove-tag')) {
+            // thêm chính nó
+            selected.push(id);
+            // auto chọn con
+            selectEl.querySelectorAll('option').forEach(opt => {
+                if (opt.dataset.parent == id && !selected.includes(opt.value)) {
+                    selected.push(opt.value);
+                }
+            });
+
+            selectEl.selectedIndex = 0;
+            refreshUI();
+        });
+
+        // Xóa tag (cha→xóa con đệ quy)
+        wrapper.addEventListener('click', e => {
+            if (!e.target.matches('.btn-close')) return;
             const id = e.target.dataset.id;
-            const tag = e.target.closest('.category-tag');
-            const name = tag.textContent.trim().replace('×', '');
 
-            // Xoá khỏi mảng
-            selectedCategories = selectedCategories.filter(item => item !== id);
+            function removeRecursively(remId) {
+                selected = selected.filter(x => x != remId);
+                selectEl.querySelectorAll('option').forEach(opt => {
+                    if (opt.dataset.parent == remId) {
+                        removeRecursively(opt.value);
+                    }
+                });
+            }
 
-            // Xoá khỏi view
-            tag.remove();
+            removeRecursively(id);
+            refreshUI();
+        });
 
-            // Thêm lại vào dropdown
-            const option = document.createElement('option');
-            option.value = id;
-            option.text = name;
-            option.dataset.name = name;
-            select.appendChild(option);
-
-            // Sắp xếp lại dropdown (nếu cần)
-            const options = Array.from(select.options).slice(1); // Bỏ option đầu
-            options.sort((a, b) => a.text.localeCompare(b.text));
-            options.forEach(opt => select.appendChild(opt));
-
-            // Cập nhật input ẩn
-            hiddenInput.value = JSON.stringify(selectedCategories);
-        }
+        // Khởi tạo UI (mặc dù selected==[])
+        refreshUI();
     });
 </script>
+
 <style>
     .category-tag {
         display: inline-block;
@@ -419,6 +451,7 @@
         font-size: 14px;
         position: relative;
     }
+
     .category-tag .remove-tag {
         margin-left: 8px;
         cursor: pointer;
@@ -427,4 +460,4 @@
     }
 </style>
 
-    @endsection
+@endsection

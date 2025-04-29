@@ -14,12 +14,15 @@ class BlogClientController extends Controller
      */
     public function index()
     {
-        // Lấy danh sách blog với các cột id, user_id, title, content, status và phân trang 8 bản ghi mỗi trang
-        $blogs = Blog::select('id', 'user_id', 'title', 'content', 'status')->paginate(8);
-
+        // Lấy danh sách blog với trạng thái khác "draft" và phân trang
+        $blogs = Blog::where('status', '!=', 'draft')
+            ->select('id', 'user_id', 'image_url', 'title', 'content', 'status', 'created_at')
+            ->paginate(8);
+            
         // Trả về view và truyền dữ liệu blogs vào
         return view('client.pages.blog', compact('blogs'));
     }
+
     public function show($id)
     {
         $blog = Blog::findOrFail($id); // Tìm blog theo ID, nếu không có sẽ trả 404

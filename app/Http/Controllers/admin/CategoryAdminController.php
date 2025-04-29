@@ -3,19 +3,19 @@
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Category;
+use App\Models\Categories;
 
 class CategoryAdminController extends Controller
 {
     public function index()
     {
-        $categories = Category::with('parent')->latest()->paginate(10);
+        $categories = Categories::with('parent')->latest()->paginate(10);
         return view('admin.pages.categories.index', compact('categories'));
     }
 
     public function create()
     {
-        $categories = Category::whereNull('parent_id')->get(); // Chỉ lấy danh mục cha
+        $categories = Categories::whereNull('parent_id')->get(); // Chỉ lấy danh mục cha
         return view('admin.pages.categories.create', compact('categories'));
     }
 
@@ -27,17 +27,17 @@ class CategoryAdminController extends Controller
             'parent_id' => 'nullable|exists:categories,id'
         ]);
 
-        Category::create($request->all());
+        Categories::create($request->all());
         return redirect()->route('admin.categories.index')->with('success', 'Danh mục đã được thêm!');
     }
 
-    public function edit(Category $category)
+    public function edit(Categories $category)
     {
-        $categories = Category::whereNull('parent_id')->where('id', '!=', $category->id)->get();
+        $categories = Categories::whereNull('parent_id')->where('id', '!=', $category->id)->get();
         return view('admin.pages.categories.edit', compact('category', 'categories'));
     }
 
-    public function update(Request $request, Category $category)
+    public function update(Request $request, Categories $category)
     {
         $request->validate([
             'name' => 'required|max:255|unique:categories,name,' . $category->id,
@@ -49,7 +49,7 @@ class CategoryAdminController extends Controller
         return redirect()->route('admin.categories.index')->with('success', 'Danh mục đã được cập nhật!');
     }
 
-    public function destroy(Category $category)
+    public function destroy(Categories $category)
     {
         $category->voucherConditions()->delete();
         $category->delete();

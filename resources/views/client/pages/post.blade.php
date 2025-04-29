@@ -1,119 +1,152 @@
-<?php
-?>
-
-
 @extends('client.layouts.app')
 @section('title', 'Blog')
 
 @section('content')
-
-  <!-- Hero Section -->
-  <section class="hero-section position-relative padding-large"
-    style="background-image: url('{{ asset('assetClient/images/banner-image-bg-1.jpg') }}'); background-size: cover; background-repeat: no-repeat; background-position: center; height: 400px;">
-    <div class="hero-content d-flex align-items-center justify-content-center h-100">
-    <div class="container text-center text-white">
-      <h1 class="mb-2">Chi tiết bài viết</h1>
-      <div class="breadcrumbs">
-      <a href="/" class="text-white">Home</a>
-      <span class="mx-1 text-white">/</span>
-      <span class="text-decoration-underline text-white">Post</span>
+<div class="breadcrumb-area">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="breadcrumb-wrap">
+          <nav aria-label="breadcrumb">
+            <ul class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{{ url('/') }}"><i class="fa fa-home"></i></a></li>
+              <li class="breadcrumb-item"><a href="{{ url('/blog') }}">blog</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Bài viết chi tiết</li>
+            </ul>
+          </nav>
+        </div>
       </div>
     </div>
-    </div>
-  </section>
+  </div>
+</div>
 
-  <!-- Blog Detail Section -->
-  <section class="inner-page-sec-padding-bottom py-5">
-    <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-10">
-
-      <!-- Blog Post -->
-      <div class="blog-post post-details mb-5">
-        <div class="blog-image mb-4">
-        @if ($blog->image)
-      <img src="{{ Storage::url($blog->image) }}" alt="Blog image" class="img-fluid w-100 rounded">
-    @else
-    <img src="https://via.placeholder.com/800x400?text=No+Image" class="img-fluid w-100 rounded" alt="No Image">
-  @endif
-        </div>
-
-        <div class="blog-content">
-        <h3 class="mb-3">{{ $blog->title }}</h3>
-        <div class="post-meta mb-4 ">
-          <i class="far fa-calendar-alt"></i> {{ $blog->created_at->format('F d, Y') }}
-        </div>
-
-        <article>
-          <p>{{ $blog->content }}</p>
-        </article>
-        </div>
-      </div>
-
-      <!-- Comment Form -->
-      {{-- <section>
-
-        <!-- Hiển thị các bình luận -->
-        <div class="comments-section mt-4">
-        <h4>{{ $blog->comments->count() }} Bình luận</h4>
-
-        @foreach($blog->comments as $comment)
-      <div class="comment">
-        <h5>{{ $comment->name }}</h5>
-        <p>{{ $comment->content }}</p>
-        <small>{{ $comment->created_at->diffForHumans() }}</small>
-      </div>
-    @endforeach
-        </div>
-
-        <!-- Form Bình luận -->
-        <div class="comment-form mt-5">
-        <h4>Để lại bình luận của bạn</h4>
-
-        @if(session('success'))
-      <div class="alert alert-success">
-        {{ session('success') }}
-      </div>
-    @endif
-
-        <form action="{{ route('comments.store', $blog->id) }}" method="POST">
-          @csrf
-          <div class="form-group">
-          <label for="name">Tên của bạn</label>
-          <input type="text" id="name" name="name" class="form-control" value="{{ old('name') }}">
-          @error('name')
-        <div class="alert alert-danger">{{ $message }}</div>
-      @enderror
+<div class="blog-main-wrapper section-padding">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-3 order-2">
+        <aside class="blog-sidebar-wrapper">
+          <!-- Search Sidebar -->
+          <div class="blog-sidebar">
+            <h5 class="title">search</h5>
+            <div class="sidebar-serch-form">
+              <form action="#">
+                <input type="text" class="search-field" placeholder="search here">
+                <button type="submit" class="search-btn"><i class="fa fa-search"></i></button>
+              </form>
+            </div>
           </div>
 
-          <div class="form-group">
-          <label for="email">Email</label>
-          <input type="email" id="email" name="email" class="form-control" value="{{ old('email') }}">
-          @error('email')
-        <div class="alert alert-danger">{{ $message }}</div>
-      @enderror
+          <!-- Categories Sidebar (Only show if categories exist) -->
+
+
+          <!-- Blog Archives Sidebar (Only show if archives exist) -->
+
+
+          <!-- Recent Posts Sidebar (Only show if recent posts exist) -->
+
+
+          <!-- Tags Sidebar -->
+
+        </aside>
+      </div>
+
+      <div class="col-lg-9 order-1">
+        <div class="blog-item-wrapper">
+          <!-- Blog Post -->
+          <div class="blog-post-item blog-details-post">
+            <figure class="blog-thumb">
+              <div class="blog-carousel-2 slick-row-15 slick-arrow-style slick-dot-style">
+                @if($blog->image_url )
+                <div class="blog-single-slide">
+                  <img src="{{ Storage::url($blog->image_url) }}" alt="blog image">
+                </div>
+                @endif
+              </div>
+            </figure>
+            <div class="blog-content">
+              <h3 class="blog-title">{{ $blog->title }}</h3>
+              <div class="blog-meta">
+                @if($blog->status != 'draft')
+                <!-- Hiển thị ngày tháng và tác giả nếu bài viết không phải là nháp -->
+                <p>
+                  {{ optional($blog->created_at)->format('d/m/Y') }} |
+                  <a href="#">{{ $blog->user->name ?? 'Unknown' }}</a>
+                </p>
+                @else
+                <!-- Nếu là nháp, không hiển thị gì hoặc có thể hiển thị thông báo -->
+
+                @endif
+              </div>
+              <div class="entry-summary">
+                <p>{{ $blog->content }}</p>
+                <blockquote>
+                  <p>{{ $blog->quote }}</p>
+                </blockquote>
+              </div>
+            </div>
           </div>
 
-          <div class="form-group">
-          <label for="content">Nội dung bình luận</label>
-          <textarea id="content" name="content" class="form-control" rows="5">{{ old('content') }}</textarea>
-          @error('content')
-        <div class="alert alert-danger">{{ $message }}</div>
-      @enderror
+          <!-- Comment Section (Only show if comments exist) -->
+          @if($comments && $comments->count() > 0)
+          <div class="comment-section section-padding">
+            <h5>{{ $comments->count() }} Comment</h5>
+            <ul>
+              @foreach($comments as $comment)
+              <li>
+                <div class="author-avatar">
+                  <img src="{{ $comment->author->avatar_url }}" alt="">
+                </div>
+                <div class="comment-body">
+                  <span class="reply-btn"><a href="#">Reply</a></span>
+                  <h5 class="comment-author">{{ $comment->author->name }}</h5>
+                  <div class="comment-post-date">
+                    {{ $comment->created_at->format('d M, Y') }} at {{ $comment->created_at->format('h:i a') }}
+                  </div>
+                  <p>{{ $comment->content }}</p>
+                </div>
+              </li>
+              @endforeach
+            </ul>
           </div>
+          @endif
 
-          <button type="submit" class="btn btn-primary">Gửi Bình luận</button>
-        </form>
+          <!-- Comment Box (Always show) -->
+          <div class="blog-comment-wrapper">
+            <h5>Leave a reply</h5>
+            <p>Your email address will not be published. Required fields are marked *</p>
+            <form action="#">
+              <div class="comment-post-box">
+                <div class="row">
+                  <div class="col-12">
+                    <label>Comment</label>
+                    <textarea name="commnet" placeholder="Write a comment"></textarea>
+                  </div>
+                  <div class="col-lg-4 col-md-4">
+                    <label>Name</label>
+                    <input type="text" class="coment-field" placeholder="Name">
+                  </div>
+                  <div class="col-lg-4 col-md-4">
+                    <label>Email</label>
+                    <input type="text" class="coment-field" placeholder="Email">
+                  </div>
+                  <div class="col-lg-4 col-md-4">
+                    <label>Website</label>
+                    <input type="text" class="coment-field" placeholder="Website">
+                  </div>
+                  <div class="col-12">
+                    <div class="coment-btn">
+                      <input class="btn btn-sqr" type="submit" name="submit" value="Post Comment">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
-    </div>
-  </section>
+  </div>
+</div>
 
-
-  </div>
-  </div>
-  </div>
-  </section> --}}
 
 @endsection
