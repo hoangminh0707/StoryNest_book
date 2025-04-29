@@ -5,7 +5,7 @@
       <!-- start logo area -->
       <div class="col-lg-2">
         <div class="logo">
-          <a href="index-3.html">
+          <a href="{{ route('index') }}">
             <img src="https://i.ibb.co/HDdt9T0j/STORYNEST-BOOK-2.png" alt="Brand Logo">
           </a>
         </div>
@@ -88,28 +88,42 @@
                 <a href="#">
                   <i class="pe-7s-user"></i>
                 </a>
-                <ul class="dropdown-list">
+                <ul class="dropdown-list p-3" style="min-width: 180px;">
                   @guest
-            <li><a href="{{ route('login') }}">Đăng nhập</a></li>
-            <li><a href="{{ route('register') }}">Đăng ký</a></li>
+            <li class="mb-2">
+            <a class="text-decoration-none d-block" href="{{ route('login') }}">Đăng nhập</a>
+            </li>
+            <li>
+            <a class="text-decoration-none d-block" href="{{ route('register') }}">Đăng ký</a>
+            </li>
           @endguest
 
                   @auth
-            <li><span class="dropdown-item-text fw-bold">{{ Auth::user()->name }}</span></li>
-            <hr class="my-1">
-            <li><a href="{{ route('profile.index') }}"><i class="bi bi-gear-fill"></i> Cài đặt</a></li>
+            <li class="mb-2">
+            <span class="fw-bold d-block">{{ Auth::user()->name }}</span>
+            </li>
+            <hr class="my-2">
 
-            <li><a href="{{ route('orders.index') }}">Đơn hàng</a></li>
+            <li class="mb-2">
+            <a class="text-decoration-none d-flex align-items-center" href="{{ route('profile.index') }}">
+              <i class="bi bi-gear-fill me-2"></i> Cài đặt
+            </a>
+            </li>
+
+            <li class="mb-2">
+            <a class="text-decoration-none d-flex align-items-center" href="{{ route('orders.index') }}">
+              <i class="bi bi-bag-fill me-2"></i> Đơn hàng
+            </a>
+            </li>
+
             <li>
             <form method="POST" action="{{ route('logout') }}">
               @csrf
-              <button type="submit">
-              <i class="bi bi-box-arrow-left"></i>
-              Đăng xuất
+              <button type="submit" class="btn btn-link p-0 text-decoration-none d-flex align-items-center">
+              <i class="bi bi-box-arrow-left me-2"></i> Đăng xuất
               </button>
             </form>
             </li>
-
           @endauth
                 </ul>
               </li>
@@ -158,8 +172,6 @@
         $total += $item->price * $item->quantity;
         @endphp
             <ul>
-
-
             <li class="minicart-item">
               <div class="minicart-thumb">
               <a href="{{ route('product.show', $product->id) }}">
@@ -173,12 +185,26 @@
               <p>
                 <span class="cart-quantity">{{$item->quantity}} <strong>&times;</strong></span>
                 <span class="cart-price">{{ number_format($item->price * $item->quantity) }} đ</span>
+                <br>
+                @if ($item->variant && $item->variant->attributeValues->isNotEmpty())
+          @foreach ($item->variant->attributeValues as $attributeValue)
+        <span class="cart-variran">Loại : {{ $attributeValue->value }} </span>
+      @endforeach
+        @else
+      <span class="cart-variran">
+      Loại : Mặc Định
+      </span>
+    @endif
               </p>
               </div>
-              <form action="{{ route('cart.remove', $item['id']) }}" method="POST" style="display: none;">
+
+              <a onclick="event.preventDefault(); this.nextElementSibling.submit();" class="minicart-remove"><i
+                class="pe-7s-close"></i></a>
+
+              <form action="{{ route('cart.remove', $item->product_id) }}" method="POST" style="display: none;">
               @csrf
-              <button type="submit" class="minicart-remove"><i class="pe-7s-close"></i></button>
               </form>
+
             </li>
     @empty
     <li class="list-group-item bg-transparent text-center">Giỏ hàng trống</li>

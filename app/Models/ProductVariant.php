@@ -26,9 +26,11 @@ class ProductVariant extends Model
     {
         return $this->belongsToMany(
             AttributeValue::class,
-            'product_variant_attributes',
+            'product_variant_attributes', // bảng trung gian
             'product_variant_id',
             'attribute_value_id'
         );
     }
+
+
 }
