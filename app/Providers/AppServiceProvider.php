@@ -28,9 +28,12 @@ class AppServiceProvider extends ServiceProvider
                 // Lấy danh sách yêu thích
                 $wishlistItems = Wishlist::with('product')->where('user_id', auth()->id())->get();
 
-                // Lấy giỏ hàng và sản phẩm tương ứng
-                $cart = Cart::with('items.product')->where('user_id', auth()->id())->first();
+                // Lấy giỏ hàng và sản phẩm + biến thể sản phẩm
+                $cart = Cart::with('items.product', 'items.variant.attributeValues')->where('user_id', auth()->id())->first();
+
                 $cartItems = $cart?->items ?? collect();
+
+
 
                 // Truyền cả hai vào view
                 $view->with('wishlistItems', $wishlistItems);

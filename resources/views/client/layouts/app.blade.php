@@ -112,7 +112,8 @@
     <!-- Countdown JS -->
     <script src="{{ asset('assetsClient/js/plugins/countdown.min.js') }}"></script>
     <!-- Nice Select JS -->
-    <script src="{{ asset('assetsClient/js/plugins/nice-select.min.js') }}"></script>
+    {{--
+    <script src="{{ asset('assetsClient/js/plugins/nice-select.min.js') }}"></script> --}}
     <!-- jquery UI JS -->
     <script src="{{ asset('assetsClient/js/plugins/jqueryui.min.js') }}"></script>
     <!-- Image zoom JS -->

@@ -15,785 +15,387 @@
   </style>
 
 
-  @php
-    $hasVariants = $variants->count() > 0;
-@endphp
 
 
-
-
-  <section class="single-product padding-large">
+  <main>
+    <!-- breadcrumb area start -->
+    <div class="breadcrumb-area">
     <div class="container">
-    <div class="row">
-      <div class="col-lg-6">
-      <div class="d-flex gap-3 product-preview">
-        <div
-        class="swiper thumb-swiper w-50 swiper-initialized swiper-horizontal swiper-backface-hidden swiper-thumbs">
-        <div class="swiper-wrapper d-flex flex-wrap gap-3 align-content-start" id="swiper-wrapper-8dc65d07f643104e8"
-          aria-live="polite" style="transform: translate3d(0px, 0px, 0px);">
-          @if($thumbnail)
-        <div
-        class="swiper-slide bg-white swiper-slide-active swiper-slide-visible swiper-slide-fully-visible swiper-slide-thumb-active"
-        role="group" aria-label="1 / {{ $otherImages->count() + 1 }}" style="width: 62px;">
-        <img src="{{ Storage::url($thumbnail->image_path) }}" alt="product-thumb"
-        class="img-fluid border rounded-3">
+      <div class="row">
+      <div class="col-12">
+        <div class="breadcrumb-wrap">
+        <nav aria-label="breadcrumb">
+          <ul class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html"><i class="fa fa-home"></i></a></li>
+          <li class="breadcrumb-item"><a href="shop.html">shop</a></li>
+          <li class="breadcrumb-item active" aria-current="page">variable products</li>
+          </ul>
+        </nav>
+        </div>
+      </div>
+      </div>
+    </div>
+    </div>
+    <!-- breadcrumb area end -->
+
+    <!-- page main wrapper start -->
+    <div class="shop-main-wrapper section-padding pb-0">
+    <div class="container">
+      <div class="row">
+      <!-- product details wrapper start -->
+      <div class="col-lg-12 order-1 order-lg-2">
+        <!-- product details inner end -->
+        <div class="product-details-inner">
+        <div class="row">
+          <div class="col-lg-5">
+          <div class="product-large-slider">
+            <div class="pro-large-img img-zoom">
+            @if($thumbnail)
+        <img src="{{ Storage::url($thumbnail->image_path) }}" alt="product-details"
+          style="width : 100% ; max-width: 300px; height: 100%; max-height: 335px;">
         </div>
       @endif
-
-          @foreach($otherImages as $index => $image)
-        <div class="swiper-slide bg-white swiper-slide-next swiper-slide-visible swiper-slide-fully-visible"
-        role="group" aria-label="{{ $index + 2 }} / {{ $otherImages->count() + 1 }}"
-        style="width: 106px; height:62px;">
-        <img src="{{ Storage::url($image->image_path)}}" alt="product-thumb" class="img-fluid border rounded-3">
+            @foreach($otherImages as $index => $image)
+        <div class="pro-large-img img-zoom">
+        <img src="{{ Storage::url($image->image_path)}}" alt="product-details"
+          style="width : 100% ; max-width: 300px; height: 100%; max-height: 335px;">
+        </div>
+      @endforeach
+          </div>
+          <div class="pro-nav slick-row-10 slick-arrow-style">
+            @foreach($otherImages as $index => $image)
+        <div class="pro-nav-thumb">
+        <img src="{{ Storage::url($image->image_path)}}" alt="product-details"
+          style="width : 100% ; max-width: 120px;">
         </div>
       @endforeach
 
-        </div>
-        <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
-        </div>
-        <div
-        class="swiper large-swiper border rounded-3 overflow-hidden swiper-fade swiper-initialized swiper-horizontal swiper-watch-progress swiper-backface-hidden">
-        <div class="swiper-wrapper" id="swiper-wrapper-0513af73d940ca35" aria-live="polite">
+          </div>
+          </div>
+          <div class="col-lg-7">
+          <div class="product-details-des">
+            <div class="manufacturer-name">
+            <a href="product-details.html">{{ $product->author->name }}</a>
+            </div>
+            <h3 class="product-name">{{ $product->name }}</h3>
+            <div class="ratings d-flex">
+            <span><i class="fa fa-star-o"></i></span>
+            <span><i class="fa fa-star-o"></i></span>
+            <span><i class="fa fa-star-o"></i></span>
+            <span><i class="fa fa-star-o"></i></span>
+            <span><i class="fa fa-star-o"></i></span>
+            <div class="pro-review">
+              <span>1 Reviews</span>
+            </div>
+            </div>
+            <div class="price-box">
+            <span class="price-regular" id="product-price">{{ number_format($product->price)}} đ</span>
+            </div>
 
-          @if($thumbnail)
-        <div class="swiper-slide bg-white swiper-slide-visible swiper-slide-fully-visible swiper-slide-active"
-        role="group" aria-label="1 / {{ $otherImages->count() + 1 }}"
-        style="width: 513px; height:513px; opacity: 1; transform: translate3d(0px, 0px, 0px);">
-        <img src="{{ Storage::url($thumbnail->image_path)  }}" alt="{{ $product->name }}" class="img-fluid">
-        </div>
-      @endif
+            <div class="product-countdown" data-countdown="2022/12/30"></div>
+            <form id="add-to-cart-form" action="{{ route('cart.add', $product->id) }}" method="POST"
+            style="display:inline;">
+            @csrf
+            <input type="hidden" name="price" id="product_price">
+            <input type="hidden" name="product_variant_id" id="product_variant_id">
 
-          @foreach($otherImages as $index => $image)
-        <div class="swiper-slide bg-white swiper-slide-next" role="group"
-        aria-label="{{ $index + 2 }} / {{ $otherImages->count() + 1 }}"
-        style="width: 513px; height:513px; opacity: 0; transform: translate3d(-513px, 0px, 0px);">
-        <img src="{{ asset('storage/' . $image->image_path) }}" alt="single-product" class="img-fluid">
+            <div class="availability">
+              <i class="fa fa-check-circle"></i>
+              <span>Số Lượng : {{ $product->quantity }}</span>
+            </div>
+
+            {{--
+            <pre>{{ $product }}</pre> --}}
+
+            <p class="pro-desc">{{ $product->description }}</p>
+
+            <div class="quantity-cart-box d-flex align-items-center">
+              <h6 class="option-title">SL:</h6>
+              <div class="quantity">
+              <div class="pro-qty">
+                <input type="text" value="1" name="quantity">
+              </div>
+              </div>
+              <div class="action_link">
+              <button type="submit" class="btn btn-cart2" id="add-to-cart-btn">
+                Add to cart
+              </button>
+              </div>
+            </div>
+
+            @foreach ($groupedAttributes as $attributeName => $attributeValues)
+        <div class="pro-size">
+          <h6 class="option-title">{{ $attributeName }} </h6>
+          <select name="variant_id" id="{{ strtolower($attributeName) }}_variant_id" class="form-control"
+          style="width : 100% ; max-width: 120px;">
+          <option value="">Chọn {{ $attributeName }}</option>
+          @foreach ($attributeValues as $attribute)
+        <option value="{{ $attribute['variant_id'] }}"
+        data-price="{{ number_format($attribute['price'])  }}">
+        {{ $attribute['value'] }}
+        </option>
+      @endforeach
+          </select>
         </div>
       @endforeach
 
+
+
+            </form>
+
+            <div class="useful-links">
+            <a href="{{ route('wishlist.add', $product->id) }}" data-bs-toggle="tooltip" title="Wishlist">
+              <i class="pe-7s-like"></i> wishlist
+            </a>
+            </div>
+          </div>
+          </div>
         </div>
-        <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+
+
+
+        <!-- product details inner end -->
+
+        <!-- product details reviews start -->
+        <div class="product-details-reviews section-padding pb-0">
+          <div class="row">
+          <div class="col-lg-12">
+            <div class="product-review-info">
+            <ul class="nav review-tab">
+              <li>
+              <a class="active" data-bs-toggle="tab" href="#tab_one">description</a>
+              </li>
+              <li>
+              <a data-bs-toggle="tab" href="#tab_two">information</a>
+              </li>
+              <li>
+              <a data-bs-toggle="tab" href="#tab_three">reviews (1)</a>
+              </li>
+            </ul>
+            <div class="tab-content reviews-tab">
+              <div class="tab-pane fade show active" id="tab_one">
+              <div class="tab-one">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam
+                fringilla augue nec est tristique auctor. Ipsum metus feugiat
+                sem, quis fermentum turpis eros eget velit. Donec ac tempus
+                ante. Fusce ultricies massa massa. Fusce aliquam, purus eget
+                sagittis vulputate, sapien libero hendrerit est, sed commodo
+                augue nisi non neque.Cras neque metus, consequat et blandit et,
+                luctus a nunc. Etiam gravida vehicula tellus, in imperdiet
+                ligula euismod eget. Pellentesque habitant morbi tristique
+                senectus et netus et malesuada fames ac turpis egestas. Nam
+                erat mi, rutrum at sollicitudin rhoncus</p>
+              </div>
+              </div>
+              <div class="tab-pane fade" id="tab_two">
+              <table class="table table-bordered">
+                <tbody>
+                @foreach ($groupedAttributes as $attributeName => $attributeValues)
+          <tr>
+            <td>{{ $attributeName }}</td>
+            <td>
+            @foreach ($attributeValues as $attribute)
+        {{ $attribute['value'] }}
+      @endforeach
+            </td>
+          </tr>
+        @endforeach
+                </tbody>
+              </table>
+              </div>
+              <div class="tab-pane fade" id="tab_three">
+              <form action="#" class="review-form">
+                <h5>1 review for <span>Chaz Kangeroo</span></h5>
+                <div class="total-reviews">
+                <div class="rev-avatar">
+                  <img src="assets/img/about/avatar.jpg" alt="">
+                </div>
+                <div class="review-box">
+                  <div class="ratings">
+                  <span class="good"><i class="fa fa-star"></i></span>
+                  <span class="good"><i class="fa fa-star"></i></span>
+                  <span class="good"><i class="fa fa-star"></i></span>
+                  <span class="good"><i class="fa fa-star"></i></span>
+                  <span><i class="fa fa-star"></i></span>
+                  </div>
+                  <div class="post-author">
+                  <p><span>admin -</span> 30 Mar, 2019</p>
+                  </div>
+                  <p>Aliquam fringilla euismod risus ac bibendum. Sed sit
+                  amet sem varius ante feugiat lacinia. Nunc ipsum nulla,
+                  vulputate ut venenatis vitae, malesuada ut mi. Quisque
+                  iaculis, dui congue placerat pretium, augue erat
+                  accumsan lacus</p>
+                </div>
+                </div>
+                <div class="form-group row">
+                <div class="col">
+                  <label class="col-form-label"><span class="text-danger">*</span>
+                  Your Name</label>
+                  <input type="text" class="form-control" required>
+                </div>
+                </div>
+                <div class="form-group row">
+                <div class="col">
+                  <label class="col-form-label"><span class="text-danger">*</span>
+                  Your Email</label>
+                  <input type="email" class="form-control" required>
+                </div>
+                </div>
+                <div class="form-group row">
+                <div class="col">
+                  <label class="col-form-label"><span class="text-danger">*</span>
+                  Your Review</label>
+                  <textarea class="form-control" required></textarea>
+                  <div class="help-block pt-10"><span class="text-danger">Note:</span>
+                  HTML is not translated!
+                  </div>
+                </div>
+                </div>
+                <div class="form-group row">
+                <div class="col">
+                  <label class="col-form-label"><span class="text-danger">*</span>
+                  Rating</label>
+                  &nbsp;&nbsp;&nbsp; Bad&nbsp;
+                  <input type="radio" value="1" name="rating">
+                  &nbsp;
+                  <input type="radio" value="2" name="rating">
+                  &nbsp;
+                  <input type="radio" value="3" name="rating">
+                  &nbsp;
+                  <input type="radio" value="4" name="rating">
+                  &nbsp;
+                  <input type="radio" value="5" name="rating" checked>
+                  &nbsp;Good
+                </div>
+                </div>
+                <div class="buttons">
+                <button class="btn btn-sqr" type="submit">Continue</button>
+                </div>
+              </form> <!-- end of review-form -->
+              </div>
+            </div>
+            </div>
+          </div>
+          </div>
         </div>
+        <!-- product details reviews end -->
+        </div>
+        <!-- product details wrapper end -->
       </div>
       </div>
-      <div class="col-lg-6">
-      <div class="product-info ps-lg-5 pt-3 pt-lg-0">
-        <div class="element-header">
-        <h1 class="product-title">{{ $product->name}}</h1>
-        <div class="product-price price d-flex align-items-center mt-2">
-          <span class="fs-2 fw-light text-primary me-2"
-          id="product-price">{{ number_format($product->price)}}</span>
+    </div>
+    <!-- page main wrapper end -->
+
+    <!-- related products area start -->
+    <section class="related-products section-padding">
+      <div class="container">
+      <div class="row">
+        <div class="col-12">
+        <!-- section title start -->
+        <div class="section-title text-center">
+          <h2 class="title">Related Products</h2>
+          <p class="sub-title">Add related products to weekly lineup</p>
         </div>
-        <div class="rating text-warning d-flex align-items-center mb-2">
-          <svg class="star star-fill">
-          <use xlink:href="#star-fill"></use>
-          </svg>
-          <svg class="star star-fill">
-          <use xlink:href="#star-fill"></use>
-          </svg>
-          <svg class="star star-fill">
-          <use xlink:href="#star-fill"></use>
-          </svg>
-          <svg class="star star-fill">
-          <use xlink:href="#star-fill"></use>
-          </svg>
-          <svg class="star star-fill">
-          <use xlink:href="#star-fill"></use>
-          </svg>
-        </div>
-        </div>
-        <p>{{ $product->description}}</p>
-        <hr>
-        <div class="cart-wrap">
-        @foreach ($groupedAttributes as $attributeName => $attributeValues)
-      <div class="product-select my-3">
-        <div class="color-toggle" data-option-index="0">
-        <h4 class="item-title text-decoration-underline text-capitalize">{{ $attributeName }}</h4>
-        <ul class="select-list list-unstyled d-flex mb-0" data-attribute-name="{{ $attributeName }}">
-        @foreach ($attributeValues as $valueId => $value)
-      <li class="select-item me-3" data-val="{{ $value }}" data-id="{{ $valueId }}" title="{{ $value }}">
-      <a href="javascript:void(0)">{{ $value }}</a>
-      </li>
-    @endforeach
-        </ul>
+        <!-- section title start -->
         </div>
       </div>
-    @endforeach
+      <div class="row">
+        <div class="col-12">
+        <div class="product-carousel-4 slick-row-10 slick-arrow-style">
+          <!-- product item start -->
 
+          @foreach ($products as $product)
 
-        </div>
-        <div class="product-quantity my-3">
-        <div class="item-title">
-          @if($vouchers->count())
-        <div class="mt-4">
-        @foreach($vouchers as $voucher)
+          @php
+        $thumbnail = $product->images->where('is_thumbnail', true)->first();
+        $secondary = $product->images->where('is_thumbnail', false)->first();
+    @endphp
+          <div class="product-item">
+          <figure class="product-thumb">
+          <a href="{{ route('product.show', $product->id) }}">
 
-      <div class="d-flex align-items-center badge bg-info">
-
-      {{ $voucher->code }} -
-      {{ ucfirst($voucher->type == 'percent' ? $voucher->value . '%' : number_format($voucher->value, 0, ',', '.') . '₫') }}
-      </strong>
-      </div>
-
-
-    @endforeach
-        </div>
-      @endif
-
-
-
-        </div>
-        <form action="{{ route('cart.add', $product->id) }}" method="POST" style="display:inline;">
-          @csrf
-          <input type="hidden" name="price" id="product_price">
-          <input type="hidden" name="product_variant_id" id="product_variant_id">
-
-          <div class="stock-button-wrap mt-2 d-flex flex-wrap align-items-center">
-          <div class="product-quantity">
-            <div class="input-group product-qty align-items-center" style="max-width: 150px;">
-            <span class="input-group-btn">
-              <button type="button" class="bg-white shadow border rounded-3 fw-light quantity-left-minus"
-              data-type="minus" data-field="">
-              <svg width="16" height="16">
-                <use xlink:href="#minus"></use>
-              </svg>
-              </button>
+          <img class="pri-img" src="{{ storage::url($thumbnail->image_path) }}" alt="product">
+          <img class="sec-img" src="{{ storage::url($secondary->image_path) }}" alt="product">
+          </a>
+          <div class="product-badge">
+          <div class="product-label new">
+            <span>new</span>
+          </div>
+          </div>
+          <div class="button-group">
+          <a href="wishlist.html" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to wishlist"><i
+            class="pe-7s-like"></i></a>
+          <a href="compare.html" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Compare"><i
+            class="pe-7s-refresh-2"></i></a>
+          <a href="#" data-bs-toggle="modal" data-bs-target="#quick_view">
+            <span data-bs-toggle="tooltip" data-bs-placement="left" title="Quick View">
+            <i class="pe-7s-search"></i>
             </span>
-            <input type="text" id="quantity" name="quantity"
-              class="form-control bg-white shadow border rounded-3 py-2 mx-2 input-number text-center" value="1"
-              min="1" max="100" required="">
-            <span class="input-group-btn">
-              <button type="button" class="bg-white shadow border rounded-3 fw-light quantity-right-plus"
-              data-type="plus" data-field="">
-              <svg width="16" height="16">
-                <use xlink:href="#plus"></use>
-              </svg>
-              </button>
-            </span>
-            </div>
+          </a>
+          </div>
+          <div class="cart-hover">
+          <button class="btn btn-cart">Add to cart</button>
+          </div>
+          </figure>
+
+          <div class="product-caption text-center">
+          <div class="product-identity">
+          <p class="manufacturer-name">
+            <a href="#">{{ $product->author->name ?? 'Không rõ tác giả' }}</a>
+          </p>
+          </div>
+
+          <h6 class="product-name">
+          <a href="{{ route('product.show', $product->id) }}">{{ $product->name }}</a>
+          </h6>
+
+          <div class="price-box">
+          <span class="price-regular">{{ number_format($product->price) }}₫</span>
+
           </div>
           </div>
-        </div>
-
-        <div class="action-buttons my-3 d-flex flex-wrap gap-3">
-        <button type="submit" class="btn btn-dark" id="add-to-cart-btn" {{ $hasVariants ? 'disabled' : '' }}>
-          Thêm vào giỏ hàng
-        </button>
-
-        </form>
-
-        <a href="{{ route('wishlist.add', $product->id) }}" class="btn btn-dark">
-          <svg class="heart" width="21" height="21">
-          <use xlink:href="#heart"></use>
-          </svg>
-        </a>
-        </div>
-      </div>
-      <hr>
-      <div class="meta-product my-3">
-        <div class="meta-item d-flex mb-1">
-        <span class="fw-medium me-2">SKU:</span>
-        <ul class="select-list list-unstyled d-flex mb-0">
-          <li data-value="S" class="select-item">1223</li>
-        </ul>
-        </div>
-        <div class="meta-item d-flex mb-1">
-        <span class="fw-medium me-2">Category:</span>
-        <ul class="select-list list-unstyled d-flex mb-0">
-          <li data-value="S" class="select-item">
-          <a href="#">Romance</a>,
-          </li>
-          <li data-value="S" class="select-item">
-          <a href="#">Sci-Fi</a>,
-          </li>
-          <li data-value="S" class="select-item">
-          <a href="#">Fiction</a>
-          </li>
-        </ul>
-        </div>
-        <div class="meta-item d-flex mb-1">
-        <span class="fw-medium me-2">Tags:</span>
-        <ul class="select-list list-unstyled d-flex mb-0">
-          <li data-value="S" class="select-item">
-          <a href="#">Revenge</a>,
-          </li>
-          <li data-value="S" class="select-item">
-          <a href="#">Vampire</a>,
-          </li>
-          <li data-value="S" class="select-item">
-          <a href="#">Life</a>
-          </li>
-        </ul>
-        </div>
-      </div>
-      </div>
-    </div>
-    </div>
-    </div>
-  </section>
-
-
-  <section class="product-tabs">
-    <div class="container">
-    <div class="row">
-      <div class="tabs-listing">
-      <nav>
-        <div class="nav nav-tabs d-flex justify-content-center py-3" id="nav-tab" role="tablist">
-        <button class="nav-link text-capitalize active" id="nav-home-tab" data-bs-toggle="tab"
-          data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Mô
-          Tả</button>
-        <button class="nav-link text-capitalize" id="nav-information-tab" data-bs-toggle="tab"
-          data-bs-target="#nav-information" type="button" role="tab" aria-controls="nav-information"
-          aria-selected="false" tabindex="-1">Additional information</button>
-        <button class="nav-link text-capitalize" id="nav-shipping-tab" data-bs-toggle="tab"
-          data-bs-target="#nav-shipping" type="button" role="tab" aria-controls="nav-shipping" aria-selected="false"
-          tabindex="-1">Shipping &amp; Return</button>
-        <button class="nav-link text-capitalize" id="nav-review-tab" data-bs-toggle="tab"
-          data-bs-target="#nav-review" type="button" role="tab" aria-controls="nav-review" aria-selected="false"
-          tabindex="-1">Reviews (02)</button>
-        </div>
-      </nav>
-      <div class="tab-content border-bottom py-4" id="nav-tabContent">
-        <div class="tab-pane fade active show" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-        <p>Mô Tả Sản Phẩm {{ $product->name}}</p>
-        <p>{{ $product->description}}</p>
-        </p>
-        <ul class="fw-light">
-          <li> Tác Giả : {{ $product->author->name}}</li>
-          <li>Chất Liệu</li>
-          <li>Bla</li>
-        </ul>
-        <p>StoryNest Book cảm ơn bạn đã ghé qua!</p>
-        </div>
-        <div class="tab-pane fade" id="nav-information" role="tabpanel" aria-labelledby="nav-information-tab">
-        <p>It is Comfortable and Best</p>
-        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-          Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
-          laborum. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim
-          id est laborum.</p>
-        </div>
-        <div class="tab-pane fade" id="nav-shipping" role="tabpanel" aria-labelledby="nav-shipping-tab">
-        <p>Returns Policy</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce eros justo, accumsan non dui sit amet.
-          Phasellus semper volutpat mi sed imperdiet. Ut odio lectus, vulputate non ex non, mattis sollicitudin
-          purus. Mauris consequat justo a enim interdum, in consequat dolor accumsan. Nulla iaculis diam purus, ut
-          vehicula leo efficitur at.</p>
-        <p>Interdum et malesuada fames ac ante ipsum primis in faucibus. In blandit nunc enim, sit amet pharetra
-          erat aliquet ac.</p>
-        <p>Shipping</p>
-        <p>Pellentesque ultrices ut sem sit amet lacinia. Sed nisi dui, ultrices ut turpis pulvinar. Sed fringilla
-          ex eget lorem consectetur, consectetur blandit lacus varius. Duis vel scelerisque elit, et vestibulum
-          metus. Integer sit amet tincidunt tortor. Ut lacinia ullamcorper massa, a fermentum arcu vehicula ut. Ut
-          efficitur faucibus dui Nullam tristique dolor eget turpis consequat varius. Quisque a interdum augue. Nam
-          ut nibh mauris.</p>
-        </div>
-        <div class="tab-pane fade" id="nav-review" role="tabpanel" aria-labelledby="nav-review-tab">
-        <div class="review-box review-style d-flex gap-3 flex-column">
-          <div class="review-item d-flex">
-          <div class="image-holder me-2">
-            <img src="assetClient/images/review-image1.jpg" alt="review" class="img-fluid rounded-3">
           </div>
-          <div class="review-content">
-            <div class="rating text-primary">
-            <svg class="star star-fill">
-              <use xlink:href="#star-fill"></use>
-            </svg>
-            <svg class="star star-fill">
-              <use xlink:href="#star-fill"></use>
-            </svg>
-            <svg class="star star-fill">
-              <use xlink:href="#star-fill"></use>
-            </svg>
-            <svg class="star star-fill">
-              <use xlink:href="#star-fill"></use>
-            </svg>
-            <svg class="star star-fill">
-              <use xlink:href="#star-fill"></use>
-            </svg>
-            </div>
-            <div class="review-header">
-            <span class="author-name fw-medium">Tom Johnson</span>
-            <span class="review-date">- 07/05/2022</span>
-            </div>
-            <p>Vitae tortor condimentum lacinia quis vel eros donec ac. Nam at lectus urna duis convallis
-            convallis</p>
-          </div>
-          </div>
-          <div class="review-item d-flex">
-          <div class="image-holder me-2">
-            <img src="assetClient/images/review-image2.jpg" alt="review" class="img-fluid rounded-3">
-          </div>
-          <div class="review-content">
-            <div class="rating text-primary">
-            <svg class="star star-fill">
-              <use xlink:href="#star-fill"></use>
-            </svg>
-            <svg class="star star-fill">
-              <use xlink:href="#star-fill"></use>
-            </svg>
-            <svg class="star star-fill">
-              <use xlink:href="#star-fill"></use>
-            </svg>
-            <svg class="star star-fill">
-              <use xlink:href="#star-fill"></use>
-            </svg>
-            <svg class="star star-fill">
-              <use xlink:href="#star-fill"></use>
-            </svg>
-            </div>
-            <div class="review-header">
-            <span class="author-name fw-medium">Jenny Willis</span>
-            <span class="review-date">- 07/05/2022</span>
-            </div>
-            <p>Vitae tortor condimentum lacinia quis vel eros donec ac. Nam at lectus urna duis convallis
-            convallis</p>
-          </div>
-          </div>
-        </div>
-        <div class="add-review margin-small">
-          <h3>Add a review</h3>
-          <p>Your email address will not be published. Required fields are marked *</p>
-          <div class="review-rating py-2">
-          <span class="my-2">Your rating *</span>
-          <div class="rating text-secondary">
-            <svg class="star star-fill">
-            <use xlink:href="#star-fill"></use>
-            </svg>
-            <svg class="star star-fill">
-            <use xlink:href="#star-fill"></use>
-            </svg>
-            <svg class="star star-fill">
-            <use xlink:href="#star-fill"></use>
-            </svg>
-            <svg class="star star-fill">
-            <use xlink:href="#star-fill"></use>
-            </svg>
-            <svg class="star star-fill">
-            <use xlink:href="#star-fill"></use>
-            </svg>
-          </div>
-          </div>
-          <input type="file" class="jfilestyle py-3 border-0" data-text="Choose your file">
-          <form id="form" class="d-flex gap-3 flex-wrap">
-          <div class="w-100 d-flex gap-3">
-            <div class="w-50">
-            <input type="text" name="name" placeholder="Write your name here *" class="form-control w-100">
-            </div>
-            <div class="w-50">
-            <input type="text" name="email" placeholder="Write your email here *" class="form-control w-100">
-            </div>
-          </div>
-          <div class="w-100">
-            <textarea placeholder="Write your review here *" class="form-control w-100"></textarea>
-          </div>
-          <label class="w-100">
-            <input type="checkbox" required="" class="d-inline">
-            <span>Save my name, email, and website in this browser for the next time.</span>
-          </label>
-          <button type="submit" name="submit" class="btn my-3">Submit</button>
-          </form>
-        </div>
-        </div>
-      </div>
-      </div>
-    </div>
-    </div>
-  </section>
+      @endforeach
 
 
-  <section id="related-items" class="position-relative padding-large ">
-    <div class="container">
-    <div class="section-title d-md-flex justify-content-between align-items-center mb-4">
-      <h3 class="d-flex align-items-center">Các mục liên quan</h3>
-      <a href="{{ route('shop') }}" class="btn">Xem tất cả</a>
-    </div>
-    <div class="position-absolute top-50 end-0 pe-0 pe-xxl-5 me-0 me-xxl-5 swiper-next product-slider-button-next"
-      tabindex="0" role="button" aria-label="Next slide" aria-controls="swiper-wrapper-d595e1cec66e64e4"
-      aria-disabled="false">
-      <svg class="chevron-forward-circle d-flex justify-content-center align-items-center p-2" width="80" height="80">
-      <use xlink:href="#alt-arrow-right-outline"></use>
-      </svg>
-    </div>
-    <div
-      class="position-absolute top-50 start-0 ps-0 ps-xxl-5 ms-0 ms-xxl-5 swiper-prev product-slider-button-prev swiper-button-disabled"
-      tabindex="-1" role="button" aria-label="Previous slide" aria-controls="swiper-wrapper-d595e1cec66e64e4"
-      aria-disabled="true">
-      <svg class="chevron-back-circle d-flex justify-content-center align-items-center p-2" width="80" height="80">
-      <use xlink:href="#alt-arrow-left-outline"></use>
-      </svg>
-    </div>
 
-    <div class="swiper product-swiper swiper-initialized swiper-horizontal swiper-backface-hidden">
-      <div class="swiper-wrapper" id="swiper-wrapper-d595e1cec66e64e4" aria-live="polite">
-      @foreach($products as $product)
-      <div class="swiper-slide swiper-slide-active" role="group" aria-label="1 / 6"
-      style="width: 243.2px; margin-right: 20px;">
-      <div class="card position-relative p-4 border rounded-3">
-      <div class="position-absolute">
-        <p class="bg-primary py-1 px-3 fs-6 text-white rounded-2">10% off</p>
-      </div>
-      @if($product->images->isNotEmpty())
-      <img src="{{ Storage::url($product->images->first()->image_path) }}" alt="{{ $product->name }}"
-      class="img-fluid shadow-sm">
-    @endif
-      <h6 class="mt-4 mb-0 fw-bold"><a href="{{ route('product.show', $product->id) }}">{{ $product->name }}</a>
-      </h6>
-      <div class="review-content d-flex">
-        <p class="my-2 me-2 fs-6 text-black-50">{{ $product->author->name }}</p>
-
-        <div class="rating text-warning d-flex align-items-center">
-        <svg class="star star-fill">
-        <use xlink:href="#star-fill"></use>
-        </svg>
-        <svg class="star star-fill">
-        <use xlink:href="#star-fill"></use>
-        </svg>
-        <svg class="star star-fill">
-        <use xlink:href="#star-fill"></use>
-        </svg>
-        <svg class="star star-fill">
-        <use xlink:href="#star-fill"></use>
-        </svg>
-        <svg class="star star-fill">
-        <use xlink:href="#star-fill"></use>
-        </svg>
         </div>
-      </div>
-      <span class="price text-primary fw-bold mb-2 fs-5">{{ number_format($product->price) }}
-        <strong>VND</strong></span>
-      <div class="card-concern position-absolute start-0 end-0 d-flex gap-2">
-        @auth
-
-      <form action="{{ route('cart.add', $product->id) }}" method="POST" style="display:inline;">
-      @csrf
-      <button type="submit" href="#" class="btn btn-dark" data-bs-toggle="tooltip" data-bs-placement="top"
-      data-bs-title="Tooltip on top">
-      <svg class="cart">
-      <use xlink:href="#cart"></use>
-      </svg>
-      </button>
-      </form>
-    @endauth
-        @guest
-      <a href="#" onclick="showLoginAlert()" class="btn btn-dark" data-bs-toggle="tooltip"
-      data-bs-placement="top" data-bs-title="Tooltip on top">
-      <svg class="cart">
-      <use xlink:href="#cart"></use>
-      </svg>
-      </a>
-    @endguest
-
-        <a href="{{ route('wishlist.add', $product->id) }}" class="btn btn-dark">
-        <span>
-        <svg class="wishlist">
-        <use xlink:href="#heart"></use>
-        </svg>
-        </span>
-        </a>
-
-      </div>
-      </div>
-      </div>
-    @endforeach
-
-
-      </div>
-      <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
-    </div>
-    </div>
-  </section>
-
-
-  <section id="customers-reviews" class="position-relative padding-large"
-    style="background-image: url(assetClient/images/banner-image-bg.jpg); background-size: cover; background-repeat: no-repeat; background-position: center; height: 600px;">
-    <div class="container offset-md-3 col-md-6 ">
-    <div class="position-absolute top-50 end-0 pe-0 pe-xxl-5 me-0 me-xxl-5 swiper-next testimonial-button-next"
-      tabindex="0" role="button" aria-label="Next slide" aria-controls="swiper-wrapper-f4ddda8a837b96e6"
-      aria-disabled="false">
-      <svg class="chevron-forward-circle d-flex justify-content-center align-items-center p-2" width="80" height="80">
-      <use xlink:href="#alt-arrow-right-outline"></use>
-      </svg>
-    </div>
-    <div
-      class="position-absolute top-50 start-0 ps-0 ps-xxl-5 ms-0 ms-xxl-5 swiper-prev testimonial-button-prev swiper-button-disabled"
-      tabindex="-1" role="button" aria-label="Previous slide" aria-controls="swiper-wrapper-f4ddda8a837b96e6"
-      aria-disabled="true">
-      <svg class="chevron-back-circle d-flex justify-content-center align-items-center p-2" width="80" height="80">
-      <use xlink:href="#alt-arrow-left-outline"></use>
-      </svg>
-    </div>
-    <div class="section-title mb-4 text-center">
-      <h3 class="mb-4">Customers reviews</h3>
-    </div>
-    <div class="swiper testimonial-swiper swiper-initialized swiper-horizontal swiper-backface-hidden">
-      <div class="swiper-wrapper" id="swiper-wrapper-f4ddda8a837b96e6" aria-live="polite">
-      <div class="swiper-slide swiper-slide-active" role="group" aria-label="1 / 5"
-        style="width: 736px; margin-right: 20px;">
-        <div class="card position-relative text-left p-5 border rounded-3">
-        <blockquote>"I stumbled upon this bookstore while visiting the city, and it instantly became my favorite
-          spot. The cozy atmosphere, friendly staff, and wide selection of books make every visit a delight!"
-        </blockquote>
-        <div class="rating text-warning d-flex align-items-center">
-          <svg class="star star-fill">
-          <use xlink:href="#star-fill"></use>
-          </svg>
-          <svg class="star star-fill">
-          <use xlink:href="#star-fill"></use>
-          </svg>
-          <svg class="star star-fill">
-          <use xlink:href="#star-fill"></use>
-          </svg>
-          <svg class="star star-fill">
-          <use xlink:href="#star-fill"></use>
-          </svg>
-          <svg class="star star-fill">
-          <use xlink:href="#star-fill"></use>
-          </svg>
-        </div>
-        <h5 class="mt-1 fw-normal">Emma Chamberlin</h5>
-        </div>
-      </div>
-      <div class="swiper-slide swiper-slide-next" role="group" aria-label="2 / 5"
-        style="width: 736px; margin-right: 20px;">
-        <div class="card position-relative text-left p-5 border rounded-3">
-        <blockquote>"As an avid reader, I'm always on the lookout for new releases, and this bookstore never
-          disappoints. They always have the latest titles, and their recommendations have introduced me to some
-          incredible reads!"</blockquote>
-        <div class="rating text-warning d-flex align-items-center">
-          <svg class="star star-fill">
-          <use xlink:href="#star-fill"></use>
-          </svg>
-          <svg class="star star-fill">
-          <use xlink:href="#star-fill"></use>
-          </svg>
-          <svg class="star star-fill">
-          <use xlink:href="#star-fill"></use>
-          </svg>
-          <svg class="star star-fill">
-          <use xlink:href="#star-fill"></use>
-          </svg>
-          <svg class="star star-fill">
-          <use xlink:href="#star-fill"></use>
-          </svg>
-        </div>
-        <h5 class="mt-1 fw-normal">Thomas John</h5>
-        </div>
-      </div>
-      <div class="swiper-slide" role="group" aria-label="3 / 5" style="width: 736px; margin-right: 20px;">
-        <div class="card position-relative text-left p-5 border rounded-3">
-        <blockquote>"I ordered a few books online from this store, and I was impressed by the quick delivery and
-          careful packaging. It's clear that they prioritize customer satisfaction, and I'll definitely be shopping
-          here again!"</blockquote>
-        <div class="rating text-warning d-flex align-items-center">
-          <svg class="star star-fill">
-          <use xlink:href="#star-fill"></use>
-          </svg>
-          <svg class="star star-fill">
-          <use xlink:href="#star-fill"></use>
-          </svg>
-          <svg class="star star-fill">
-          <use xlink:href="#star-fill"></use>
-          </svg>
-          <svg class="star star-fill">
-          <use xlink:href="#star-fill"></use>
-          </svg>
-          <svg class="star star-fill">
-          <use xlink:href="#star-fill"></use>
-          </svg>
-        </div>
-        <h5 class="mt-1 fw-normal">Kevin Bryan</h5>
-        </div>
-      </div>
-      <div class="swiper-slide" role="group" aria-label="4 / 5" style="width: 736px; margin-right: 20px;">
-        <div class="card position-relative text-left p-5 border rounded-3">
-        <blockquote>“I stumbled upon this tech store while searching for a new laptop, and I couldn't be happier
-          with my experience! The staff was incredibly knowledgeable and guided me through the process of choosing
-          the perfect device for my needs. Highly recommended!”</blockquote>
-        <div class="rating text-warning d-flex align-items-center">
-          <svg class="star star-fill">
-          <use xlink:href="#star-fill"></use>
-          </svg>
-          <svg class="star star-fill">
-          <use xlink:href="#star-fill"></use>
-          </svg>
-          <svg class="star star-fill">
-          <use xlink:href="#star-fill"></use>
-          </svg>
-          <svg class="star star-fill">
-          <use xlink:href="#star-fill"></use>
-          </svg>
-          <svg class="star star-fill">
-          <use xlink:href="#star-fill"></use>
-          </svg>
-        </div>
-        <h5 class="mt-1 fw-normal">Stevin</h5>
-        </div>
-      </div>
-      <div class="swiper-slide" role="group" aria-label="5 / 5" style="width: 736px; margin-right: 20px;">
-        <div class="card position-relative text-left p-5 border rounded-3">
-        <blockquote>“I stumbled upon this tech store while searching for a new laptop, and I couldn't be happier
-          with my experience! The staff was incredibly knowledgeable and guided me through the process of choosing
-          the perfect device for my needs. Highly recommended!”</blockquote>
-        <div class="rating text-warning d-flex align-items-center">
-          <svg class="star star-fill">
-          <use xlink:href="#star-fill"></use>
-          </svg>
-          <svg class="star star-fill">
-          <use xlink:href="#star-fill"></use>
-          </svg>
-          <svg class="star star-fill">
-          <use xlink:href="#star-fill"></use>
-          </svg>
-          <svg class="star star-fill">
-          <use xlink:href="#star-fill"></use>
-          </svg>
-          <svg class="star star-fill">
-          <use xlink:href="#star-fill"></use>
-          </svg>
-        </div>
-        <h5 class="mt-1 fw-normal">Roman</h5>
         </div>
       </div>
       </div>
-      <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
-    </div>
-    </div>
-  </section>
+    </section>
+    <!-- related products area end -->
+  </main>
 
 
-  <section id="latest-posts" class="padding-large">
-    <div class="container">
-    <div class="section-title d-md-flex justify-content-between align-items-center mb-4">
-      <h3 class="d-flex align-items-center">Latest posts</h3>
-      <a href="shop.html" class="btn">View All</a>
-    </div>
-    <div class="row">
-      <div class="col-md-3 posts mb-4">
-      <img src="assetClient/images/post-item1.jpg" alt="post image" class="img-fluid rounded-3">
-      <a href="blog.html" class="fs-6 text-primary">Books</a>
-      <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">10 Must-Read Books of the Year:
-        Our Top Picks!</a></h4>
-      <p class="mb-2">Dive into the world of cutting-edge technology with our latest blog post, where we highlight
-        five essential gadg <span><a class="text-decoration-underline text-black-50" href="single-post.html">Read
-          More</a></span>
-      </p>
-      </div>
-      <div class="col-md-3 posts mb-4">
-      <img src="assetClient/images/post-item2.jpg" alt="post image" class="img-fluid rounded-3">
-      <a href="blog.html" class="fs-6 text-primary">Books</a>
-      <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">The Fascinating Realm of
-        Science Fiction</a></h4>
-      <p class="mb-2">Explore the intersection of technology and sustainability in our latest blog post. Learn about
-        the innovative <span><a class="text-decoration-underline text-black-50" href="single-post.html">Read
-          More</a></span> </p>
-      </div>
-      <div class="col-md-3 posts mb-4">
-      <img src="assetClient/images/post-item3.jpg" alt="post image" class="img-fluid rounded-3">
-      <a href="blog.html" class="fs-6 text-primary">Books</a>
-      <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">Finding Love in the Pages of a
-        Book</a></h4>
-      <p class="mb-2">Stay ahead of the curve with our insightful look into the rapidly evolving landscape of
-        wearable technology. <span><a class="text-decoration-underline text-black-50" href="single-post.html">Read
-          More</a></span>
-      </p>
-      </div>
-      <div class="col-md-3 posts mb-4">
-      <img src="assetClient/images/post-item4.jpg" alt="post image" class="img-fluid rounded-3">
-      <a href="blog.html" class="fs-6 text-primary">Books</a>
-      <h4 class="card-title mb-2 text-capitalize text-dark"><a href="single-post.html">Reading for Mental Health: How
-        Books Can Heal and Inspire</a></h4>
-      <p class="mb-2">In today's remote work environment, productivity is key. Discover the top apps and tools that
-        can help you stay <span><a class="text-decoration-underline text-black-50" href="single-post.html">Read
-          More</a></span>
-      </p>
-      </div>
-    </div>
-    </div>
-  </section>
+
+
+
+
 
 
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-    const form = document.getElementById('add-to-cart-form');
-    const variantInput = document.getElementById('product_variant_id');
-    const priceInput = document.getElementById('product_price');
-    const addToCartBtn = document.getElementById('add-to-cart-btn');
-    const hasVariants = {{ $variants->count() > 0 ? 'true' : 'false' }};
-    const productVariants = @json($variants);
+    window.onload = function () {
+    document.querySelectorAll('.form-control').forEach(function (selectElement) {
+      selectElement.addEventListener('change', function () {
+      let selectedOption = selectElement.options[selectElement.selectedIndex];
+      // console.log('Selected option:', selectedOption);  // Kiểm tra option đã chọn
 
-    // Bắt sự kiện click vào biến thể
-    document.querySelectorAll('.select-list').forEach(list => {
-      list.addEventListener('click', function (e) {
-      const clickedItem = e.target.closest('.select-item');
-      if (!clickedItem) return;
+      let newPrice = selectedOption.dataset.price;
+      // console.log('Selected price:', newPrice);  // Kiểm tra giá trị data-price
 
-      // Bỏ active khỏi tất cả
-      list.querySelectorAll('.select-item').forEach(item => {
-        item.classList.remove('active');
-      });
-
-      // Thêm active vào item vừa chọn
-      clickedItem.classList.add('active');
-
-      updatePriceBySelectedAttributes();
-      });
-    });
-
-    function updatePriceBySelectedAttributes() {
-      let selectedAttrValueIds = [];
-
-      document.querySelectorAll('.select-list .select-item.active').forEach(item => {
-      const attrValueId = parseInt(item.getAttribute('data-id'));
-      if (!isNaN(attrValueId)) {
-        selectedAttrValueIds.push(attrValueId);
-      }
-      });
-
-      // Tìm biến thể khớp
-      let matchedVariant = productVariants.find(variant => {
-      const variantAttrIds = variant.attribute_values.map(attr => attr.id).sort();
-      return JSON.stringify(variantAttrIds) === JSON.stringify(selectedAttrValueIds.sort());
-      });
-
-      if (matchedVariant) {
-      variantInput.value = matchedVariant.id;
-      priceInput.value = matchedVariant.variant_price;
-
-      document.getElementById('product-price').textContent =
-        new Intl.NumberFormat('vi-VN').format(matchedVariant.variant_price);
-
-      // Cho phép thêm vào giỏ
-      addToCartBtn.disabled = false;
+      if (newPrice) {
+        document.getElementById('product-price').innerText = newPrice.toLocaleString() + " đ";
       } else {
-      document.getElementById('product-price').textContent = 'Không có biến thể phù hợp';
-      variantInput.value = '';
-      priceInput.value = '';
-      addToCartBtn.disabled = true;
+        document.getElementById('product-price').innerText = '{{ number_format($product->price) }} đ';
       }
-    }
-
-    // Ngăn submit nếu chưa chọn biến thể
-    form.addEventListener('submit', function (e) {
-      if (hasVariants && !variantInput.value) {
-      e.preventDefault();
-      alert('Vui lòng chọn biến thể sản phẩm trước khi thêm vào giỏ hàng!');
-      }
+      });
     });
-    });
-
-
-    // Khởi tạo tooltips khi trang được tải
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-    return new bootstrap.Tooltip(tooltipTriggerEl)
-    })
-
+    };
 
 
   </script>
-
-
 
 
 

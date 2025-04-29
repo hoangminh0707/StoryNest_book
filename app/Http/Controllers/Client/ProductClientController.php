@@ -72,9 +72,7 @@ class ProductClientController extends Controller
         $products = Product::with([
             'author',
             'categories', // thêm dòng này để load danh mục của sản phẩm
-            'images' => function ($query) {
-                $query->where('is_thumbnail', true);
-            }
+            'images',
         ])->get();
 
         $categories = categories::all();
@@ -94,9 +92,14 @@ class ProductClientController extends Controller
         foreach ($variants as $variant) {
             foreach ($variant->attributeValues as $attrValue) {
                 $attributeName = $attrValue->attribute->name;
-                $groupedAttributes[$attributeName][$attrValue->id] = $attrValue->value;
+                $groupedAttributes[$attributeName][] = [
+                    'variant_id' => $variant->id,
+                    'value' => $attrValue->value,
+                    'price' => $variant->variant_price
+                ];
             }
         }
+
 
         $variants = $variants->map(function ($variant) {
             return [

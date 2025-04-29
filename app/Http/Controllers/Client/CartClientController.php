@@ -41,8 +41,15 @@ class CartClientController extends Controller
 
         $product = Product::findOrFail($id);
         $userId = Auth::id();
-        $variantId = $request->input('product_variant_id');
+        $variantId = $request->input('variant_id'); // lưu ý đây
         $quantity = $request->input('quantity', 1);
+
+        // Kiểm tra nếu sản phẩm có biến thể mà chưa chọn biến thể
+        $hasVariants = ProductVariant::where('product_id', $product->id)->exists();
+
+        if ($hasVariants && !$variantId) {
+            return redirect()->back()->with('error', 'Vui lòng chọn biến thể sản phẩm trước khi thêm vào giỏ hàng.');
+        }
 
         // Nếu có variant, dùng giá của variant
         if ($variantId) {
@@ -77,8 +84,9 @@ class CartClientController extends Controller
             ]);
         }
 
-        return redirect()->back()->with('success', 'Đã thêm vào giỏ hàng');
+        return redirect()->back()->with('success', 'Đã thêm sản phẩm vào giỏ hàng.');
     }
+
 
 
     public function update(Request $request, Product $product)
