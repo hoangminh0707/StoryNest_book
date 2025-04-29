@@ -126,7 +126,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // ─── ADMIN ROUTES ──────────────────────────────────────────────────────────────────
 //
 
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     // Đăng nhập / Đăng ký / Dashboard
     Route::get('/', [AdminController::class, 'dashboard'])->middleware(['auth', 'role:admin'])->name('dashboard');
     Route::get('/login', [LoginAdminController::class, 'showLoginAdminForm'])->name('login');
@@ -171,11 +171,18 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('attribute-values', AttributeValueAdminController::class);
 
 
-    // Bình luận & đánh giá
-    Route::resource('comments', CommentAdminController::class)->only(['index', 'destroy']);
-    Route::patch('comments/{id}/approve', [CommentAdminController::class, 'approve'])->name('comments.approve');
+    // Bình luận 
+    Route::resource('comments', CommentAdminController::class)->except(['create', 'store']);
+
+    // Duyệt và hủy duyệt bình luận
+    Route::get('comments/{id}/approve', [CommentAdminController::class, 'approve'])->name('comments.approve');
+    Route::get('comments/{id}/disapprove', [CommentAdminController::class, 'disapprove'])->name('comments.disapprove');
+
+    // Trả lời bình luận
+    Route::post('comments/{commentId}/reply', [CommentAdminController::class, 'reply'])->name('comments.reply');
 
 
+    // đánh giá
     Route::resource('reviews', ReviewAdminController::class)->only(['index', 'show', 'destroy']);
     Route::patch('reviews/{id}/approve', [ReviewAdminController::class, 'approve'])->name('reviews.approve');
 
