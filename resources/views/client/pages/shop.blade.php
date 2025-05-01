@@ -16,8 +16,8 @@
       <div class="breadcrumb-wrap">
         <nav aria-label="breadcrumb">
         <ul class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html"><i class="fa fa-home"></i></a></li>
-          <li class="breadcrumb-item active" aria-current="page">shop list no sidebar</li>
+          <li class="breadcrumb-item"><a href="{{ route('index') }}"><i class="fa fa-home"></i></a></li>
+          <li class="breadcrumb-item active" aria-current="page">Cửa hàng</li>
         </ul>
         </nav>
       </div>

@@ -128,7 +128,7 @@
                 </ul>
               </li>
               <li>
-                <a href="wishlist.html">
+                <a href="{{ route('wishlist.index') }}">
                   <i class="pe-7s-like"></i>
                   <div class="notification">{{ $wishlistItems->count() }}</div>
                 </a>

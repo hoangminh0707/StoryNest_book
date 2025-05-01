@@ -35,6 +35,10 @@ use App\Http\Controllers\Client\VerificationClientController;
 use App\Http\Controllers\Client\ProfileClientController;
 use App\Http\Controllers\Client\BlogClientController;
 use App\Http\Controllers\Client\CommentClientController;
+use App\Http\Controllers\Client\ReviewCLientController;
+use App\Http\Controllers\Client\VnpayController;
+use App\Http\Controllers\Client\MomoController;
+
 
 
 
@@ -108,16 +112,36 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'verified'])->group(function () {
 
     // Wishlist
+    Route::get('/wishlist', [WishlistClientController::class, 'index'])->name('wishlist.index');
     Route::get('/wishlist/add/{productId}', [WishlistClientController::class, 'add'])->name('wishlist.add');
-    Route::get('/wishlist/remove/{productId}', [WishlistClientController::class, 'remove'])->name('wishlist.remove');
+    Route::delete('/wishlist/{productId}', [WishlistClientController::class, 'remove'])->name('wishlist.remove');
+
 
     // Checkout & Orders
     Route::get('/checkout', [CheckoutClientController::class, 'show'])->name('checkout');
     Route::post('/checkout', [CheckoutClientController::class, 'submit'])->name('checkout.submit');
+    Route::post('/checkout/update-address', [CheckoutClientController::class, 'updateAddress'])->name('checkout.updateAddress');
+    Route::post('/checkout/update-shipping', [CheckoutClientController::class, 'updateShipping'])->name('checkout.updateShipping');
+    Route::post('/checkout/update-payment', [CheckoutClientController::class, 'updatePayment'])->name('checkout.updatePayment');
+    Route::post('/checkout/update-voucher', [CheckoutClientController::class, 'updateVoucher'])->name('checkout.updateVoucher');
+
+    // Thanh toán online
+    Route::get('/vnpay/payment', [VnpayController::class, 'createPaymentUrl'])->name('vnpay.payment');
+    Route::get('/vnpay/callback', [VnpayController::class, 'handleCallback'])->name('vnpay.callback');
+
+    Route::get('/momo/payment', [MomoController::class, 'createPayment'])->name('momo.payment');
+    Route::get('/momo/return', [MomoController::class, 'handleReturn'])->name(name: 'momo.callback');
+    Route::post('/momo/callback', [MomoController::class, 'handleCallback']);
+
+
 
     Route::get('/orders/success', [OrderClientController::class, 'success'])->name('orders.success');
+    Route::view('/orders/failed', 'client.pages.orders.failed')->name('orders.failed');
     Route::get('/orders', [OrderClientController::class, 'index'])->name('orders.index');
     Route::get('/orders/{id}', [OrderClientController::class, 'show'])->name('orders.show');
+
+    Route::post('/reviews', [ReviewCLientController::class, 'store'])->name('reviews.store');
+
 });
 
 

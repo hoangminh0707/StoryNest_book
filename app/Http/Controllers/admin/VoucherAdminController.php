@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Categories;
 use App\Models\Voucher;
 use App\Models\VoucherCondition;
 use App\Models\Product;
-use App\Models\Category;
 use Illuminate\Http\Request;
 
 class VoucherAdminController extends Controller
@@ -43,7 +43,7 @@ class VoucherAdminController extends Controller
     public function create()
     {
         $products = Product::all();
-        $categories = Category::all();
+        $categories = Categories::all();
 
         return view('admin.pages.vouchers.create', compact('products', 'categories'));
     }
@@ -128,7 +128,7 @@ class VoucherAdminController extends Controller
         $voucher->save();
 
         // Trả về thông báo thành công và chuyển hướng lại trang danh sách
-        return redirect()->route('vouchers.index')->with('success', 'Trạng thái mã giảm giá đã được cập nhật.');
+        return redirect()->route('admin.vouchers.index')->with('success', 'Trạng thái mã giảm giá đã được cập nhật.');
     }
 
     // Phương thức hiển thị form sửa voucher
@@ -139,7 +139,7 @@ class VoucherAdminController extends Controller
 
         // Lấy tất cả sản phẩm để hiển thị trong select box
         $products = Product::all();
-        $categories = Category::all();
+        $categories = Categories::all();
 
         // Truyền dữ liệu vào view
         return view('admin.pages.vouchers.edit', compact('voucher', 'products', 'categories'));

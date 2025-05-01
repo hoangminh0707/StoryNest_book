@@ -11,6 +11,7 @@ use App\Models\Author;
 use App\Models\ProductVariant;
 use Carbon\Carbon;
 use App\Models\Voucher;
+use App\Models\OrderItem;
 
 
 class ProductClientController extends Controller
@@ -77,7 +78,12 @@ class ProductClientController extends Controller
 
         $categories = categories::all();
 
-        $product = Product::with(['author', 'categories', 'images'])->findOrFail($id);
+        $product = Product::with([
+            'author',
+            'categories',
+            'images',
+            'reviews.user' // ✏️ Thêm để lấy luôn tên người đánh giá
+        ])->findOrFail($id);
 
         $thumbnail = $product->images->where('is_thumbnail', 1)->first();
         $otherImages = $product->images->where('is_thumbnail', false);
@@ -119,36 +125,46 @@ class ProductClientController extends Controller
         });
 
 
+
+
         $productCategoryIds = $product->categories->pluck('id')->toArray();
 
         $vouchers = Voucher::where('is_active', 1)
             ->where(function ($query) use ($product, $productCategoryIds) {
                 $query
-                    // Điều kiện voucher áp dụng cho mọi sản phẩm
-                    ->whereHas('conditions', function ($q) {
-                        $q->where('condition_type', 'product')->whereNull('product_id');
-                    })
-                    // Điều kiện voucher áp dụng cho mọi danh mục
-                    ->orWhereHas('conditions', function ($q) {
-                        $q->where('condition_type', 'category')->whereNull('category_id');
-                    })
-                    // Điều kiện voucher áp dụng cụ thể theo sản phẩm
-                    ->orWhereHas('conditions', function ($q) use ($product) {
-                        $q->where('condition_type', 'product')->where('product_id', $product->id);
-                    })
-                    // Điều kiện voucher áp dụng cụ thể theo danh mục
-                    ->orWhereHas('conditions', function ($q) use ($productCategoryIds) {
-                        $q->where('condition_type', 'category')->whereIn('category_id', $productCategoryIds);
-                    })
-                    // Điều kiện voucher áp dụng cả sản phẩm và danh mục cụ thể
+                    // 1. Voucher không có điều kiện nào (áp dụng toàn bộ)
+                    ->whereDoesntHave('conditions')
+                    // 2. Hoặc có điều kiện phù hợp
                     ->orWhereHas('conditions', function ($q) use ($product, $productCategoryIds) {
-                        $q->where('condition_type', 'product & category')
-                            ->where(function ($sub) use ($product) {
-                                $sub->where('product_id', $product->id)->orWhereNull('product_id');
-                            })
-                            ->where(function ($sub) use ($productCategoryIds) {
-                                $sub->whereIn('category_id', $productCategoryIds)->orWhereNull('category_id');
-                            });
+                        $q->where(function ($cond) use ($product, $productCategoryIds) {
+                            $cond
+                                // Sản phẩm cụ thể
+                                ->where(function ($q1) use ($product) {
+                                    $q1->where('condition_type', 'product')->where('product_id', $product->id);
+                                })
+                                // Danh mục cụ thể
+                                ->orWhere(function ($q2) use ($productCategoryIds) {
+                                    $q2->where('condition_type', 'category')->whereIn('category_id', $productCategoryIds);
+                                })
+                                // Áp dụng kết hợp sản phẩm & danh mục
+                                ->orWhere(function ($q3) use ($product, $productCategoryIds) {
+                                    $q3->where('condition_type', 'product & category')
+                                        ->where(function ($sub1) use ($product) {
+                                            $sub1->where('product_id', $product->id)->orWhereNull('product_id');
+                                        })
+                                        ->where(function ($sub2) use ($productCategoryIds) {
+                                            $sub2->whereIn('category_id', $productCategoryIds)->orWhereNull('category_id');
+                                        });
+                                })
+                                // Áp dụng toàn bộ sản phẩm (product_id null)
+                                ->orWhere(function ($q4) {
+                                    $q4->where('condition_type', 'product')->whereNull('product_id');
+                                })
+                                // Áp dụng toàn bộ danh mục (category_id null)
+                                ->orWhere(function ($q5) {
+                                    $q5->where('condition_type', 'category')->whereNull('category_id');
+                                });
+                        });
                     });
             })
             ->where(function ($q) {
@@ -157,8 +173,33 @@ class ProductClientController extends Controller
             ->get();
 
 
-        return view('client.pages.product', compact('product', 'thumbnail', 'otherImages', 'products', 'categories', 'variants', 'groupedAttributes', 'vouchers'));
+        // 🎯 Thêm: tính trung bình rating
+        $averageRating = $product->reviews()->where('is_approved', true)->avg('rating');
 
+        // 🎯 Thêm: kiểm tra quyền đánh giá
+        $canReview = false;
+        if (auth()->check()) {
+            $canReview = OrderItem::whereHas('order', function ($q) {
+                $q->where('user_id', auth()->id())
+                    ->where('status', 'completed');
+            })
+                ->where('product_id', $product->id)
+                ->exists();
+        }
+
+
+        return view('client.pages.product', compact(
+            'product',
+            'thumbnail',
+            'otherImages',
+            'products',
+            'categories',
+            'variants',
+            'groupedAttributes',
+            'vouchers',
+            'averageRating',
+            'canReview'
+        ));
 
     }
     public function about()

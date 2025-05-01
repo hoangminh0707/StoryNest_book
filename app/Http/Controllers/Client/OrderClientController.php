@@ -24,7 +24,7 @@ class OrderClientController extends Controller
 
     public function show($id)
     {
-        $order = Order::with(['orderItems', 'userAddress', 'shippingMethod', 'payment'])->findOrFail($id);
+        $order = Order::with(['orderItems', 'userAddress', 'shippingMethod', 'payment.paymentMethod'])->findOrFail($id);
 
         return view('client.pages.orders.show', compact('order'));
     }

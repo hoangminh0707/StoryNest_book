@@ -7,25 +7,25 @@
     @if($orders->isEmpty())
     <div class="alert alert-info">Bạn chưa có đơn hàng nào.</div>
   @else
-  <div class="list-group">
-  @foreach($orders as $order)
-    <a href="{{ route('orders.show', $order->id) }}" class="list-group-item list-group-item-action">
-    <div class="d-flex justify-content-between align-items-center">
-    <div>
-    <h5 class="mb-1">Mã đơn hàng #{{ rand() }}</h5>
-    <small>Ngày đặt: {{ $order->created_at->format('d/m/Y H:i') }}</small>
-    </div>
-    <span class="badge bg-primary">{{ strtoupper($order->status) }}</span>
-    </div>
 
-    <ul class="mt-2 mb-0">
+  @foreach($orders as $order)
+    <a href="{{ route('orders.show', $order->id) }}">
+
+    <div class="tab-pane fade active show" id="address-edit" role="tabpanel">
+    <div class="myaccount-content text-dark">
+    <h5>Mã đơn hàng #{{ $order->order_code }} <span class="badge bg-primary">{{ strtoupper($order->status) }}</span>
+    </h5>
+
+    <info>
+    <p><strong>Ngày đặt: {{ $order->created_at->format('d/m/Y H:i') }}</strong></p>
     @foreach($order->orderItems as $item)
-    <li>{{ $item->product_name }} - SL: {{ $item->quantity }} - {{ number_format($item->price) }} VND</li>
+    <p>{{ $item->product_name }} - SL: {{ $item->quantity }} - {{ number_format($item->price) }} VND</p>
   @endforeach
-    </ul>
+    </info>
+    </div>
     </a>
   @endforeach
-  </div>
+
 @endif
-  </div>
-@endsection
+
+  @endsection

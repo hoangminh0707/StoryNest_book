@@ -13,6 +13,16 @@ use Illuminate\Support\Facades\Auth;
 class WishlistClientController extends Controller
 {
 
+    public function index()
+    {
+        $wishlistItems = Wishlist::with(['product.thumbnail'])
+            ->where('user_id', Auth::id())
+            ->get();
+
+
+        return view('client.pages.wishlist', compact('wishlistItems'));
+    }
+
     public function add($productId)
     {
         if (!Auth::check())
@@ -34,6 +44,7 @@ class WishlistClientController extends Controller
 
         return redirect()->back()->with('success', 'Đã xóa khỏi yêu thích!');
     }
+
 
 
 }
