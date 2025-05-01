@@ -7,6 +7,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\Models\Wishlist;
 use App\Models\Cart;
+use App\Models\Categories;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -45,6 +46,30 @@ class AppServiceProvider extends ServiceProvider
 
             Paginator::useBootstrapFive();
         });
-    }
 
+        View::composer('*', function ($view) {
+            $danhMucSachs = Categories::with('childrenRecursive')
+                ->where('name', 'Sách')
+                ->first();
+
+            $danhMucDungCu = Categories::with('childrenRecursive')
+                ->where('name', 'Dụng cụ học sinh')
+                ->first();
+
+            $danhMucDoChoi = Categories::with('childrenRecursive')
+                ->where('name', 'Đồ chơi')
+                ->first();
+
+            $danhMucHanhTrang = Categories::with('childrenRecursive')
+                ->where('name', 'Hành trang đến trường')
+                ->first();
+
+            $view->with([
+                'danhMucSachs' => $danhMucSachs,
+                'danhMucDungCu' => $danhMucDungCu,
+                'danhMucDoChoi' => $danhMucDoChoi,
+                'danhMucHanhTrang' => $danhMucHanhTrang,
+            ]);
+        });
+    }
 }

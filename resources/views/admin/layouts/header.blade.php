@@ -515,11 +515,11 @@
                                 <span class="text-start ms-xl-2">
                                     {{-- <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{{
                                         $user->name }}</span> --}}
-                                    {{-- <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">
+                                {{-- <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">
                                         @foreach ($user->roles as $role)
                                         {{ $role->name }}@if (!$loop->last), @endif
-                                        @endforeach</span>
-                                </span> --}}
+                                @endforeach</span>
+                            </span> --}}
                             </span>
                         </button>
                         <div class="dropdown-menu dropdown-menu-end">
@@ -627,10 +627,14 @@
                 <ul class="navbar-nav" id="navbar-nav">
                     <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                     <li class="nav-item">
+                        <a class="nav-link menu-link" href="{{ route('admin.dashboard') }}">
+                        <i class="ri-dashboard-line"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link menu-link" href="#sidebarUser" data-bs-toggle="collapse" role="button"
                             aria-expanded="false" aria-controls="sidebarUser">
                             <i class="ri-user-settings-line"></i> <span>Quản lí tài khoản</span>
-
                         </a>
                         <div class="collapse menu-dropdown" id="sidebarUser">
                             <ul class="nav nav-sm flex-column">
@@ -676,21 +680,10 @@
                             </ul>
                         </div>
                     </li>
-                    
                     <li class="nav-item">
-                        <a class="nav-link menu-link" href="#sidebarPages" data-bs-toggle="collapse" role="button"
-                            aria-expanded="false" aria-controls="sidebarPages">
-                            <i class="ri-pages-line"></i> <span data-key="t-pages">Đơn hàng</span>
+                        <a class="nav-link menu-link" href="{{ route('admin.orders.index') }}">
+                        <i class="ri-pages-line"></i> </i>Đơn hàng
                         </a>
-                        <div class="collapse menu-dropdown" id="sidebarPages">
-                            <ul class="nav nav-sm flex-column">
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.orders.index') }}" class="nav-link" data-key="t-starter">
-                                        Danh
-                                        sách đơn hàng </a>
-                                </li>
-                            </ul>
-                        </div>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#sidebarForms" data-bs-toggle="collapse" role="button"

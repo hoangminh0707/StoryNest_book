@@ -24,41 +24,50 @@
                 </li>
                 <li class="position-static"><a href="#">Danh Mục <i class="fa fa-angle-down"></i></a>
                   <ul class="megamenu dropdown">
-                    <li class="mega-title"><span>column 01</span>
+
+                    @if($danhMucSachs)
+                    <li class="mega-title"><span>{{ $danhMucSachs->name }}</span>
                       <ul>
-                        <li><a href="shop.html">shop grid left sidebar</a></li>
-                        <li><a href="shop-grid-right-sidebar.html">shop grid right sidebar</a></li>
-                        <li><a href="shop-list-left-sidebar.html">shop list left sidebar</a></li>
-                        <li><a href="shop-list-right-sidebar.html">shop list right sidebar</a></li>
+                        @foreach($danhMucSachs->childrenRecursive as $child)
+                        <li><a href="{{ route('shop', ['category_id' =>$child->id]) }}">{{ $child->name }}</a></li>
+                        @endforeach
                       </ul>
                     </li>
-                    <li class="mega-title"><span>column 02</span>
+                    @endif
+
+                    @if($danhMucDungCu)
+                    <li class="mega-title"><span>{{ $danhMucDungCu->name }}</span>
                       <ul>
-                        <li><a href="product-details.html">product details</a></li>
-                        <li><a href="product-details-affiliate.html">product details affiliate</a></li>
-                        <li><a href="product-details-variable.html">product details variable</a></li>
-                        <li><a href="privacy-policy.html">privacy policy</a></li>
+                        @foreach($danhMucDungCu->childrenRecursive as $child)
+                        <li><a href="{{ route('shop', ['category_id' =>$child->id]) }}">{{ $child->name }}</a></li>
+                        @endforeach
                       </ul>
                     </li>
-                    <li class="mega-title"><span>column 03</span>
+                    @endif
+
+                    @if($danhMucDoChoi)
+                    <li class="mega-title"><span>{{ $danhMucDoChoi->name }}</span>
                       <ul>
-                        <li><a href="cart.html">cart</a></li>
-                        <li><a href="checkout.html">checkout</a></li>
-                        <li><a href="compare.html">compare</a></li>
-                        <li><a href="wishlist.html">wishlist</a></li>
+                        @foreach($danhMucDoChoi->childrenRecursive as $child)
+                        <li><a href="{{ route('shop', ['category_id' =>$child->id]) }}">{{ $child->name }}</a></li>
+                        @endforeach
                       </ul>
                     </li>
-                    <li class="mega-title"><span>column 04</span>
+                    @endif
+
+                    @if($danhMucHanhTrang)
+                    <li class="mega-title"><span>{{ $danhMucHanhTrang->name }}</span>
                       <ul>
-                        <li><a href="my-account.html">my-account</a></li>
-                        <li><a href="login-register.html">login-register</a></li>
-                        <li><a href="about-us.html">about us</a></li>
-                        <li><a href="contact-us.html">contact us</a></li>
+                        @foreach($danhMucHanhTrang->childrenRecursive as $child)
+                        <li><a href="{{ route('shop', ['category_id' =>$child->id]) }}">{{ $child->name }}</a></li>
+                        @endforeach
                       </ul>
                     </li>
+                    @endif
 
                   </ul>
                 </li>
+
 
                 <li><a href="{{ route('shop') }}">Cửa hàng</a></li>
                 <li><a href="{{ route('blogs.index') }}">Blog</a></li>
@@ -90,41 +99,41 @@
                 </a>
                 <ul class="dropdown-list p-3" style="min-width: 180px;">
                   @guest
-            <li class="mb-2">
-            <a class="text-decoration-none d-block" href="{{ route('login') }}">Đăng nhập</a>
-            </li>
-            <li>
-            <a class="text-decoration-none d-block" href="{{ route('register') }}">Đăng ký</a>
-            </li>
-          @endguest
+                  <li class="mb-2">
+                    <a class="text-decoration-none d-block" href="{{ route('login') }}">Đăng nhập</a>
+                  </li>
+                  <li>
+                    <a class="text-decoration-none d-block" href="{{ route('register') }}">Đăng ký</a>
+                  </li>
+                  @endguest
 
                   @auth
-            <li class="mb-2">
-            <span class="fw-bold d-block">{{ Auth::user()->name }}</span>
-            </li>
-            <hr class="my-2">
+                  <li class="mb-2">
+                    <span class="fw-bold d-block">{{ Auth::user()->name }}</span>
+                  </li>
+                  <hr class="my-2">
 
-            <li class="mb-2">
-            <a class="text-decoration-none d-flex align-items-center" href="{{ route('profile.index') }}">
-              <i class="bi bi-gear-fill me-2"></i> Cài đặt
-            </a>
-            </li>
+                  <li class="mb-2">
+                    <a class="text-decoration-none d-flex align-items-center" href="{{ route('profile.index') }}">
+                      <i class="bi bi-gear-fill me-2"></i> Cài đặt
+                    </a>
+                  </li>
 
-            <li class="mb-2">
-            <a class="text-decoration-none d-flex align-items-center" href="{{ route('orders.index') }}">
-              <i class="bi bi-bag-fill me-2"></i> Đơn hàng
-            </a>
-            </li>
+                  <li class="mb-2">
+                    <a class="text-decoration-none d-flex align-items-center" href="{{ route('orders.index') }}">
+                      <i class="bi bi-bag-fill me-2"></i> Đơn hàng
+                    </a>
+                  </li>
 
-            <li>
-            <form method="POST" action="{{ route('logout') }}">
-              @csrf
-              <button type="submit" class="btn btn-link p-0 text-decoration-none d-flex align-items-center">
-              <i class="bi bi-box-arrow-left me-2"></i> Đăng xuất
-              </button>
-            </form>
-            </li>
-          @endauth
+                  <li>
+                    <form method="POST" action="{{ route('logout') }}">
+                      @csrf
+                      <button type="submit" class="btn btn-link p-0 text-decoration-none d-flex align-items-center">
+                        <i class="bi bi-box-arrow-left me-2"></i> Đăng xuất
+                      </button>
+                    </form>
+                  </li>
+                  @endauth
                 </ul>
               </li>
               <li>
@@ -167,48 +176,48 @@
         <div class="minicart-item-wrapper">
           @php $total = 0; @endphp
           @forelse($cartItems as $item)
-            @php
-        $product = $item->product;
-        $total += $item->price * $item->quantity;
-        @endphp
-            <ul>
+          @php
+          $product = $item->product;
+          $total += $item->price * $item->quantity;
+          @endphp
+          <ul>
             <li class="minicart-item">
               <div class="minicart-thumb">
-              <a href="{{ route('product.show', $product->id) }}">
-                <img src="{{ Storage::url($product->images->first()->image_path) }}" alt="product" width="85px">
-              </a>
+                <a href="{{ route('product.show', $product->id) }}">
+                  <img src="{{ Storage::url($product->images->first()->image_path) }}" alt="product" width="85px">
+                </a>
               </div>
               <div class="minicart-content">
-              <h3 class="product-name">
-                <a href="{{ route('product.show', $product->id) }}">{{ $product->name }}</a>
-              </h3>
-              <p>
-                <span class="cart-quantity">{{$item->quantity}} <strong>&times;</strong></span>
-                <span class="cart-price">{{ number_format($item->price * $item->quantity) }} đ</span>
-                <br>
-                @if ($item->variant && $item->variant->attributeValues->isNotEmpty())
-          @foreach ($item->variant->attributeValues as $attributeValue)
-        <span class="cart-variran">Loại : {{ $attributeValue->value }} </span>
-      @endforeach
-        @else
-      <span class="cart-variran">
-      Loại : Mặc Định
-      </span>
-    @endif
-              </p>
+                <h3 class="product-name">
+                  <a href="{{ route('product.show', $product->id) }}">{{ $product->name }}</a>
+                </h3>
+                <p>
+                  <span class="cart-quantity">{{$item->quantity}} <strong>&times;</strong></span>
+                  <span class="cart-price">{{ number_format($item->price * $item->quantity) }} đ</span>
+                  <br>
+                  @if ($item->variant && $item->variant->attributeValues->isNotEmpty())
+                  @foreach ($item->variant->attributeValues as $attributeValue)
+                  <span class="cart-variran">Loại : {{ $attributeValue->value }} </span>
+                  @endforeach
+                  @else
+                  <span class="cart-variran">
+                    Loại : Mặc Định
+                  </span>
+                  @endif
+                </p>
               </div>
 
               <a onclick="event.preventDefault(); this.nextElementSibling.submit();" class="minicart-remove"><i
-                class="pe-7s-close"></i></a>
+                  class="pe-7s-close"></i></a>
 
               <form action="{{ route('cart.remove', $item->product_id) }}" method="POST" style="display: none;">
-              @csrf
+                @csrf
               </form>
 
             </li>
-    @empty
-    <li class="list-group-item bg-transparent text-center">Giỏ hàng trống</li>
-  @endforelse
+            @empty
+            <li class="list-group-item bg-transparent text-center">Giỏ hàng trống</li>
+            @endforelse
           </ul>
         </div>
 
