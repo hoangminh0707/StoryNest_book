@@ -7,10 +7,6 @@ use App\Models\Categories;
 use App\Models\Voucher;
 use App\Models\VoucherCondition;
 use App\Models\Product;
-<<<<<<< HEAD
-=======
-use App\Models\Categories;
->>>>>>> c170e17ec6c67008d0a86093aa6f4a975969663b
 use Illuminate\Http\Request;
 
 class VoucherAdminController extends Controller
@@ -141,25 +137,19 @@ class VoucherAdminController extends Controller
         $voucher = Voucher::with('conditions')->findOrFail($id);
         $products = Product::all();
         $categories = Categories::all();
-<<<<<<< HEAD
-
-        // Truyền dữ liệu vào view
-        return view('admin.pages.vouchers.edit', compact('voucher', 'products', 'categories'));
-=======
-    
         // Lấy danh sách ID của sản phẩm và danh mục được gán điều kiện
         $selectedProductIds = $voucher->conditions
             ->where('condition_type', 'product')
             ->pluck('product_id')
             ->filter()
             ->toArray();
-    
+
         $selectedCategoryIds = $voucher->conditions
             ->where('condition_type', 'category')
             ->pluck('category_id')
             ->filter()
             ->toArray();
-    
+
         return view('admin.pages.vouchers.edit', compact(
             'voucher',
             'products',
@@ -167,9 +157,8 @@ class VoucherAdminController extends Controller
             'selectedProductIds',
             'selectedCategoryIds'
         ));
->>>>>>> c170e17ec6c67008d0a86093aa6f4a975969663b
     }
-    
+
 
 
 
@@ -177,7 +166,7 @@ class VoucherAdminController extends Controller
     public function update(Request $request, $id)
     {
         $voucher = Voucher::findOrFail($id);
-    
+
         $validated = $request->validate([
             'code' => 'required|string|unique:vouchers,code,' . $voucher->id,
             'name' => 'required|string|max:255',
@@ -195,7 +184,7 @@ class VoucherAdminController extends Controller
             'category_ids' => 'nullable|array',
             'category_ids.*' => 'exists:categories,id',
         ]);
-    
+
         // Cập nhật voucher
         $voucher->update([
             'code' => $validated['code'],
@@ -210,10 +199,10 @@ class VoucherAdminController extends Controller
             'is_active' => $request->has('is_active') ? 1 : 0,
             'condition_type' => $validated['condition_type'] ?? null,
         ]);
-    
+
         // Xóa điều kiện cũ
         $voucher->conditions()->delete();
-    
+
         // Gắn lại điều kiện mới nếu có
         if (($validated['condition_type'] ?? null) === 'product') {
             foreach ($validated['product_ids'] ?? [] as $productId) {
@@ -223,7 +212,7 @@ class VoucherAdminController extends Controller
                 ]);
             }
         }
-    
+
         if (($validated['condition_type'] ?? null) === 'category') {
             foreach ($validated['category_ids'] ?? [] as $categoryId) {
                 $voucher->conditions()->create([
@@ -232,12 +221,12 @@ class VoucherAdminController extends Controller
                 ]);
             }
         }
-    
+
         return redirect()->route('admin.vouchers.index')
             ->with('success', 'Cập nhật voucher thành công.');
     }
-    
-    
+
+
 
 
 
