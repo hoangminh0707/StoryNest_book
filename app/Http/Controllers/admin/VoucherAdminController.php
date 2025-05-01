@@ -7,6 +7,10 @@ use App\Models\Categories;
 use App\Models\Voucher;
 use App\Models\VoucherCondition;
 use App\Models\Product;
+<<<<<<< HEAD
+=======
+use App\Models\Categories;
+>>>>>>> c170e17ec6c67008d0a86093aa6f4a975969663b
 use Illuminate\Http\Request;
 
 class VoucherAdminController extends Controller
@@ -134,55 +138,111 @@ class VoucherAdminController extends Controller
     // Phương thức hiển thị form sửa voucher
     public function edit($id)
     {
-        // Lấy voucher cần chỉnh sửa
-        $voucher = Voucher::findOrFail($id);
-
-        // Lấy tất cả sản phẩm để hiển thị trong select box
+        $voucher = Voucher::with('conditions')->findOrFail($id);
         $products = Product::all();
         $categories = Categories::all();
+<<<<<<< HEAD
 
         // Truyền dữ liệu vào view
         return view('admin.pages.vouchers.edit', compact('voucher', 'products', 'categories'));
+=======
+    
+        // Lấy danh sách ID của sản phẩm và danh mục được gán điều kiện
+        $selectedProductIds = $voucher->conditions
+            ->where('condition_type', 'product')
+            ->pluck('product_id')
+            ->filter()
+            ->toArray();
+    
+        $selectedCategoryIds = $voucher->conditions
+            ->where('condition_type', 'category')
+            ->pluck('category_id')
+            ->filter()
+            ->toArray();
+    
+        return view('admin.pages.vouchers.edit', compact(
+            'voucher',
+            'products',
+            'categories',
+            'selectedProductIds',
+            'selectedCategoryIds'
+        ));
+>>>>>>> c170e17ec6c67008d0a86093aa6f4a975969663b
     }
+    
 
-    // Phương thức cập nhật voucher
+
+
+
     public function update(Request $request, $id)
     {
-        // Lấy voucher theo id
         $voucher = Voucher::findOrFail($id);
-
-        // Xử lý validate (nếu không dùng validator, chỉ sử dụng request validation inline)
-        $request->validate([
-            'code' => 'required|string|max:255',
+    
+        $validated = $request->validate([
+            'code' => 'required|string|unique:vouchers,code,' . $voucher->id,
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string|max:1000',
+            'description' => 'nullable|string',
             'type' => 'required|in:fixed,percent',
             'value' => 'required|numeric|min:0',
             'max_discount_amount' => 'nullable|numeric|min:0',
             'min_order_value' => 'nullable|numeric|min:0',
             'expires_at' => 'nullable|date',
-            'max_usage' => 'nullable|numeric|min:1',
+            'max_usage' => 'nullable|integer|min:0',
             'is_active' => 'nullable|boolean',
+            'condition_type' => 'nullable|in:product,category',
+            'product_ids' => 'nullable|array',
+            'product_ids.*' => 'exists:products,id',
+            'category_ids' => 'nullable|array',
+            'category_ids.*' => 'exists:categories,id',
         ]);
-
-        // Cập nhật thông tin voucher từ request
-        $voucher->code = $request->input('code');
-        $voucher->name = $request->input('name');
-        $voucher->description = $request->input('description');
-        $voucher->type = $request->input('type');
-        $voucher->value = $request->input('value');
-        $voucher->max_discount_amount = $request->input('max_discount_amount');
-        $voucher->min_order_value = $request->input('min_order_value');
-        $voucher->expires_at = $request->input('expires_at');
-        $voucher->max_usage = $request->input('max_usage');
-        $voucher->is_active = $request->has('is_active') ? 1 : 0;
-
-        // Lưu lại thông tin voucher
-        $voucher->save();
-
-        // Quay lại trang danh sách voucher với thông báo thành công
-        return redirect()->route('admin.vouchers.index')->with('success', 'Voucher đã được cập nhật thành công!');
+    
+        // Cập nhật voucher
+        $voucher->update([
+            'code' => $validated['code'],
+            'name' => $validated['name'],
+            'description' => $validated['description'] ?? null,
+            'type' => $validated['type'],
+            'value' => $validated['value'],
+            'max_discount_amount' => $validated['max_discount_amount'] ?? null,
+            'min_order_value' => $validated['min_order_value'] ?? null,
+            'expires_at' => $validated['expires_at'] ?? null,
+            'max_usage' => $validated['max_usage'] ?? null,
+            'is_active' => $request->has('is_active') ? 1 : 0,
+            'condition_type' => $validated['condition_type'] ?? null,
+        ]);
+    
+        // Xóa điều kiện cũ
+        $voucher->conditions()->delete();
+    
+        // Gắn lại điều kiện mới nếu có
+        if (($validated['condition_type'] ?? null) === 'product') {
+            foreach ($validated['product_ids'] ?? [] as $productId) {
+                $voucher->conditions()->create([
+                    'condition_type' => 'product',
+                    'product_id' => $productId,
+                ]);
+            }
+        }
+    
+        if (($validated['condition_type'] ?? null) === 'category') {
+            foreach ($validated['category_ids'] ?? [] as $categoryId) {
+                $voucher->conditions()->create([
+                    'condition_type' => 'category',
+                    'category_id' => $categoryId,
+                ]);
+            }
+        }
+    
+        return redirect()->route('admin.vouchers.index')
+            ->with('success', 'Cập nhật voucher thành công.');
     }
+    
+    
+
+
+
+
+
 
     public function show($id)
     {

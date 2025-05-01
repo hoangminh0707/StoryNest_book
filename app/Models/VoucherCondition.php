@@ -37,7 +37,11 @@ class VoucherCondition extends Model
      */
     public function category()
     {
+<<<<<<< HEAD
         return $this->belongsTo(Categories::class);
+=======
+        return $this->belongsTo(categories::class);
+>>>>>>> c170e17ec6c67008d0a86093aa6f4a975969663b
     }
 
 
