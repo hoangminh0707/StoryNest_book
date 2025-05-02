@@ -38,6 +38,8 @@ use App\Http\Controllers\Client\CommentClientController;
 use App\Http\Controllers\Client\ReviewCLientController;
 use App\Http\Controllers\Client\VnpayController;
 use App\Http\Controllers\Client\MomoController;
+use App\Http\Controllers\Client\ContactController;
+
 
 
 
@@ -61,6 +63,12 @@ Route::get('/blog/{id}', [BlogClientController::class, 'show'])->name('blogs.sho
 // Blog - Client
 Route::get('/blog', [BlogClientController::class, 'index'])->name('blogs.index');
 Route::get('/blog/{id}', [BlogClientController::class, 'show'])->name('blogs.show');
+
+Route::get('/contact', function () {
+    return view('client.pages.contact');
+})->name('contact');
+
+Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
 
 
 
@@ -97,6 +105,8 @@ Route::middleware(['auth'])->group(function () {
     // Bình luận cho bài viết
     Route::post('/blogs/{blog}/comments', [CommentClientController::class, 'store'])->name('comments.store');
     Route::get('/blog/{id}', [BlogClientController::class, 'show'])->name('client.blog.show');
+
+    Route::post('/comments', [CommentClientController::class, 'store'])->name('comments.store');
 
 
     //Giỏ hàng
@@ -139,6 +149,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('/orders/failed', 'client.pages.orders.failed')->name('orders.failed');
     Route::get('/orders', [OrderClientController::class, 'index'])->name('orders.index');
     Route::get('/orders/{id}', [OrderClientController::class, 'show'])->name('orders.show');
+    Route::put('/orders/{order}/cancel', [OrderClientController::class, 'cancel'])->name('orders.cancel');
+
 
     Route::post('/reviews', [ReviewCLientController::class, 'store'])->name('reviews.store');
 
@@ -235,6 +247,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
 
     // Blog
     Route::post('blogs/upload', [BlogAdminController::class, 'upload'])->name('blogs.upload');
+    Route::post('/admin/blogs/upload-image', [BlogAdminController::class, 'uploadImage'])->name('admin.blogs.uploadImage');
     Route::resource('blogs', BlogAdminController::class);
     Route::post('blogs/mass-delete', [BlogAdminController::class, 'massDelete'])->name('blogs.massDelete');
 

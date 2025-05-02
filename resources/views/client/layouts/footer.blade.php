@@ -1,3 +1,4 @@
+</div>
 <footer id="footer" class="padding-large">
   <div class="container">
     <div class="row">
@@ -6,8 +7,9 @@
           <div class="col-lg-3 col-sm-6 pb-3">
             <div class="footer-menu">
               <img src="https://i.ibb.co/HDdt9T0j/STORYNEST-BOOK-2.png" alt="logo" class="img-fluid mb-2">
-              <p>Nisi, purus vitae, ultrices nunc. Sit ac sit suscipit hendrerit. Gravida massa volutpat aenean odio
-                erat nullam fringilla.</p>
+              <p>StoryNest Book là website chuyên bán sách và dụng cụ học tập cho học sinh, cung cấp sản phẩm chất
+                lượng, giá hợp lý và giao hàng nhanh chóng. Chúng tôi đồng hành cùng bạn trên hành trình học tập mỗi
+                ngày.</p>
               <div class="social-links">
                 <ul class="d-flex list-unstyled">
                   <li>
@@ -51,55 +53,56 @@
           </div>
           <div class="col-lg-2 col-sm-6 pb-3">
             <div class="footer-menu text-capitalize">
-              <h5 class="widget-title pb-2">Quick Links</h5>
+              <h5 class="widget-title pb-2">Liên kết nhanh</h5>
               <ul class="menu-list list-unstyled text-capitalize">
                 <li class="menu-item mb-1">
-                  <a href="#">Home</a>
+                  <a href="{{ route('index') }}">Trang chủ</a>
                 </li>
                 <li class="menu-item mb-1">
-                  <a href="#">About</a>
+                  <a href="{{ route('about') }}">Giới thiệu</a>
                 </li>
                 <li class="menu-item mb-1">
-                  <a href="#">Shop</a>
+                  <a href="{{ route('shop') }}">Cửa hàng</a>
                 </li>
                 <li class="menu-item mb-1">
-                  <a href="#">Blogs</a>
+                  <a href="{{ route('blogs.index') }}">Blogs</a>
                 </li>
                 <li class="menu-item mb-1">
-                  <a href="#">Contact</a>
+                  <a href="{{ route('contact') }}">Liên hệ</a>
                 </li>
+
               </ul>
             </div>
           </div>
           <div class="col-lg-3 col-sm-6 pb-3">
             <div class="footer-menu text-capitalize">
-              <h5 class="widget-title pb-2">Help & Info Help</h5>
+              <h5 class="widget-title pb-2">Trợ giúp & Thông tin Trợ giúp</h5>
               <ul class="menu-list list-unstyled">
                 <li class="menu-item mb-1">
-                  <a href="#">Track Your Order</a>
+                  <a href="#">Theo dõi đơn hàng của bạn</a>
                 </li>
                 <li class="menu-item mb-1">
-                  <a href="#">Returns Policies</a>
+                  <a href="#">Chính sách trả hàng</a>
                 </li>
                 <li class="menu-item mb-1">
-                  <a href="#">Shipping + Delivery</a>
+                  <a href="#">Vận chuyển + Giao hàng</a>
                 </li>
                 <li class="menu-item mb-1">
-                  <a href="#">Contact Us</a>
+                  <a href="#">Liên hệ với chúng tôi</a>
                 </li>
                 <li class="menu-item mb-1">
-                  <a href="#">Faqs</a>
+                  <a href="#">Câu hỏi thường gặp</a>
                 </li>
               </ul>
             </div>
           </div>
           <div class="col-lg-3 col-sm-6 pb-3">
             <div class="footer-menu contact-item">
-              <h5 class="widget-title text-capitalize pb-2">Contact Us</h5>
-              <p>Do you have any queries or suggestions? <a href="mailto:"
-                  class="text-decoration-underline">yourinfo@gmail.com</a></p>
-              <p>If you need support? Just give us a call. <a href="#" class="text-decoration-underline">+55 111 222
-                  333 44</a></p>
+              <h5 class="widget-title text-capitalize pb-2">Liên hệ với chúng tôi</h5>
+              <p>Bạn có thắc mắc hoặc góp ý gì không? <a href="mailto:"
+                  class="text-decoration-underline">bookstorynest@gmail.com</a></p>
+              <p>Nếu bạn cần hỗ trợ? Hãy gọi cho chúng tôi. <a href="#" class="text-decoration-underline">+84 999 999
+                  999</a></p>
             </div>
           </div>
         </div>

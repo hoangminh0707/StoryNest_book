@@ -29,6 +29,17 @@ class OrderClientController extends Controller
         return view('client.pages.orders.show', compact('order'));
     }
 
+    public function cancel(Order $order)
+    {
+        if (!in_array($order->status, ['pending', 'confirmed'])) {
+            return back()->with('error', 'Không thể huỷ đơn hàng đã được giao hoặc huỷ trước đó.');
+        }
+
+        $order->status = 'cancelled';
+        $order->save();
+
+        return redirect()->route('orders.show', $order->id)->with('success', 'Đơn hàng đã được huỷ thành công.');
+    }
 
 
     public function success()

@@ -14,34 +14,23 @@ use Illuminate\Support\Facades\Validator;
 class CommentClientController extends Controller
 {
     // Lưu bình luận
-    public function store(Request $request, $blog_id)
+    public function store(Request $request)
     {
-        // Validate dữ liệu
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255',
+        $request->validate([
             'content' => 'required',
+            'commentable_id' => 'required|integer',
+            'commentable_type' => 'required|string',
         ]);
 
-        if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
-        }
-
-        // Kiểm tra xem bài viết có tồn tại không
-        $blog = Blog::find($blog_id);
-        if (!$blog) {
-            return redirect()->route('blogs.index')->with('error', 'Bài viết không tồn tại!');
-        }
-
-        // Lưu bình luận
         Comment::create([
-            'blog_id' => $blog_id,
-            'name' => $request->name,
-            'email' => $request->email,
+            'user_id' => auth()->id() ?? null,
+            'parent_id' => $request->parent_id,
+            'commentable_id' => $request->commentable_id,
+            'commentable_type' => $request->commentable_type,
             'content' => $request->content,
+            'is_approved' => true // hoặc false nếu cần kiểm duyệt
         ]);
 
-        // Trở lại bài viết với thông báo thành công
-        return back()->with('success', 'Bình luận của bạn đã được gửi!');
+        return back()->with('success', 'Comment posted!');
     }
 }

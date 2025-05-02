@@ -30,7 +30,7 @@ class ProfileClientController extends Controller
 
 
         $totalSpent = Order::where('user_id', $user->id)
-            ->where('status', 'confirmed')
+            ->where('status', 'completed')
             ->sum('total_amount');
 
         $totalProducts = OrderItem::whereHas('order', function ($q) use ($user) {
@@ -39,7 +39,7 @@ class ProfileClientController extends Controller
         })->sum('quantity');
 
         $completedOrders = Order::where('user_id', $user->id)
-            ->where('status', 'confirmed')
+            ->where('status', 'completed')
             ->count();
 
         return view('client.pages.profile.index', compact('user', 'totalSpent', 'totalProducts', 'completedOrders'));
@@ -78,7 +78,7 @@ class ProfileClientController extends Controller
             $pathInStorage = "avatars/{$filename}";
 
             // Lưu file (storeAs tự tạo file vào storage/app/public/avatars)
-            $request->file('avatar')->storeAs('avatars', $filename);
+            $request->file('avatar')->storeAs('public/avatars', $filename);
 
             // Nếu user đã có avatar cũ, xóa file cũ đi
             if ($user->avatar && $user->avatar !== $pathInStorage && Storage::exists('public/' . $user->avatar)) {
