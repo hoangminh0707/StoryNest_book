@@ -7,14 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class Comment extends Model
 {
     use HasFactory;
-
     protected $fillable = [
         'user_id',
+        'parent_id',
         'commentable_id',
         'commentable_type',
         'content',
-        'is_approved',
-        'parent_id',
+        'is_approved'
     ];
 
     // Quan hệ với người dùng (User)
@@ -39,5 +38,10 @@ class Comment extends Model
     public function commentable()
     {
         return $this->morphTo();
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Comment::class, 'parent_id');
     }
 }

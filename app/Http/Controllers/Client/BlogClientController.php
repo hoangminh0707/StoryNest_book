@@ -18,14 +18,14 @@ class BlogClientController extends Controller
         $blogs = Blog::where('status', '!=', 'draft')
             ->select('id', 'user_id', 'image_url', 'title', 'content', 'status', 'created_at')
             ->paginate(8);
-            
+
         // Trả về view và truyền dữ liệu blogs vào
         return view('client.pages.blog', compact('blogs'));
     }
 
     public function show($id)
     {
-        $blog = Blog::findOrFail($id); // Tìm blog theo ID, nếu không có sẽ trả 404
+        $blog = Blog::with(['comments.children', 'comments.user'])->findOrFail($id);
 
         return view('client.pages.post', compact('blog'));
     }

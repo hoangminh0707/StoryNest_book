@@ -13,18 +13,15 @@
                     {{-- Thông tin khách hàng --}}
                     <h6 class="fw-bold mb-3 text-uppercase text-muted">Thông tin khách hàng</h6>
                     <ul class="list-unstyled mb-4">
-                        <li><strong>Họ tên:</strong> {{ $order->user->name }}</li>
+                        <li><strong>Họ tên:</strong> {{ $order->full_name }}</li>
                         <li><strong>Email:</strong> {{ $order->user->email }}</li>
-                        <li><strong>Điện thoại:</strong> {{ $order->userAddress->phone ?? '---' }}</li>
+                        <li><strong>Điện thoại:</strong> {{ $order->phone ?? '---' }}</li>
                     </ul>
 
                     {{-- Địa chỉ giao hàng --}}
                     <h6 class="fw-bold mb-3 text-uppercase text-muted">Địa chỉ giao hàng</h6>
                     <p>
-                        {{ $order->userAddress->address_line ?? '---' }},
-                        {{ $order->userAddress->ward ?? '' }},
-                        {{ $order->userAddress->district ?? '' }},
-                        {{ $order->userAddress->city ?? '' }}
+                        {{ $order->user_address ?? '---' }}
                     </p>
 
                     {{-- Phương thức vận chuyển & mã giảm giá --}}
@@ -123,7 +120,7 @@
 
                     {{-- Thông tin thanh toán --}}
                     <h6 class="fw-bold mt-4 mb-3 text-uppercase text-muted">Thông tin thanh toán</h6>
-                    <p><strong>Phương thức:</strong> {{ $order->payment->payment_method ?? '---' }}</p>
+                    <p><strong>Phương thức:</strong> {{ $order->payment->paymentMethod->name ?? '---' }}</p>
                     <p><strong>Trạng thái:</strong> {{ ucfirst($order->payment->status ?? '---') }}</p>
 
                     @if($order->payment && $order->payment->details)

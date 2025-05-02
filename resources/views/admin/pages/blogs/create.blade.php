@@ -81,37 +81,50 @@
 {{-- Script khởi tạo CKEditor --}}
 <script src="https://cdn.ckeditor.com/ckeditor5/35.0.1/classic/ckeditor.js"></script>
 <script>
-    ClassicEditor
-        .create(document.querySelector('#content'), {
-            toolbar: ['heading', '|', 'bold', 'italic', 'link', '|', 'bulletedList', 'numberedList', '|', 'blockQuote', 'imageUpload', 'insertTable', 'mediaEmbed'],
-            image: {
-                resizeUnit: 'px',
-                resizeOptions: [{
-                        name: 'resizeImage:original',
-                        label: 'Original',
-                        value: null
-                    },
-                    {
-                        name: 'resizeImage:50',
-                        label: '50%',
-                        value: '50'
-                    },
-                    {
-                        name: 'resizeImage:75',
-                        label: '75%',
-                        value: '75'
-                    },
-                    {
-                        name: 'resizeImage:100',
-                        label: '100%',
-                        value: '100'
-                    }
-                ]
-            }
-        })
-        .catch(error => {
-            console.error(error);
-        });
+    const uploadUrl = '{{ route('admin.blogs.upload') }}?_token={{ csrf_token() }}';
+</script>
+
+<script>
+  ClassicEditor
+    .create(document.querySelector('#content'), {
+        toolbar: [
+            'heading', '|', 'bold', 'italic', 'link', '|',
+            'bulletedList', 'numberedList', '|',
+            'blockQuote', 'imageUpload', 'insertTable', 'mediaEmbed'
+        ],
+        ckfinder: {
+            uploadUrl: '{{ route('admin.blogs.upload') }}?_token={{ csrf_token() }}'
+        },
+        image: {
+            resizeUnit: 'px',
+            resizeOptions: [
+                {
+                    name: 'resizeImage:original',
+                    label: 'Original',
+                    value: null
+                },
+                {
+                    name: 'resizeImage:50',
+                    label: '50%',
+                    value: '50'
+                },
+                {
+                    name: 'resizeImage:75',
+                    label: '75%',
+                    value: '75'
+                },
+                {
+                    name: 'resizeImage:100',
+                    label: '100%',
+                    value: '100'
+                }
+            ]
+        }
+    })
+    .catch(error => {
+        console.error(error);
+    });
+
 
     // Function preview image
     function previewImage(event) {

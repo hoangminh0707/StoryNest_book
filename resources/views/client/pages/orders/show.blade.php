@@ -87,12 +87,23 @@
       <li><strong>Thành tiền:</strong> <span class="text-success">{{ number_format($order->final_amount) }} VND</span>
       </li>
       <li><strong>Phương thức:</strong> {{ $order->payment->paymentMethod->name ?? '---' }}</li>
-      <li><strong>Trạng thái:</strong> <span class="badge bg-info text-white">{{ ucfirst($order->status) }}</span>
+      <li><strong>Trạng thái:</strong> <span
+        class="badge bg-{{ $statusColors[$order->status] ?? 'secondary' }} text-white">{{ ucfirst($statusLabels[$order->status] ?? $order->status) }}</span>
       </li>
       <li><strong>Đặt lúc:</strong> {{ $order->created_at->format('H:i d/m/Y') }}</li>
       </ul>
     </div>
-
+    @if (in_array($order->status, ['pending', 'processing']))
+    <div class="mt-4">
+      <form action="{{ route('orders.cancel', $order->id) }}" method="POST"
+      onsubmit="return confirm('Bạn có chắc muốn huỷ đơn hàng này?');">
+      @csrf
+      @method('PUT')
+      <button type="submit" class="btn btn-sqr">❌ Huỷ đơn hàng</button>
+      </form>
     </div>
+    @endif
+    </div>
+
 
   @endsection

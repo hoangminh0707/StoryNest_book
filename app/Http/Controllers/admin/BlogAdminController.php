@@ -11,11 +11,7 @@ use Illuminate\Contracts\View\View;
 
 class BlogAdminController extends Controller
 {
-    /**
-     * Hiển thị danh sách bài viết.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index(): View
     {
         // Lấy danh sách bài viết, sắp xếp theo thứ tự mới nhất và phân trang
@@ -25,23 +21,14 @@ class BlogAdminController extends Controller
         return view('admin.pages.blogs.index', compact('blogs'));
     }
 
-    /**
-     * Hiển thị form tạo bài viết mới.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create(): View
     {
         // Trả về view tạo bài viết mới
         return view('admin.pages.blogs.create');
     }
 
-    /**
-     * Lưu bài viết mới vào cơ sở dữ liệu.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
         // Validating dữ liệu
@@ -72,12 +59,6 @@ class BlogAdminController extends Controller
         return redirect()->route('admin.blogs.index')->with('success', 'Bài viết đã được thêm thành công.');
     }
 
-    /**
-     * Hiển thị form chỉnh sửa bài viết.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         // Lấy bài viết theo ID
@@ -87,13 +68,7 @@ class BlogAdminController extends Controller
         return view('admin.pages.blogs.edit', compact('blog'));
     }
 
-    /**
-     * Cập nhật thông tin bài viết.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, $id)
     {
         $blog = Blog::findOrFail($id);
@@ -127,12 +102,7 @@ class BlogAdminController extends Controller
         return redirect()->route('admin.blogs.index')->with('success', 'Cập nhật bài viết thành công!');
     }
 
-    /**
-     * Xóa bài viết.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy($id)
     {
         // Tìm bài viết theo ID và xóa
@@ -150,12 +120,7 @@ class BlogAdminController extends Controller
         return redirect()->route('admin.blogs.index')->with('success', 'Xóa bài viết thành công.');
     }
 
-    /**
-     * Xóa nhiều bài viết cùng lúc.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function massDelete(Request $request)
     {
         // Xác thực mảng ID bài viết cần xóa
@@ -171,21 +136,32 @@ class BlogAdminController extends Controller
         return redirect()->route('admin.blogs.index')->with('success', 'Xóa các bài viết thành công.');
     }
 
-    /**
-     * Kiểm tra nếu tệp có tồn tại và phương thức upload ảnh.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
+
     public function upload(Request $request)
     {
         if ($request->hasFile('upload')) {
-            $imagePath = $request->file('upload')->store('ckeditor_images', 'public');
-            $url = asset('storage/' . $imagePath);
-            
-            return response()->json(['url' => $url]);
+            $file = $request->file('upload');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $path = $file->storeAs('uploads/blogs', $filename, 'public');
+
+            return response()->json([
+                'url' => Storage::url($path)
+            ]);
         }
-    
-        return response()->json(['error' => 'Tải ảnh lên thất bại'], 400);
+
+        return response()->json(['error' => 'No file uploaded.'], 400);
+    }
+
+    public function uploadImage(Request $request)
+    {
+        if ($request->hasFile('upload')) {
+            $file = $request->file('upload');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $path = $file->storeAs('uploads/blogs', $filename, 'public');
+
+            return response()->json([
+                'url' => Storage::url($path)
+            ]);
+        }
     }
 }

@@ -23,10 +23,12 @@ class Blog extends Model
         return $this->belongsTo(User::class);
     }
 
+    // app/Models/Blog.php
     public function comments()
     {
-        return $this->morphMany(Comment::class, 'commentable');
+        return $this->morphMany(Comment::class, 'commentable')->whereNull('parent_id')->where('is_approved', true);
     }
+
 
 
 }

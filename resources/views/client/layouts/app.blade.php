@@ -94,7 +94,9 @@
 
 </script>
 
+
 <body>
+
     @include('client.layouts.header')
 
     @yield('content')
