@@ -22,9 +22,9 @@ class ProductClientController extends Controller
     public function index()
     {
         $products = Product::with(['author', 'images'])->get();
-        $categories = categories::all();
-
-        return view('client.pages.index', compact('products', 'categories'));
+        $menuCategories = Categories::with('childrenRecursive')
+            ->whereNull('parent_id')->get();
+        return view('client.pages.index', compact('products', 'menuCategories'));
     }
 
 
@@ -61,7 +61,7 @@ class ProductClientController extends Controller
 
 
         $authors = Author::all();
-        $categories = categories::all();
+        $categories = Categories::with('childrenRecursive')->get();
 
         return view('client.pages.shop', compact('products', 'categories', 'authors'));
     }
@@ -200,12 +200,9 @@ class ProductClientController extends Controller
             'averageRating',
             'canReview'
         ));
-
     }
     public function about()
     {
         return view('client.pages.about');
     }
-
-
 }
