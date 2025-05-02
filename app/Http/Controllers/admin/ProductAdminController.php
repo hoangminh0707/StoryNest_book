@@ -20,7 +20,7 @@ class ProductAdminController extends Controller
     public function index(Request $request)
     {
         $keyword = $request->input('keyword');
-        $status  = $request->input('status', 'all');
+        $status = $request->input('status', 'all');
 
         $products = Product::with(['categories', 'author', 'publisher', 'variants.attributeValues.attribute', 'images'])
             ->when($keyword, fn($q) => $q->where('name', 'like', "%{$keyword}%"))
@@ -30,9 +30,9 @@ class ProductAdminController extends Controller
             ->appends($request->query());
 
         $counts = [
-            'all'       => Product::count(),
+            'all' => Product::count(),
             'published' => Product::where('status', 'published')->count(),
-            'draft'     => Product::where('status', 'draft')->count(),
+            'draft' => Product::where('status', 'draft')->count(),
         ];
 
         return view('admin.pages.products.index', compact('products', 'counts'));
@@ -42,7 +42,7 @@ class ProductAdminController extends Controller
     {
         $attributes = Attribute::with('values')->get();
         $categories = Categories::with('childrenRecursive')->whereNull('parent_id')->get();
-        $authors    = Author::all();
+        $authors = Author::all();
         $publishers = Publisher::all();
 
         return view('admin.pages.products.create', compact('attributes', 'categories', 'authors', 'publishers'));
@@ -92,7 +92,7 @@ class ProductAdminController extends Controller
         $product = Product::with(['categories', 'author', 'publisher', 'images', 'variants.attributeValues.attribute'])
             ->findOrFail($id);
 
-        $thumbnail     = $product->images->where('is_thumbnail', true)->first();
+        $thumbnail = $product->images->where('is_thumbnail', true)->first();
         $galleryImages = $product->images->where('is_thumbnail', false);
 
         return view('admin.pages.products.show', compact('product', 'thumbnail', 'galleryImages'));
@@ -111,10 +111,10 @@ class ProductAdminController extends Controller
             ->get();
 
         $attributes = Attribute::with('values')->get();
-        $authors    = Author::all();
+        $authors = Author::all();
         $publishers = Publisher::all();
 
-        $thumbnail     = $product->images->firstWhere('is_thumbnail', true);
+        $thumbnail = $product->images->firstWhere('is_thumbnail', true);
         $galleryImages = $product->images->where('is_thumbnail', false);
 
         return view('admin.pages.products.edit', compact(
@@ -198,23 +198,23 @@ class ProductAdminController extends Controller
     {
         $rules = [
             'product_type' => 'required|in:simple,variable',
-            'name'         => 'required|string|max:255',
-            'description'  => 'nullable|string|max:300',
-            'price'        => 'nullable|numeric|min:0.01',
-            'quantity'     => 'nullable|integer|min:1',
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:300',
+            'price' => 'nullable|numeric|min:0.01',
+            'quantity' => 'nullable|integer|min:1',
             'category_ids' => 'nullable|json|min:1',
-            'author_id'    => 'nullable|exists:authors,id',
+            'author_id' => 'nullable|exists:authors,id',
             'publisher_id' => 'nullable|exists:publishers,id',
-            'status'       => 'required|in:published,draft',
-            'thumbnail'    => $id
+            'status' => 'required|in:published,draft',
+            'thumbnail' => $id
                 ? 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
                 : 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'gallery.*'    => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'variants'                  => 'nullable|array',
-            'variants.*.variant_price'  => 'required_if:product_type,variable|numeric|min:0.01',
+            'gallery.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'variants' => 'nullable|array',
+            'variants.*.variant_price' => 'required_if:product_type,variable|numeric|min:0.01',
             'variants.*.stock_quantity' => 'required_if:product_type,variable|integer|min:1',
-            'variants.*.attribute_values'      => 'required_if:product_type,variable|array',
-            'variants.*.attribute_values.*'    => 'exists:attribute_values,id',
+            'variants.*.attribute_values' => 'required_if:product_type,variable|array',
+            'variants.*.attribute_values.*' => 'exists:attribute_values,id',
         ];
 
         $request->validate($rules);
@@ -223,19 +223,19 @@ class ProductAdminController extends Controller
     private function buildProductData(Request $request): array
     {
         $data = [
-            'name'         => $request->name,
-            'description'  => $request->description,
+            'name' => $request->name,
+            'description' => $request->description,
             'product_type' => $request->product_type,
-            'author_id'    => $request->author_id,
+            'author_id' => $request->author_id,
             'publisher_id' => $request->publisher_id,
-            'status'       => $request->status,
+            'status' => $request->status,
         ];
 
         if ($request->product_type === 'simple') {
-            $data['price']    = $request->price;
+            $data['price'] = $request->price;
             $data['quantity'] = $request->quantity;
         } else {
-            $data['price']    = null;
+            $data['price'] = null;
             $data['quantity'] = null;
         }
 
@@ -244,7 +244,7 @@ class ProductAdminController extends Controller
 
     private function syncCategories(Product $product, ?string $jsonIds)
     {
-        $ids   = json_decode($jsonIds, true) ?: [];
+        $ids = json_decode($jsonIds, true) ?: [];
         $valid = Categories::whereIn('id', $ids)->pluck('id')->toArray();
         $product->categories()->sync($valid);
     }
@@ -286,7 +286,7 @@ class ProductAdminController extends Controller
     {
         foreach ($variants as $item) {
             $variant = ProductVariant::create([
-                'product_id'    => $product->id,
+                'product_id' => $product->id,
                 'variant_price' => $item['variant_price'],
                 'stock_quantity' => $item['stock_quantity'],
             ]);
@@ -298,7 +298,7 @@ class ProductAdminController extends Controller
             }
         }
     }
-       
+
     public function bulkDelete(Request $request)
     {
         $ids = explode(',', $request->input('ids'));
