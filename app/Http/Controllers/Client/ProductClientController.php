@@ -23,15 +23,15 @@ class ProductClientController extends Controller
 
     public function index()
     {
-        $products = Product::with(['author', 'images'])->get();
+        $products = Product::with(['author', 'images'])
+            ->where('status', 'published') // Chỉ lấy sản phẩm đã xuất bản
+            ->get();
 
         $menuCategories = Categories::with('childrenRecursive')
             ->whereNull('parent_id')->get();
 
-        // Chỉ lấy các banner có ảnh để tránh lỗi null
         $banners = Banner::whereNotNull('image_url')->get();
 
-        // Gom các ID con cho từng nhóm
         $sachIds = Categories::where('parent_id', 1)->pluck('id')->toArray();
         $sachIds[] = 1;
 
@@ -43,21 +43,29 @@ class ProductClientController extends Controller
         $allGroupIds = array_merge($sachIds, $butVietIds, $doChoiIds);
 
         $productsByCategory = [
-            'sach' => Product::whereHas('categories', function ($q) use ($sachIds) {
-                $q->whereIn('categories.id', $sachIds);
-            })->with(['author', 'images'])->get(),
+            'sach' => Product::where('status', 'published')
+                ->whereHas('categories', function ($q) use ($sachIds) {
+                    $q->whereIn('categories.id', $sachIds);
+                })
+                ->with(['author', 'images'])->get(),
 
-            'butviet' => Product::whereHas('categories', function ($q) use ($butVietIds) {
-                $q->whereIn('categories.id', $butVietIds);
-            })->with(['author', 'images'])->get(),
+            'butviet' => Product::where('status', 'published')
+                ->whereHas('categories', function ($q) use ($butVietIds) {
+                    $q->whereIn('categories.id', $butVietIds);
+                })
+                ->with(['author', 'images'])->get(),
 
-            'dochoi' => Product::whereHas('categories', function ($q) use ($doChoiIds) {
-                $q->whereIn('categories.id', $doChoiIds);
-            })->with(['author', 'images'])->get(),
+            'dochoi' => Product::where('status', 'published')
+                ->whereHas('categories', function ($q) use ($doChoiIds) {
+                    $q->whereIn('categories.id', $doChoiIds);
+                })
+                ->with(['author', 'images'])->get(),
 
-            'khac' => Product::whereDoesntHave('categories', function ($q) use ($allGroupIds) {
-                $q->whereIn('categories.id', $allGroupIds);
-            })->with(['author', 'images', 'categories'])->get(),
+            'khac' => Product::where('status', 'published')
+                ->whereDoesntHave('categories', function ($q) use ($allGroupIds) {
+                    $q->whereIn('categories.id', $allGroupIds);
+                })
+                ->with(['author', 'images', 'categories'])->get(),
         ];
 
         return view('client.pages.index', compact('products', 'menuCategories', 'banners', 'productsByCategory'));
@@ -104,7 +112,7 @@ class ProductClientController extends Controller
 
 
 
-    public function show($id)
+    public function show($slug)
     {
         $products = Product::with([
             'author',
@@ -118,8 +126,9 @@ class ProductClientController extends Controller
             'author',
             'categories',
             'images',
-            'reviews.user' // ✏️ Thêm để lấy luôn tên người đánh giá
-        ])->findOrFail($id);
+            'reviews.user'
+        ])->where('slug', $slug)->firstOrFail();
+
 
         $thumbnail = $product->images->where('is_thumbnail', 1)->first();
         $otherImages = $product->images->where('is_thumbnail', false);

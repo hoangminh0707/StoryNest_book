@@ -343,7 +343,7 @@
         @endphp
         <div class="product-item">
           <figure class="product-thumb">
-          <a href="{{ route('product.show', $product->id) }}">
+          <a href="{{ route('product.show', $product->slug) }}">
 
           <img class="pri-img" src="{{ storage::url($thumbnail->image_path) }}" alt="product">
           <img class="sec-img" src="{{ storage::url($secondary->image_path) }}" alt="product">
@@ -361,7 +361,16 @@
           </a>
           </div>
           <div class="cart-hover">
-          <button class="btn btn-cart">Add to cart</button>
+          @auth
+        <form action="{{ route('cart.add', $product->id) }}" method="POST" style="display:inline;">
+        @csrf
+        <button type="submit" class="btn btn-cart">add to cart</button>
+        </form>
+        @endauth
+
+          @guest
+        <button onclick="showLoginAlert()" class="btn btn-cart">add to cart</button>
+        @endguest
           </div>
           </figure>
 
@@ -373,13 +382,26 @@
           </div>
 
           <h6 class="product-name">
-          <a href="{{ route('product.show', $product->id) }}">{{ $product->name }}</a>
+          <a href="{{ route('product.show', $product->slug) }}">{{ $product->name }}</a>
           </h6>
-
+          @php
+        $variants = $product->variants;
+        if ($variants->count() > 0) {
+        $minPrice = $variants->min('variant_price');
+        $maxPrice = $variants->max('variant_price');
+        }
+        @endphp
           <div class="price-box">
-          <span class="price-regular">{{ number_format($product->price) }}₫</span>
-
+          @if ($variants->count() === 1)
+        <span class="price-regular">{{ number_format($minPrice) }} đ</span>
+        @elseif ($variants->count() > 1)
+        <span class="price-regular">{{ number_format($minPrice) }} đ -
+        {{ number_format($maxPrice) }} đ </span>
+        @else
+        <span class="price-regular">{{ number_format($product->price) }}</span>
+        @endif
           </div>
+
           </div>
         </div>
       @endforeach

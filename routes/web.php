@@ -99,7 +99,7 @@ Route::middleware(['auth'])->group(function () {
 
 
     // Sản phẩm (chi tiết)
-    Route::get('/product/{id}', [ProductClientController::class, 'show'])->name('product.show');
+    Route::get('/product/{slug}', [ProductClientController::class, 'show'])->name('product.show');
 
 
     // Bình luận cho bài viết

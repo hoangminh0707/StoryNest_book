@@ -14,6 +14,7 @@ use App\Models\Attribute;
 use App\Models\Categories;
 use App\Models\Author;
 use App\Models\Publisher;
+use Illuminate\Support\Str;
 
 class ProductAdminController extends Controller
 {
@@ -224,6 +225,7 @@ class ProductAdminController extends Controller
     {
         $data = [
             'name' => $request->name,
+            'slug' => Str::slug($request->name),
             'description' => $request->description,
             'product_type' => $request->product_type,
             'author_id' => $request->author_id,

@@ -67,7 +67,7 @@
       <!-- product grid start -->
       <div class="product-item">
       <figure class="product-thumb">
-        <a href="href=" {{ route('product.show', $product->id) }}">
+        <a href="href=" {{ route('product.show', $product->slug) }}">
         <img class="pri-img" src="{{ Storage::url($product->images->first()->image_path) }}" alt="product">
         <img class="sec-img" src="{{ Storage::url($product->images->first()->image_path) }}" alt="product">
         </a>
@@ -94,11 +94,11 @@
       <div class="product-caption text-center">
         <div class="product-identity">
         <p class="manufacturer-name"><a
-        href="{{ route('product.show', $product->id) }}">{{ $product->author->name ?? " "}}</a></p>
+        href="{{ route('product.show', $product->slug) }}">{{ $product->author->name ?? " "}}</a></p>
         </div>
 
         <h6 class="product-name">
-        <a href="{{ route('product.show', $product->id) }}">{{ $product->name }}</a>
+        <a href="{{ route('product.show', $product->slug) }}">{{ $product->name }}</a>
         </h6>
         @php
       $variants = $product->variants;
@@ -124,7 +124,7 @@
       <!-- product list item end -->
       <div class="product-list-item">
       <figure class="product-thumb">
-        <a href="{{ route('product.show', $product->id) }}">
+        <a href="{{ route('product.show', $product->slug) }}">
         <img class="pri-img" src="{{ Storage::url($product->images->first()->image_path) }}" alt="product">
         <img class="sec-img" src="{{ Storage::url($product->images->first()->image_path) }}" alt="product">
         </a>
@@ -156,7 +156,7 @@
       </figure>
       <div class="product-content-list">
         <div class="manufacturer-name">
-        <a href="{{ route('product.show', $product->id) }}">{{ $product->author->name}}</a>
+        <a href="{{ route('product.show', $product->slug) }}">{{ $product->author->name}}</a>
         </div>
         <ul class="color-categories">
         <li>
@@ -173,7 +173,8 @@
         </li>
         </ul>
 
-        <h5 class="product-name"><a href="{{ route('product.show', $product->id) }}">{{ $product->name }}</a></h5>
+        <h5 class="product-name"><a href="{{ route('product.show', $product->slug) }}">{{ $product->name }}</a>
+        </h5>
         <div class="price-box">
         @if ($variants->count() === 1)
       <span class="price-regular">{{ number_format($minPrice) }} đ</span>

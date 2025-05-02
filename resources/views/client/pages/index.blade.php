@@ -139,7 +139,7 @@
         @endphp
         <div class="product-item">
         <figure class="product-thumb">
-        <a href="{{ route('product.show', $product->id) }}">
+        <a href="{{ route('product.show', $product->slug) }}">
           @if ($thumbnail)
         <img class="pri-img" src="{{ Storage::url($thumbnail->image_path) }}" alt="product">
         @endif
@@ -193,7 +193,7 @@
           <p class="manufacturer-name"><a href="#">{{ $product->author->name ?? 'N/A' }}</a></p>
         </div>
         <h6 class="product-name">
-          <a href="{{ route('product.show', $product->id) }}">{{ $product->name }}</a>
+          <a href="{{ route('product.show', $product->slug) }}">{{ $product->name }}</a>
         </h6>
         @php
         $variants = $product->variants;
