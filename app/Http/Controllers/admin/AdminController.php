@@ -62,22 +62,22 @@ class AdminController extends Controller
 
 
 
-
         $topCategories = Categories::withCount([
-            'products as total_sales' => function ($query) use ($fromDate, $toDate) {
-                // Lọc sản phẩm bán được theo đơn hàng trong khoảng ngày
-                $query->whereHas('orderItems', function ($query) use ($fromDate, $toDate) {
-                    $query->when($fromDate && $toDate, function ($query) use ($fromDate, $toDate) {
-                        return $query->whereBetween('order_items.created_at', [$fromDate, $toDate]);
-                    });
+            'products as total_sales' => function ($productQuery) use ($fromDate, $toDate) {
+                $productQuery->whereHas('orderItems', function ($orderItemQuery) use ($fromDate, $toDate) {
+                    if ($fromDate && $toDate) {
+                        $orderItemQuery->whereBetween('order_items.created_at', [$fromDate, $toDate]);
+                    }
                 });
             }
         ])
-            ->orderByDesc('total_sales') // Sắp xếp theo số lượng bán
-            ->take(5) // Lấy 5 danh mục bán chạy nhất
-            ->get();
+        ->orderByDesc('total_sales') // Sắp xếp theo tổng sản phẩm có đơn hàng
+        ->take(5) // Lấy 5 danh mục có tổng bán cao nhất
+        ->get();
+        
         $categoryLabels = $topCategories->pluck('name')->toArray();
         $categoryValues = $topCategories->pluck('total_sales')->toArray();
+        
 
 
         // Best-Selling Products: top 5 theo tổng số lượng bán
@@ -156,43 +156,41 @@ class AdminController extends Controller
             'recentOrders'
         ));
     }
-
+ 
 
     public function getRevenueData(Request $request)
     {
-        // Lấy giá trị lọc ngày từ request
-        $dateRange = $request->input('date_range');
-        $fromDate = null;
-        $toDate = null;
-
-        if ($dateRange && str_contains($dateRange, 'to')) {
-            [$from, $to] = explode(' to ', $dateRange);
-            $fromDate = Carbon::createFromFormat('d M, Y', trim($from))->startOfDay();
-            $toDate = Carbon::createFromFormat('d M, Y', trim($to))->endOfDay();
-        }
-
-        // Lấy dữ liệu doanh thu theo khoảng thời gian
-        $revenueByDay = Order::selectRaw('DATE(created_at) as day, SUM(final_amount) as total')
-            ->when($fromDate && $toDate, function ($query) use ($fromDate, $toDate) {
-                return $query->whereBetween('created_at', [$fromDate, $toDate]);
-            }, function ($query) {
-                return $query->whereBetween('created_at', [now()->subDays(6), now()]);
-            })
-            ->groupBy('day')
-            ->orderBy('day')
+        $range = $request->input('date_range', 'year');
+    
+        $from = match ($range) {
+            'today' => now()->startOfDay(),
+            'yesterday' => now()->subDay()->startOfDay(),
+            'month' => now()->startOfMonth(),
+            'year' => now()->startOfYear(),
+            default => now()->startOfWeek(),
+        };
+    
+        $to = match ($range) {
+            'today', 'yesterday' => now()->endOfDay(),
+            'month' => now()->endOfMonth(),
+            'year' => now()->endOfYear(),
+            default => now()->endOfWeek(),
+        };
+    
+        $data = Order::selectRaw('DATE(created_at) as date, COUNT(*) as orders, SUM(final_amount) as revenue')
+            ->whereBetween('created_at', [$from, $to])
+            ->groupBy('date')
+            ->orderBy('date')
             ->get();
-
-        // Xử lý labels và values cho biểu đồ
-        $revenueLabels = $revenueByDay->pluck('day')
-            ->map(fn($d) => Carbon::parse($d)->format('d/m'))
-            ->toArray();
-
-        $revenueValues = $revenueByDay->pluck('total')->toArray();
-
-        // Trả về dữ liệu dưới dạng JSON
+    
         return response()->json([
-            'labels' => $revenueLabels,
-            'values' => $revenueValues
+            'labels' => $data->pluck('date')->map(fn($d) => \Carbon\Carbon::parse($d)->format('d/m'))->toArray(),
+            'orders' => $data->pluck('orders')->toArray(),
+            'revenues' => $data->pluck('revenue')->toArray(),
         ]);
     }
+    
+
+    
+    
 }
