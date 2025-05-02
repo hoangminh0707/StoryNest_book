@@ -4,7 +4,10 @@
 @extends('client.layouts.app')
 @section('title', 'Dashboards')
 
+@section('active_pages_shop', 'active')
+
 @section('content')
+
 
     <main>
         <!-- breadcrumb area start -->
@@ -18,7 +21,7 @@
                                     <li class="breadcrumb-item"><a href="{{ route('index') }}"><i
                                                 class="fa fa-home"></i></a></li>
                                     <li class="breadcrumb-item"><a href="{{ route('shop') }}">Cửa hàng</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">Sản phẩm yêu thích</li>
+                                    <li class="breadcrumb-item active" aria-current="page">Sản phần yêu thích</li>
                                 </ul>
                             </nav>
                         </div>
@@ -43,63 +46,53 @@
                                             <th class="pro-thumbnail">Thumbnail</th>
                                             <th class="pro-title">Product</th>
                                             <th class="pro-price">Price</th>
-                                            <th class="pro-quantity">Số lượng sản phẩm</th>
+                                            <th class="pro-quantity">Stock Status</th>
                                             <th class="pro-subtotal">Add to Cart</th>
                                             <th class="pro-remove">Remove</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @forelse ($wishlistItems as $item)
-                                            <tr>
-                                                <td class="pro-thumbnail">
-                                                    <a href="{{ route('product.show', $item->product->id) }}">
-                                                        <img class="img-fluid"
-                                                            src="{{ $item->product->thumbnail ? Storage::url($item->product->thumbnail->image_path) : asset('assets/img/default.jpg') }}"
-                                                            alt="{{ $item->product->name }}">
-
-                                                    </a>
-                                                </td>
-                                                <td class="pro-title">
-                                                    <a href="{{ route('product.show', $item->product->id) }}">
-                                                        {{ $item->product->name }}
-                                                    </a>
-                                                </td>
-                                                <td class="pro-price"><span>{{ number_format($item->product->price) }} đ</span>
-                                                </td>
-                                                <td class="pro-quantity">
-                                                    @if ($item->product->quantity > 0)
-                                                        <span class="text-success">Còn hàng</span>
-                                                    @else
-                                                        <span class="text-danger">Không còn hàng</span>
-                                                    @endif
-                                                </td>
-                                                <td class="pro-subtotal">
-                                                    @if ($item->product->quantity > 0)
-                                                        <form action="{{ route('cart.add', $item->product->id) }}" method="POST">
-                                                            @csrf
-                                                            <button class="btn btn-sqr" type="submit">Thêm vào giỏ hàng</button>
-                                                        </form>
-                                                    @else
-                                                        <button class="btn btn-sqr disabled" disabled>Sản phẩm hết hàng</button>
-                                                    @endif
-                                                </td>
-
-                                                <td class="pro-remove">
-                                                    <form action="{{ route('wishlist.remove', $item->id) }}" method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button class="btn btn-link text-danger"><i
-                                                                class="fa fa-trash-o"></i></button>
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                        @empty
-                                            <tr>
-                                                <td colspan="6" class="text-center">Chưa có sản phẩm yêu thích nào.</td>
-                                            </tr>
-                                        @endforelse
+                                        <tr>
+                                            <td class="pro-thumbnail"><a href="#"><img class="img-fluid"
+                                                        src="assets/img/product/product-5.jpg" alt="Product"></a></td>
+                                            <td class="pro-title"><a href="#">Diamond Exclusive Ornament</a></td>
+                                            <td class="pro-price"><span>$295.00</span></td>
+                                            <td class="pro-quantity"><span class="text-success">In Stock</span></td>
+                                            <td class="pro-subtotal"><a href="cart.html" class="btn btn-sqr">Add to
+                                                    Cart</a></td>
+                                            <td class="pro-remove"><a href="#"><i class="fa fa-trash-o"></i></a></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="pro-thumbnail"><a href="#"><img class="img-fluid"
+                                                        src="assets/img/product/product-6.jpg" alt="Product"></a></td>
+                                            <td class="pro-title"><a href="#">Perfect Diamond Jewellery</a></td>
+                                            <td class="pro-price"><span>$275.00</span></td>
+                                            <td class="pro-quantity"><span class="text-success">In Stock</span></td>
+                                            <td class="pro-subtotal"><a href="cart.html" class="btn btn-sqr">Add to
+                                                    Cart</a></td>
+                                            <td class="pro-remove"><a href="#"><i class="fa fa-trash-o"></i></a></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="pro-thumbnail"><a href="#"><img class="img-fluid"
+                                                        src="assets/img/product/product-7.jpg" alt="Product"></a></td>
+                                            <td class="pro-title"><a href="#">Handmade Golden Necklace</a></td>
+                                            <td class="pro-price"><span>$295.00</span></td>
+                                            <td class="pro-quantity"><span class="text-danger">Stock Out</span></td>
+                                            <td class="pro-subtotal"><a href="cart.html" class="btn btn-sqr disabled">Add
+                                                    to Cart</a></td>
+                                            <td class="pro-remove"><a href="#"><i class="fa fa-trash-o"></i></a></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="pro-thumbnail"><a href="#"><img class="img-fluid"
+                                                        src="assets/img/product/product-8.jpg" alt="Product"></a></td>
+                                            <td class="pro-title"><a href="#">Diamond Exclusive Ornament</a></td>
+                                            <td class="pro-price"><span>$110.00</span></td>
+                                            <td class="pro-quantity"><span class="text-success">In Stock</span></td>
+                                            <td class="pro-subtotal"><a href="cart.html" class="btn btn-sqr">Add to
+                                                    Cart</a></td>
+                                            <td class="pro-remove"><a href="#"><i class="fa fa-trash-o"></i></a></td>
+                                        </tr>
                                     </tbody>
-
                                 </table>
                             </div>
                         </div>
@@ -110,5 +103,7 @@
         </div>
         <!-- wishlist main wrapper end -->
     </main>
+
+
 
 @endsection

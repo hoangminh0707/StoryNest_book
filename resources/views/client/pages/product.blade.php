@@ -44,29 +44,34 @@
         <div class="row">
           <div class="col-lg-5">
           <div class="product-large-slider">
-            <div class="pro-large-img img-zoom">
             @if($thumbnail)
-        <img src="{{ Storage::url($thumbnail->image_path) }}" alt="product-details"
-          style="width : 100% ; max-width: 300px; height: 100%; max-height: 335px;">
+        <div class="pro-large-img img-zoom">
+        <img src="{{ Storage::url($thumbnail->image_path) }}" alt="product-details">
         </div>
       @endif
+
             @foreach($otherImages as $index => $image)
         <div class="pro-large-img img-zoom">
-        <img src="{{ Storage::url($image->image_path)}}" alt="product-details"
-          style="width : 100% ; max-width: 300px; height: 100%; max-height: 335px;">
+        <img src="{{ Storage::url($image->image_path)}}" alt="product-details">
         </div>
       @endforeach
           </div>
+
           <div class="pro-nav slick-row-10 slick-arrow-style">
+            @if($thumbnail)
+        <div class="pro-nav-thumb">
+        <img src="{{ Storage::url($thumbnail->image_path) }}" alt="product-details">
+        </div>
+      @endif
+
             @foreach($otherImages as $index => $image)
         <div class="pro-nav-thumb">
-        <img src="{{ Storage::url($image->image_path)}}" alt="product-details"
-          style="width : 100% ; max-width: 120px;">
+        <img src="{{ Storage::url($image->image_path)}}" alt="product-details">
         </div>
       @endforeach
+          </div>
+          </div>
 
-          </div>
-          </div>
           <div class="col-lg-7">
           <div class="product-details-des">
             <div class="manufacturer-name">
@@ -322,7 +327,7 @@
         @php
         $thumbnail = $product->images->where('is_thumbnail', true)->first();
         $secondary = $product->images->where('is_thumbnail', false)->first();
-      @endphp
+    @endphp
         <div class="product-item">
           <figure class="product-thumb">
           <a href="{{ route('product.show', $product->id) }}">
