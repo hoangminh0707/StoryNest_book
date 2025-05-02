@@ -43,51 +43,15 @@
 
   <section class="slider-area hero-style-five">
     <div class="hero-slider-active slick-arrow-style slick-arrow-style_hero slick-dot-style">
-    <div class="hero-single-slide hero-overlay">
-      <div class="hero-slider-item bg-img" data-bg="assets/img/slider/home3-slide2.jpg">
-      <div class="container">
-        <div class="row">
-        <div class="col-md-12">
-          <div class="hero-slider-content slide-1">
-          <h2 class="slide-title">Family Jewelry <span>Collection</span></h2>
-          <h4 class="slide-desc">Designer Jewelry Necklaces-Bracelets-Earings</h4>
-          <a href="shop.html" class="btn btn-hero">Read More</a>
-          </div>
-        </div>
-        </div>
+    @foreach ($banners as $banner)
+      @if (!empty($banner->image_url))
+      <div class="hero-single-slide hero-overlay">
+      <div class="hero-slider-item bg-img" data-bg="{{ asset('storage/' . $banner->image_url) }}">
       </div>
       </div>
-    </div>
-    <div class="hero-single-slide hero-overlay">
-      <div class="hero-slider-item bg-img" data-bg="assets/img/slider/home1-slide3.jpg">
-      <div class="container">
-        <div class="row">
-        <div class="col-md-12">
-          <div class="hero-slider-content slide-2 float-md-end float-none">
-          <h2 class="slide-title">Diamonds Jewellery<span>Collection</span></h2>
-          <h4 class="slide-desc">Shukra Yogam &amp; Silver Power Silver Saving Schemes.</h4>
-          <a href="shop.html" class="btn btn-hero">Read More</a>
-          </div>
-        </div>
-        </div>
-      </div>
-      </div>
-    </div>
-    <div class="hero-single-slide hero-overlay">
-      <div class="hero-slider-item bg-img" data-bg="assets/img/slider/home3-slide1.jpg">
-      <div class="container">
-        <div class="row">
-        <div class="col-md-12">
-          <div class="hero-slider-content slide-3">
-          <h2 class="slide-title">Grace Designer<span>Jewellery</span></h2>
-          <h4 class="slide-desc">Rings, Occasion Pieces, Pandora &amp; More.</h4>
-          <a href="shop.html" class="btn btn-hero">Read More</a>
-          </div>
-        </div>
-        </div>
-      </div>
-      </div>
-    </div>
+      @endif
+    @endforeach
+
     </div>
   </section>
 
@@ -150,102 +114,117 @@
     <div class="row">
       <div class="col-12">
       <div class="product-container">
-        <!-- product tab menu start -->
         <div class="product-tab-menu">
         <ul class="nav justify-content-center">
           <li><a href="#tab1" class="active" data-bs-toggle="tab">Sách</a></li>
-          <li><a href="#tab2" data-bs-toggle="tab" class="">Bút</a></li>
-          <li><a href="#tab3" data-bs-toggle="tab" class="">Truyện tranh</a></li>
-          <li><a href="#tab4" data-bs-toggle="tab" class="">Khác</a></li>
+          <li><a href="#tab2" data-bs-toggle="tab">Bút viết</a></li>
+          <li><a href="#tab3" data-bs-toggle="tab">Đồ chơi</a></li>
+          <li><a href="#tab4" data-bs-toggle="tab">Khác</a></li>
         </ul>
         </div>
-        <!-- product tab menu end -->
 
-        <!-- product tab content start -->
         <div class="tab-content">
-        <div class="tab-pane fade show active" id="tab1">
-          <div class="product-carousel-4 slick-row-10 slick-arrow-style">
-
-          @foreach($products as $product)
-
-          @php
-        $thumbnail = $product->images->where('is_thumbnail', true)->first();
-        $otherImage = $product->images->where('is_thumbnail', false)->first();
+        @php
+      $tabs = ['sach' => 'tab1', 'butviet' => 'tab2', 'dochoi' => 'tab3', 'khac' => 'tab4'];
       @endphp
 
-          <!-- product item start -->
-          <div class="product-item">
-          <figure class="product-thumb">
-          <a href="{{ route('product.show', $product->id) }}">
-            @if ($thumbnail)
-        <img class="pri-img product-image" src="{{ Storage::url($thumbnail->image_path) }}" alt="product">
-      @endif
+        @foreach ($tabs as $key => $tabId)
+        <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}" id="{{ $tabId }}">
+        <div class="product-carousel-4 slick-row-10 slick-arrow-style">
+        @forelse ($productsByCategory[$key] as $product)
 
-            @if ($otherImage)
-        <img class="sec-img product-image" src="{{ Storage::url($otherImage->image_path) }}"
-        alt="product">
-      @endif
-          </a>
-          <div class="product-badge">
-            <div class="product-label discount">
-            <span>new</span>
-            </div>
-          </div>
-          <div class="button-group">
-            @auth
+        @php
+        $thumbnail = $product->images->where('is_thumbnail', true)->first();
+        $otherImage = $product->images->where('is_thumbnail', false)->first();
+        @endphp
+        <div class="product-item">
+        <figure class="product-thumb">
+        <a href="{{ route('product.show', $product->id) }}">
+          @if ($thumbnail)
+        <img class="pri-img" src="{{ Storage::url($thumbnail->image_path) }}" alt="product">
+        @endif
+          @if ($otherImage)
+        <img class="sec-img" src="{{ Storage::url($otherImage->image_path) }}" alt="product">
+        @endif
+        </a>
+        <div class="product-badge">
+          @if($product->is_new)
+        <div class="product-label new"><span>new</span></div>
+        @endif
+          @if($product->discount_percentage)
+        <div class="product-label discount"><span>{{ $product->discount_percentage }}%</span></div>
+        @endif
+        </div>
+        <div class="button-group">
+          @auth
         <a href="{{ route('wishlist.add', $product->id) }}" data-bs-toggle="tooltip"
         data-bs-placement="left" title="Add to wishlist"><i class="pe-7s-like"></i></a>
-      @endauth
-
-            @guest
+        @endauth
+          @guest
         <a href="#" onclick="showLoginAlert()" data-bs-toggle="tooltip" data-bs-placement="left"
         title="Add to wishlist"><i class="pe-7s-like"></i></a>
-      @endguest
+        @endguest
+          <a href="#" class="btn-quick-view" data-name="{{ $product->name }}"
+          data-price="{{ number_format($product->price) }}" data-description="{{ $product->description }}"
+          data-stock="{{ $product->quantity }}" data-author="{{ $product->author->name ?? 'Unknown' }}"
+          data-images='@json($product->images->pluck("image_path"))' data-bs-toggle="modal"
+          data-bs-target="#quick_view">
+          <span data-bs-toggle="tooltip" data-bs-placement="left" title="Quick View">
+          <i class="pe-7s-search"></i>
+          </span>
+          </a>
 
-
-            <a href="#" class="btn-quick-view" data-name="{{ $product->name }}"
-            data-price="{{ number_format($product->price) }}" data-description="{{ $product->description }}"
-            data-stock="{{ $product->quantity }}" data-author="{{ $product->author->name ?? 'Unknown' }}"
-            data-images='@json($product->images->pluck("image_path"))' data-bs-toggle="modal"
-            data-bs-target="#quick_view"><span data-bs-toggle="tooltip" data-bs-placement="left"
-            title="Quick View"><i class="pe-7s-search"></i></span></a>
-          </div>
-          <div class="cart-hover">
-            @auth
+        </div>
+        <div class="cart-hover">
+          @auth
         <form action="{{ route('cart.add', $product->id) }}" method="POST" style="display:inline;">
         @csrf
         <button type="submit" class="btn btn-cart">add to cart</button>
         </form>
-      @endauth
+        @endauth
 
-            @guest
+          @guest
         <button onclick="showLoginAlert()" class="btn btn-cart">add to cart</button>
-      @endguest
-
-
-          </div>
-          </figure>
-          <div class="product-caption">
-          <div class="product-identity">
-            <p class="manufacturer-name"><a href="product-details.html">{{ $product->author->name }}</a></p>
-          </div>
-          <h6 class="product-name">
-            <a href="{{ route('product.show', $product->id) }}">{{ $product->name }}</a>
-          </h6>
-          <div class="price-box">
-            <span class="price-regular">{{ number_format($product->price) }} đ</span>
-
-          </div>
-          </div>
-          </div>
-          <!-- product item end -->
+        @endguest
+        </div>
+        </figure>
+        <div class="product-caption">
+        <div class="product-identity">
+          <p class="manufacturer-name"><a href="#">{{ $product->author->name ?? 'N/A' }}</a></p>
+        </div>
+        <h6 class="product-name">
+          <a href="{{ route('product.show', $product->id) }}">{{ $product->name }}</a>
+        </h6>
+        @php
+        $variants = $product->variants;
+        if ($variants->count() > 0) {
+        $minPrice = $variants->min('variant_price');
+        $maxPrice = $variants->max('variant_price');
+        }
+        @endphp
+        <div class="price-box">
+          @if ($variants->count() === 1)
+        <span class="price-regular">{{ number_format($minPrice) }} đ</span>
+        @elseif ($variants->count() > 1)
+        <span class="price-regular">{{ number_format($minPrice) }} đ -
+        {{ number_format($maxPrice) }} đ </span>
+        @else
+        <span class="price-regular">{{ number_format($product->price) }}</span>
+        @endif
+        </div>
+        </div>
+        </div>
+      @empty
+        <p>Không có sản phẩm nào.</p>
+      @endforelse
+        </div>
+        </div>
       @endforeach
+        </div>
 
-          </div>
-        </div>
-        </div>
       </div>
       </div>
+    </div>
     </div>
     </div>
   </section>

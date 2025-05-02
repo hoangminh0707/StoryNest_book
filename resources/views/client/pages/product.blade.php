@@ -48,13 +48,13 @@
         <div class="pro-large-img img-zoom">
         <img src="{{ Storage::url($thumbnail->image_path) }}" alt="product-details">
         </div>
-      @endif
+        @endif
 
             @foreach($otherImages as $index => $image)
         <div class="pro-large-img img-zoom">
         <img src="{{ Storage::url($image->image_path)}}" alt="product-details">
         </div>
-      @endforeach
+        @endforeach
           </div>
 
           <div class="pro-nav slick-row-10 slick-arrow-style">
@@ -62,13 +62,13 @@
         <div class="pro-nav-thumb">
         <img src="{{ Storage::url($thumbnail->image_path) }}" alt="product-details">
         </div>
-      @endif
+        @endif
 
             @foreach($otherImages as $index => $image)
         <div class="pro-nav-thumb">
         <img src="{{ Storage::url($image->image_path)}}" alt="product-details">
         </div>
-      @endforeach
+        @endforeach
           </div>
           </div>
 
@@ -80,41 +80,54 @@
             <h3 class="product-name">{{ $product->name }}</h3>
           </div>
           @if ($averageRating)
-        <div class="ratings d-flex">
-        @for ($i = 1; $i <= 5; $i++)
-      @if ($i <= floor($averageRating))
-      <i class="fa fa-star" style="color: gold;"></i>
-    @elseif ($i - $averageRating < 1)
-      <i class="fa fa-star-half-o" style="color: gold;"></i>
-    @else
-      <i class="fa fa-star-o" style="color: gold;"></i>
-    @endif
-    @endfor
-        <div class="pro-review">
-        <span>({{ number_format($averageRating, 1) }} / 5)</span>
-        </div>
-        </div>
-      @endif
-          <div class="price-box">
-            <span class="price-regular" id="product-price">{{ number_format($product->price)}} đ</span>
+          <div class="ratings d-flex">
+          @for ($i = 1; $i <= 5; $i++)
+          @if ($i <= floor($averageRating))
+        <i class="fa fa-star" style="color: gold;"></i>
+        @elseif ($i - $averageRating < 1)
+        <i class="fa fa-star-half-o" style="color: gold;"></i>
+        @else
+        <i class="fa fa-star-o" style="color: gold;"></i>
+        @endif
+        @endfor
+          <div class="pro-review">
+          <span>({{ number_format($averageRating, 1) }} / 5)</span>
           </div>
-
+          </div>
+      @endif
+          @php
+        $variants = $product->variants;
+        if ($variants->count() > 0) {
+        $minPrice = $variants->min('variant_price');
+        $maxPrice = $variants->max('variant_price');
+        }
+        @endphp
+          <div class="price-box">
+            @if ($variants->count() === 1)
+        <span class="price-regular">{{ number_format($minPrice) }} đ</span>
+        @elseif ($variants->count() > 1)
+        <span class="price-regular">{{ number_format($minPrice) }} đ -
+        {{ number_format($maxPrice) }} đ </span>
+        @else
+        <span class="price-regular">{{ number_format($product->price) }}</span>
+        @endif
+          </div>
           <div class="product-voucher">
             <ul class="voucher-list">
             @foreach ($vouchers as $voucher)
-        <li style="padding: 5px; margin-bottom: 5px; background: #f5f5f5; border-radius: 5px;">
-          <span style="font-weight: bold; color: #ff5722;">{{ $voucher->code }}</span>:
-          @if ($voucher->type === "fixed")
-        Giảm {{ number_format($voucher->value) }} đ
-      @else
-      Giảm {{ number_format($voucher->value) }}%
-    @endif
-          @if ($voucher->expires_at)
-        <small style="color: gray;">(HSD:
-        {{ \Carbon\Carbon::parse($voucher->expires_at)->format('d/m/Y') }})</small>
-      @endif
-        </li>
-      @endforeach
+          <li style="padding: 5px; margin-bottom: 5px; background: #f5f5f5; border-radius: 5px;">
+            <span style="font-weight: bold; color: #ff5722;">{{ $voucher->code }}</span>:
+            @if ($voucher->type === "fixed")
+          Giảm {{ number_format($voucher->value) }} đ
+        @else
+          Giảm {{ number_format($voucher->value) }}%
+        @endif
+            @if ($voucher->expires_at)
+          <small style="color: gray;">(HSD:
+          {{ \Carbon\Carbon::parse($voucher->expires_at)->format('d/m/Y') }})</small>
+        @endif
+          </li>
+        @endforeach
             </ul>
           </div>
           <form id="add-to-cart-form" action="{{ route('cart.add', $product->id) }}" method="POST"
@@ -142,18 +155,18 @@
           Thêm vào giỏ hàng
           </button>
         @else
-        <button class="btn btn-cart2" id="add-to-cart-btn" disabled>
-        Sản phẩm đã hết hàng
-        </button>
-      @endif
+          <button class="btn btn-cart2" id="add-to-cart-btn" disabled>
+          Sản phẩm đã hết hàng
+          </button>
+        @endif
             </div>
             </div>
 
 
             @foreach ($groupedAttributes as $attributeName => $attributeValues)
-        <div class="pro-size">
-        <h6 class="option-title">{{ $attributeName }} </h6>
-        <select name="variant_id" id="{{ strtolower($attributeName) }}_variant_id" class="form-control"
+          <div class="pro-size">
+          <h6 class="option-title">{{ $attributeName }} </h6>
+          <select name="variant_id" id="{{ strtolower($attributeName) }}_variant_id" class="form-control"
           style="width : 100% ; max-width: 120px;">
           <option value="">Chọn {{ $attributeName }}</option>
           @foreach ($attributeValues as $attribute)
@@ -161,10 +174,10 @@
         data-price="{{ number_format($attribute['price'])  }}">
         {{ $attribute['value'] }}
         </option>
-      @endforeach
-        </select>
-        </div>
-      @endforeach
+        @endforeach
+          </select>
+          </div>
+        @endforeach
           </form>
 
           <div class="useful-links">
@@ -207,89 +220,89 @@
               <table class="table table-bordered">
               <tbody>
                 @foreach ($groupedAttributes as $attributeName => $attributeValues)
-          <tr>
-          <td>{{ $attributeName }}</td>
-          <td>
-            @foreach ($attributeValues as $attribute)
-        {{ $attribute['value'] }}
-      @endforeach
-          </td>
-          </tr>
-        @endforeach
+            <tr>
+            <td>{{ $attributeName }}</td>
+            <td>
+              @foreach ($attributeValues as $attribute)
+          {{ $attribute['value'] }}
+          @endforeach
+            </td>
+            </tr>
+          @endforeach
               </tbody>
               </table>
             </div>
             <div class="tab-pane fade" id="tab_three">
               @if ($product->reviews->where('is_approved', true)->count())
-          <div class="review-form">
-          <h5>{{ $product->reviews->where('is_approved', true)->count() }} đánh giá cho
-          <span>{{ $product->name }}</span>
-          </h5>
+            <div class="review-form">
+            <h5>{{ $product->reviews->where('is_approved', true)->count() }} đánh giá cho
+            <span>{{ $product->name }}</span>
+            </h5>
 
-          @foreach ($product->reviews->where('is_approved', true) as $review)
-        <div class="total-reviews">
-        <div class="rev-avatar">
-        <img
-        src="{{ asset($review->user->avatar ?? 'https://i.ibb.co/WpKLtySw/Logo-Story-Nest-Book.jpg') }}"
-        alt="User Avatar">
-        </div>
-
-        <div class="review-box">
-        <div class="ratings">
-        @for ($i = 1; $i <= 5; $i++)
-      @if ($i <= $review->rating)
-      <span class="good"><i class="fa fa-star"></i></span>
-    @else
-      <span><i class="fa fa-star"></i></span>
-    @endif
-    @endfor
-        </div>
-
-        <div class="post-author">
-        <p>
-        <span>{{ $review->user->name ?? 'Ẩn danh' }} -</span>
-        {{ \Carbon\Carbon::parse($review->created_at)->format('d M, Y') }}
-        </p>
-        </div>
-
-        <p>{{ $review->comment }}</p>
-        </div>
-        </div>
-      @endforeach
+            @foreach ($product->reviews->where('is_approved', true) as $review)
+          <div class="total-reviews">
+          <div class="rev-avatar">
+          <img
+            src="{{ asset($review->user->avatar ?? 'https://i.ibb.co/WpKLtySw/Logo-Story-Nest-Book.jpg') }}"
+            alt="User Avatar">
           </div>
+
+          <div class="review-box">
+          <div class="ratings">
+            @for ($i = 1; $i <= 5; $i++)
+          @if ($i <= $review->rating)
+          <span class="good"><i class="fa fa-star"></i></span>
+          @else
+          <span><i class="fa fa-star"></i></span>
+          @endif
+          @endfor
+          </div>
+
+          <div class="post-author">
+            <p>
+            <span>{{ $review->user->name ?? 'Ẩn danh' }} -</span>
+            {{ \Carbon\Carbon::parse($review->created_at)->format('d M, Y') }}
+            </p>
+          </div>
+
+          <p>{{ $review->comment }}</p>
+          </div>
+          </div>
+        @endforeach
+            </div>
         @else
-        <p>Chưa có đánh giá nào cho sản phẩm này.</p>
-      @endif
+          <p>Chưa có đánh giá nào cho sản phẩm này.</p>
+        @endif
 
               @if ($canReview)
-          <div class="form-group row">
-          <div class="col">
-          <form action="{{ route('reviews.store') }}" method="POST">
-          @csrf
-          <input type="hidden" name="product_id" value="{{ $product->id }}">
-          <label class="col-form-label"><span class="text-danger">*</span>
-            Đánh giá của bạn</label>
-          <textarea name="comment" class="form-control" required></textarea>
-          </div>
-          </div>
-          <div class="form-group row">
-          <div class="col">
-          <label class="col-form-label"><span class="text-danger">*</span>
-          Đánh giá</label>
-          @for ($i = 5; $i >= 1; $i--)
-        <input type="radio" id="star{{ $i }}" name="rating" value="{{ $i }}" required>
-        <label for="star{{ $i }}" style="margin-right: 10px;">{{ $i }} ⭐</label>
-      @endfor
-          </div>
-          </div>
-          <div class="buttons">
-          <button class="btn btn-sqr" type="submit">Đánh giá sản phẩm</button>
-          </form>
-          </div>
-        </div> <!-- end of review-form -->
-      @else
-    <p class="text-muted">Bạn cần mua sản phẩm này trước khi có thể đánh giá.</p>
-  @endif
+            <div class="form-group row">
+            <div class="col">
+            <form action="{{ route('reviews.store') }}" method="POST">
+            @csrf
+            <input type="hidden" name="product_id" value="{{ $product->id }}">
+            <label class="col-form-label"><span class="text-danger">*</span>
+              Đánh giá của bạn</label>
+            <textarea name="comment" class="form-control" required></textarea>
+            </div>
+            </div>
+            <div class="form-group row">
+            <div class="col">
+            <label class="col-form-label"><span class="text-danger">*</span>
+            Đánh giá</label>
+            @for ($i = 5; $i >= 1; $i--)
+          <input type="radio" id="star{{ $i }}" name="rating" value="{{ $i }}" required>
+          <label for="star{{ $i }}" style="margin-right: 10px;">{{ $i }} ⭐</label>
+          @endfor
+            </div>
+            </div>
+            <div class="buttons">
+            <button class="btn btn-sqr" type="submit">Đánh giá sản phẩm</button>
+            </form>
+            </div>
+          </div> <!-- end of review-form -->
+        @else
+        <p class="text-muted">Bạn cần mua sản phẩm này trước khi có thể đánh giá.</p>
+        @endif
             </div>
           </div>
           </div>
@@ -327,7 +340,7 @@
         @php
         $thumbnail = $product->images->where('is_thumbnail', true)->first();
         $secondary = $product->images->where('is_thumbnail', false)->first();
-    @endphp
+        @endphp
         <div class="product-item">
           <figure class="product-thumb">
           <a href="{{ route('product.show', $product->id) }}">
@@ -369,7 +382,7 @@
           </div>
           </div>
         </div>
-    @endforeach
+      @endforeach
 
 
 

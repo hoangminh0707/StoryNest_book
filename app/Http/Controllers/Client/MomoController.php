@@ -61,7 +61,7 @@ class MomoController extends Controller
         return redirect($jsonResult['payUrl'] ?? '/');
     }
 
-    //link thanh toán test http://localhost:8000/momo/return?resultCode=0
+    //link thanh toán test done http://localhost:8000/momo/return?resultCode=0
     public function handleReturn(Request $request)
     {
         // ⚠️ Tạm override resultCode để test

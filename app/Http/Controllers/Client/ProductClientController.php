@@ -12,6 +12,8 @@ use App\Models\ProductVariant;
 use Carbon\Carbon;
 use App\Models\Voucher;
 use App\Models\OrderItem;
+use App\Models\Banner;
+
 
 
 class ProductClientController extends Controller
@@ -22,9 +24,43 @@ class ProductClientController extends Controller
     public function index()
     {
         $products = Product::with(['author', 'images'])->get();
+
         $menuCategories = Categories::with('childrenRecursive')
             ->whereNull('parent_id')->get();
-        return view('client.pages.index', compact('products', 'menuCategories'));
+
+        // Chỉ lấy các banner có ảnh để tránh lỗi null
+        $banners = Banner::whereNotNull('image_url')->get();
+
+        // Gom các ID con cho từng nhóm
+        $sachIds = Categories::where('parent_id', 1)->pluck('id')->toArray();
+        $sachIds[] = 1;
+
+        $doChoiIds = Categories::where('parent_id', 14)->pluck('id')->toArray();
+        $doChoiIds[] = 14;
+
+        $butVietIds = [9];
+
+        $allGroupIds = array_merge($sachIds, $butVietIds, $doChoiIds);
+
+        $productsByCategory = [
+            'sach' => Product::whereHas('categories', function ($q) use ($sachIds) {
+                $q->whereIn('categories.id', $sachIds);
+            })->with(['author', 'images'])->get(),
+
+            'butviet' => Product::whereHas('categories', function ($q) use ($butVietIds) {
+                $q->whereIn('categories.id', $butVietIds);
+            })->with(['author', 'images'])->get(),
+
+            'dochoi' => Product::whereHas('categories', function ($q) use ($doChoiIds) {
+                $q->whereIn('categories.id', $doChoiIds);
+            })->with(['author', 'images'])->get(),
+
+            'khac' => Product::whereDoesntHave('categories', function ($q) use ($allGroupIds) {
+                $q->whereIn('categories.id', $allGroupIds);
+            })->with(['author', 'images', 'categories'])->get(),
+        ];
+
+        return view('client.pages.index', compact('products', 'menuCategories', 'banners', 'productsByCategory'));
     }
 
 

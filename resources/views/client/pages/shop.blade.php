@@ -100,9 +100,22 @@
         <h6 class="product-name">
         <a href="{{ route('product.show', $product->id) }}">{{ $product->name }}</a>
         </h6>
+        @php
+      $variants = $product->variants;
+      if ($variants->count() > 0) {
+      $minPrice = $variants->min('variant_price');
+      $maxPrice = $variants->max('variant_price');
+      }
+      @endphp
         <div class="price-box">
-        <span class="price-regular">{{ number_format($product->price) }} đ</span>
-
+        @if ($variants->count() === 1)
+      <span class="price-regular">{{ number_format($minPrice) }} đ</span>
+      @elseif ($variants->count() > 1)
+      <span class="price-regular">{{ number_format($minPrice) }} đ -
+      {{ number_format($maxPrice) }} đ </span>
+      @else
+      <span class="price-regular">{{ number_format($product->price) }}</span>
+      @endif
         </div>
       </div>
       </div>
@@ -134,11 +147,11 @@
       @csrf
       <button class="btn btn-cart">Thêm vào giỏ hàng</button>
       </form>
-    @endauth
+      @endauth
 
         @guest
       <a href="onclick=" showLoginAlert()" class="btn btn-cart">Thêm vào giỏ hàng</a>
-    @endguest
+      @endguest
         </div>
       </figure>
       <div class="product-content-list">
@@ -162,7 +175,14 @@
 
         <h5 class="product-name"><a href="{{ route('product.show', $product->id) }}">{{ $product->name }}</a></h5>
         <div class="price-box">
-        <span class="price-regular">{{ number_format($product->price) }} đ</span>
+        @if ($variants->count() === 1)
+      <span class="price-regular">{{ number_format($minPrice) }} đ</span>
+      @elseif ($variants->count() > 1)
+      <span class="price-regular">{{ number_format($minPrice) }} đ -
+      {{ number_format($maxPrice) }} đ </span>
+      @else
+      <span class="price-regular">{{ number_format($product->price) }}</span>
+      @endif
         </div>
         <p>{{ $product->description }}</p>
       </div>
