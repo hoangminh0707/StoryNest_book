@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Support\Facades\DB;
+use App\Notifications\NewOrderNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -21,6 +22,7 @@ use App\Models\Voucher;
 use App\Models\VoucherCondition;
 use App\Models\Product;
 use App\Models\ProductVariant;
+use App\Models\User;
 
 
 
@@ -370,6 +372,14 @@ class CheckoutClientController extends Controller
                 'status' => 'confirmed',
             ]);
 
+            $admins = User::whereHas('roles', function ($query) {
+                $query->where('name', 'admin');
+            })->get();
+
+            foreach ($admins as $admin) {
+                $admin->notify(new NewOrderNotification($order));
+            }
+
             if ($logVoucher) {
                 $logVoucher['order_id'] = $order->id;
                 DB::table('voucher_usage_logs')->insert($logVoucher);
@@ -520,6 +530,9 @@ class CheckoutClientController extends Controller
                 'status' => 'pending',
             ]);
 
+
+
+
             if ($logVoucher) {
                 $logVoucher['order_id'] = $order->id;
                 DB::table('voucher_usage_logs')->insert($logVoucher);
@@ -564,6 +577,16 @@ class CheckoutClientController extends Controller
 
             $cart->cartItems()->delete();
             $cart->delete();
+
+            $order->load('items');
+
+            $admins = User::whereHas('roles', function ($q) {
+                $q->where('name', 'admin');
+            })->get();
+
+            foreach ($admins as $admin) {
+                $admin->notify(new NewOrderNotification($order));
+            }
 
             session()->forget(['checkout_voucher', 'checkout_shipping_method', 'checkout_address_id', 'pending_checkout']);
 

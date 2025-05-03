@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\OrderAdminController;
 use App\Http\Controllers\Admin\ReviewAdminController;
 use App\Http\Controllers\Admin\PaymentAdminController;
 use App\Http\Controllers\Admin\PaymentMethodAdminController;
+use App\Http\Controllers\Admin\NotificationAdminController;
 
 // ========== CLIENT CONTROLLERS ==========
 use App\Http\Controllers\Client\ProductClientController;
@@ -257,5 +258,8 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::resource('payment-methods', PaymentMethodAdminController::class);
     Route::post('payment-methods/{paymentMethod}/toggle-status', [PaymentMethodAdminController::class, 'toggleStatus'])->name('payment-methods.toggle-status');
 
+
+    // thông báo admin
+    Route::get('/admin/notifications/fetch', [NotificationAdminController::class, 'fetch'])->name('notifications.fetch');
 
 });
