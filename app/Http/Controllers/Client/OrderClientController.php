@@ -26,6 +26,11 @@ class OrderClientController extends Controller
     {
         $order = Order::with(['orderItems', 'userAddress', 'shippingMethod', 'payment.paymentMethod'])->findOrFail($id);
 
+        // Kiểm tra quyền truy cập
+        if ($order->user_id !== auth()->id()) {
+            abort(403, 'Bạn không có quyền truy cập đơn hàng này.');
+        }
+
         return view('client.pages.orders.show', compact('order'));
     }
 

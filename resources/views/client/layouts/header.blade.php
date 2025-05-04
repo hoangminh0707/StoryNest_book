@@ -1,3 +1,73 @@
+<style>
+  .dropdown-menu.notifications-menu {
+    width: 300px !important;
+    /* nhỏ hơn */
+    font-size: 14px;
+    /* giảm size chữ */
+    padding: 0 !important;
+  }
+
+  .notifications-menu .notification-item {
+    padding: 10px 12px;
+  }
+
+  .notifications-menu .notification-item h6 {
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+
+  .notifications-menu .notification-item .fs-13,
+  .notifications-menu .notification-item .fs-12 {
+    font-size: 12px !important;
+  }
+
+  .notifications-menu .notification-item .fs-11 {
+    font-size: 10px !important;
+    color: #777;
+  }
+
+  #noti-container {
+    max-height: 200px;
+    overflow-y: auto;
+    scrollbar-width: none;
+    /* Firefox */
+  }
+
+  #noti-container::-webkit-scrollbar {
+    display: none;
+    /* Chrome */
+  }
+
+  .notification-item {
+    transition: background-color 0.2s ease;
+  }
+
+  .notification-item:hover {
+    background-color: #f8f9fa;
+  }
+
+  .avatar-xs {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    border-radius: 50%;
+  }
+
+  .fs-14 {
+    font-size: 14px;
+  }
+
+  .fs-13 {
+    font-size: 13px;
+  }
+
+  .fs-12 {
+    font-size: 12px;
+  }
+</style>
 <div class="header-main-area sticky">
   <div class="container">
     <div class="row align-items-center position-relative">
@@ -26,44 +96,44 @@
                   <ul class="megamenu dropdown">
 
                     @if($danhMucSachs)
-                    <li class="mega-title"><span>{{ $danhMucSachs->name }}</span>
-                      <ul>
-                        @foreach($danhMucSachs->childrenRecursive as $child)
-                        <li><a href="{{ route('shop', ['category_id' =>$child->id]) }}">{{ $child->name }}</a></li>
-                        @endforeach
-                      </ul>
-                    </li>
-                    @endif
+                <li class="mega-title"><span>{{ $danhMucSachs->name }}</span>
+                  <ul>
+                  @foreach($danhMucSachs->childrenRecursive as $child)
+              <li><a href="{{ route('shop', ['category_id' => $child->id]) }}">{{ $child->name }}</a></li>
+            @endforeach
+                  </ul>
+                </li>
+          @endif
 
                     @if($danhMucDungCu)
-                    <li class="mega-title"><span>{{ $danhMucDungCu->name }}</span>
-                      <ul>
-                        @foreach($danhMucDungCu->childrenRecursive as $child)
-                        <li><a href="{{ route('shop', ['category_id' =>$child->id]) }}">{{ $child->name }}</a></li>
-                        @endforeach
-                      </ul>
-                    </li>
-                    @endif
+                <li class="mega-title"><span>{{ $danhMucDungCu->name }}</span>
+                  <ul>
+                  @foreach($danhMucDungCu->childrenRecursive as $child)
+              <li><a href="{{ route('shop', ['category_id' => $child->id]) }}">{{ $child->name }}</a></li>
+            @endforeach
+                  </ul>
+                </li>
+          @endif
 
                     @if($danhMucDoChoi)
-                    <li class="mega-title"><span>{{ $danhMucDoChoi->name }}</span>
-                      <ul>
-                        @foreach($danhMucDoChoi->childrenRecursive as $child)
-                        <li><a href="{{ route('shop', ['category_id' =>$child->id]) }}">{{ $child->name }}</a></li>
-                        @endforeach
-                      </ul>
-                    </li>
-                    @endif
+                <li class="mega-title"><span>{{ $danhMucDoChoi->name }}</span>
+                  <ul>
+                  @foreach($danhMucDoChoi->childrenRecursive as $child)
+              <li><a href="{{ route('shop', ['category_id' => $child->id]) }}">{{ $child->name }}</a></li>
+            @endforeach
+                  </ul>
+                </li>
+          @endif
 
                     @if($danhMucHanhTrang)
-                    <li class="mega-title"><span>{{ $danhMucHanhTrang->name }}</span>
-                      <ul>
-                        @foreach($danhMucHanhTrang->childrenRecursive as $child)
-                        <li><a href="{{ route('shop', ['category_id' =>$child->id]) }}">{{ $child->name }}</a></li>
-                        @endforeach
-                      </ul>
-                    </li>
-                    @endif
+                <li class="mega-title"><span>{{ $danhMucHanhTrang->name }}</span>
+                  <ul>
+                  @foreach($danhMucHanhTrang->childrenRecursive as $child)
+              <li><a href="{{ route('shop', ['category_id' => $child->id]) }}">{{ $child->name }}</a></li>
+            @endforeach
+                  </ul>
+                </li>
+          @endif
 
                   </ul>
                 </li>
@@ -87,7 +157,7 @@
             <ul class="nav justify-content-end">
               <li class="header-search-container mr-0">
                 <button class="search-trigger d-block"><i class="pe-7s-search"></i></button>
-                <form class="header-search-box d-none" role="search">
+                <form class="header-search-box d-none" role="search" action="{{ route('shop') }}" method="GET">
                   <input type="text" id="search" placeholder="Search" class="header-search-field"
                     value="{{ request('search') }}" name="search">
                   <button class="header-search-btn"><i class="pe-7s-search"></i></button>
@@ -99,41 +169,41 @@
                 </a>
                 <ul class="dropdown-list p-3" style="min-width: 180px;">
                   @guest
-                  <li class="mb-2">
-                    <a class="text-decoration-none d-block" href="{{ route('login') }}">Đăng nhập</a>
-                  </li>
-                  <li>
-                    <a class="text-decoration-none d-block" href="{{ route('register') }}">Đăng ký</a>
-                  </li>
-                  @endguest
+            <li class="mb-2">
+            <a class="text-decoration-none d-block" href="{{ route('login') }}">Đăng nhập</a>
+            </li>
+            <li>
+            <a class="text-decoration-none d-block" href="{{ route('register') }}">Đăng ký</a>
+            </li>
+          @endguest
 
                   @auth
-                  <li class="mb-2">
-                    <span class="fw-bold d-block">{{ Auth::user()->name }}</span>
-                  </li>
-                  <hr class="my-2">
+            <li class="mb-2">
+            <span class="fw-bold d-block">{{ Auth::user()->name }}</span>
+            </li>
+            <hr class="my-2">
 
-                  <li class="mb-2">
-                    <a class="text-decoration-none d-flex align-items-center" href="{{ route('profile.index') }}">
-                      <i class="bi bi-gear-fill me-2"></i> Cài đặt
-                    </a>
-                  </li>
+            <li class="mb-2">
+            <a class="text-decoration-none d-flex align-items-center" href="{{ route('profile.index') }}">
+              <i class="bi bi-gear-fill me-2"></i> Cài đặt
+            </a>
+            </li>
 
-                  <li class="mb-2">
-                    <a class="text-decoration-none d-flex align-items-center" href="{{ route('orders.index') }}">
-                      <i class="bi bi-bag-fill me-2"></i> Đơn hàng
-                    </a>
-                  </li>
+            <li class="mb-2">
+            <a class="text-decoration-none d-flex align-items-center" href="{{ route('orders.index') }}">
+              <i class="bi bi-bag-fill me-2"></i> Đơn hàng
+            </a>
+            </li>
 
-                  <li>
-                    <form method="POST" action="{{ route('logout') }}">
-                      @csrf
-                      <button type="submit" class="btn btn-link p-0 text-decoration-none d-flex align-items-center">
-                        <i class="bi bi-box-arrow-left me-2"></i> Đăng xuất
-                      </button>
-                    </form>
-                  </li>
-                  @endauth
+            <li>
+            <form method="POST" action="{{ route('logout') }}">
+              @csrf
+              <button type="submit" class="btn btn-link p-0 text-decoration-none d-flex align-items-center">
+              <i class="bi bi-box-arrow-left me-2"></i> Đăng xuất
+              </button>
+            </form>
+            </li>
+          @endauth
                 </ul>
               </li>
               <li>
@@ -148,6 +218,44 @@
                   <div class="notification">{{ auth()->check() ? $cartItems->count() : 0 }}</div>
                 </a>
               </li>
+              <li>
+                @auth
+          <!-- ICON THÔNG BÁO TRONG HEADER -->
+          <div class="dropdown topbar-head-dropdown ms-1 header-item" id="notificationDropdown">
+            <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"
+            id="page-header-notifications-dropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+            aria-haspopup="true" aria-expanded="false">
+            <i class='pe-7s-bell' style="font-size: 26px;"></i>
+            <span id="noti-count"
+              class="position-absolute topbar-badge fs-10 translate-middle badge rounded-pill bg-danger">0</span>
+            </button>
+
+            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0 notifications-menu"
+            aria-labelledby="page-header-notifications-dropdown">
+            <div class="dropdown-head bg bg-pattern rounded-top">
+              <div class="p-3">
+              <div class="row align-items-center">
+                <div class="col">
+                <h6 class="m-0 fs-16 fw-semibold text-dark">Thông báo đơn hàng</h6>
+                </div>
+                <div class="col-auto dropdown-tabs">
+                <span class="badge bg-light-subtle text-body fs-13" id="noti-count-label">0 mới</span>
+                </div>
+              </div>
+              </div>
+            </div>
+            <div class="tab-content position-relative">
+              <div class="tab-pane fade show active py-2 ps-2" id="all-noti-tab" role="tabpanel">
+              <div id="noti-container" class="pe-2" data-simplebar
+                style="max-height: 300px; overflow-y: auto;">
+                Đang tải thông báo ...
+              </div>
+              </div>
+            </div>
+            </div>
+          </div>
+        @endauth
+              </li>
             </ul>
           </div>
         </div>
@@ -157,6 +265,10 @@
     </div>
   </div>
 </div>
+
+
+
+
 
 
 
@@ -177,47 +289,47 @@
           @php $total = 0; @endphp
           @forelse($cartItems as $item)
           @php
-          $product = $item->product;
-          $total += $item->price * $item->quantity;
-          @endphp
+        $product = $item->product;
+        $total += $item->price * $item->quantity;
+        @endphp
           <ul>
-            <li class="minicart-item">
-              <div class="minicart-thumb">
-                <a href="{{ route('product.show', $product->id) }}">
-                  <img src="{{ Storage::url($product->images->first()->image_path) }}" alt="product" width="85px">
-                </a>
-              </div>
-              <div class="minicart-content">
-                <h3 class="product-name">
-                  <a href="{{ route('product.show', $product->id) }}">{{ $product->name }}</a>
-                </h3>
-                <p>
-                  <span class="cart-quantity">{{$item->quantity}} <strong>&times;</strong></span>
-                  <span class="cart-price">{{ number_format($item->price * $item->quantity) }} đ</span>
-                  <br>
-                  @if ($item->variant && $item->variant->attributeValues->isNotEmpty())
-                  @foreach ($item->variant->attributeValues as $attributeValue)
-                  <span class="cart-variran">Loại : {{ $attributeValue->value }} </span>
-                  @endforeach
-                  @else
-                  <span class="cart-variran">
-                    Loại : Mặc Định
-                  </span>
-                  @endif
-                </p>
-              </div>
+          <li class="minicart-item">
+            <div class="minicart-thumb">
+            <a href="{{ route('product.show', $product->id) }}">
+              <img src="{{ Storage::url($product->images->first()->image_path) }}" alt="product" width="85px">
+            </a>
+            </div>
+            <div class="minicart-content">
+            <h3 class="product-name">
+              <a href="{{ route('product.show', $product->id) }}">{{ $product->name }}</a>
+            </h3>
+            <p>
+              <span class="cart-quantity">{{$item->quantity}} <strong>&times;</strong></span>
+              <span class="cart-price">{{ number_format($item->price * $item->quantity) }} đ</span>
+              <br>
+              @if ($item->variant && $item->variant->attributeValues->isNotEmpty())
+            @foreach ($item->variant->attributeValues as $attributeValue)
+          <span class="cart-variran">Loại : {{ $attributeValue->value }} </span>
+          @endforeach
+          @else
+          <span class="cart-variran">
+          Loại : Mặc Định
+          </span>
+          @endif
+            </p>
+            </div>
 
-              <a onclick="event.preventDefault(); this.nextElementSibling.submit();" class="minicart-remove"><i
-                  class="pe-7s-close"></i></a>
+            <a onclick="event.preventDefault(); this.nextElementSibling.submit();" class="minicart-remove"><i
+              class="pe-7s-close"></i></a>
 
-              <form action="{{ route('cart.remove', $item->product_id) }}" method="POST" style="display: none;">
-                @csrf
-              </form>
+            <form action="{{ route('cart.remove', $item->product_id) }}" method="POST" style="display: none;">
+            @csrf
+            </form>
 
-            </li>
-            @empty
-            <li class="list-group-item bg-transparent text-center">Giỏ hàng trống</li>
-            @endforelse
+          </li>
+    @empty
+        <li class="list-group-item bg-transparent text-center">Giỏ hàng trống</li>
+      @endforelse
           </ul>
         </div>
 

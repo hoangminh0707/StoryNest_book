@@ -42,6 +42,8 @@ use App\Http\Controllers\Client\MomoController;
 use App\Http\Controllers\Client\ContactController;
 
 
+require base_path('routes/channels.php');
+
 
 
 
@@ -116,7 +118,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/cart/update/{product}', [CartClientController::class, 'update'])->name('cart.update');
     Route::post('/cart/remove/{product}', [CartClientController::class, 'remove'])->name('cart.remove');
 
-
+    Route::get('/notifications/fetch', [NotificationAdminController::class, 'fetchUserNotifications'])->name('user.notifications.fetch');
 });
 
 // Người dùng phải đăng nhập và xác thực email để sử dụng
@@ -163,9 +165,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // ─── ADMIN ROUTES ──────────────────────────────────────────────────────────────────
 //
 
-Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->group(function () {
     // Đăng nhập / Đăng ký / Dashboard
-    Route::get('/', [AdminController::class, 'dashboard'])->middleware(['auth', 'role:admin'])->name('dashboard');
+    Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('/revenue-data', [AdminController::class, 'getRevenueData']);
 
     Route::get('/login', [LoginAdminController::class, 'showLoginAdminForm'])->name('login');
@@ -199,6 +201,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::put('/products/{product}', [ProductAdminController::class, 'update'])->name('products.update');
     Route::delete('/products/images/{id}', [ProductAdminController::class, 'destroyImage'])->name('products.images.destroy');
     Route::post('/products/bulk-delete', [ProductAdminController::class, 'bulkDelete'])->name('products.bulkDelete');
+    Route::post('/products/bulk-update-status', [ProductAdminController::class, 'bulkUpdateStatus'])->name('products.bulkUpdateStatus');
 
 
     // Tác giả - Nhà xuất bản

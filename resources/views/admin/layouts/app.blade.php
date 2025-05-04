@@ -49,6 +49,32 @@
     <script src="https://cdn.jsdelivr.net/npm/simplebar@latest/dist/simplebar.min.js"></script>
 
 </head>
+<script>
+    // Thông Báo Thành Công
+    document.addEventListener('DOMContentLoaded', function () {
+
+
+        @if (session('success'))
+            Swal.fire({
+                title: 'Thành công!',
+                text: '{{ session("success") }}',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+        @endif
+
+        @if (session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi!',
+                text: '{{ session('error') }}',
+                timer: 4000,
+                showConfirmButton: false
+            });
+        @endif
+});
+
+</script>
 
 <body>
 
@@ -57,7 +83,6 @@
     @include('admin.layouts.footer')
     @yield('scripts')
 
-    <audio id="notification-sound" src="{{ asset('sounds/notification.mp3') }}" preload="auto"></audio>
 </body>
 
 </html>

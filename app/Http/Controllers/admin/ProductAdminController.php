@@ -33,6 +33,7 @@ class ProductAdminController extends Controller
         $counts = [
             'all' => Product::count(),
             'published' => Product::where('status', 'published')->count(),
+            'discontinued' => Product::where('status', 'discontinued')->count(),
             'draft' => Product::where('status', 'draft')->count(),
         ];
 
@@ -162,17 +163,42 @@ class ProductAdminController extends Controller
     public function destroy($id)
     {
         DB::beginTransaction();
+
         try {
             $product = Product::with(['variants.attributeValues', 'images', 'categories', 'cartItems', 'orderItems', 'reviews', 'wishlists'])
                 ->findOrFail($id);
 
+            // ❌ Đã có người mua (có orderItems)
+            if ($product->orderItems->count() > 0) {
+                $product->status = 'discontinued';
+                $product->save();
+
+                DB::commit();
+                return redirect()->route('admin.products.index')
+                    ->with('warning', 'Sản phẩm đã có người mua nên được chuyển sang trạng thái ngưng kinh doanh.');
+            }
+
+            // ❌ Đã có danh mục gắn vào
+            if ($product->categories->count() > 0) {
+                $product->status = 'discontinued';
+                $product->save();
+
+                DB::commit();
+                return redirect()->route('admin.products.index')
+                    ->with('warning', 'Sản phẩm thuộc danh mục nên được chuyển sang trạng thái ngưng kinh doanh.');
+            }
+
+            // ✅ Nếu không vướng điều kiện nào → được phép xóa
+
             $product->voucherConditions()->delete();
             $product->cartItems()->delete();
             $product->orderItems()->delete();
+
             foreach ($product->variants as $variant) {
                 $variant->attributeValues()->detach();
                 $variant->delete();
             }
+
             $product->reviews()->delete();
             $product->wishlists()->delete();
 
@@ -311,4 +337,21 @@ class ProductAdminController extends Controller
         return redirect()->route('admin.products.index')->with('success', 'Đã xóa các sản phẩm đã chọn.');
     }
 
+
+    public function bulkUpdateStatus(Request $request)
+    {
+        $request->validate([
+            'product_ids' => 'required', // Có thể là 1 ID hoặc nhiều ID ngăn cách bởi dấu phẩy
+            'status' => 'required|in:published,draft,discontinued',
+        ]);
+
+        $productIds = explode(',', $request->input('product_ids'));
+        $status = $request->input('status');
+
+        Product::whereIn('id', $productIds)->update([
+            'status' => $status,
+        ]);
+
+        return redirect()->back()->with('success', 'Cập nhật trạng thái sản phẩm thành công!');
+    }
 }

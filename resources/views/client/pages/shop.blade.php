@@ -67,7 +67,7 @@
       <!-- product grid start -->
       <div class="product-item">
       <figure class="product-thumb">
-        <a href="href=" {{ route('product.show', $product->slug) }}">
+        <a href="{{ route('product.show', $product->slug) }}">
         <img class="pri-img" src="{{ Storage::url($product->images->first()->image_path) }}" alt="product">
         <img class="sec-img" src="{{ Storage::url($product->images->first()->image_path) }}" alt="product">
         </a>
@@ -80,15 +80,19 @@
         </div>
         </div>
         <div class="button-group">
-        <a href="wishlist.html" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to wishlist"><i
-        class="pe-7s-like"></i></a>
-        <a href="compare.html" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Compare"><i
-        class="pe-7s-refresh-2"></i></a>
-        <a href="#" data-bs-toggle="modal" data-bs-target="#quick_view"><span data-bs-toggle="tooltip"
-        data-bs-placement="left" title="Quick View"><i class="pe-7s-search"></i></span></a>
+        <a href="{{ route('wishlist.add', $product->id) }}" data-bs-toggle="tooltip" data-bs-placement="left"
+        title="Add to wishlist"><i class="pe-7s-like"></i></a>
         </div>
         <div class="cart-hover">
-        <button class="btn btn-cart">add to cart</button>
+        @auth
+      <form action="{{ route('cart.add', $product->id) }}" method="POST" style="display:inline;">
+      @csrf
+      <button class="btn btn-cart">Thêm vào giỏ hàng</button>
+      </form>
+      @endauth
+        @guest
+      <a href="onclick=" showLoginAlert()" class="btn btn-cart">Thêm vào giỏ hàng</a>
+      @endguest
         </div>
       </figure>
       <div class="product-caption text-center">
@@ -145,10 +149,9 @@
         @auth
       <form action="{{ route('cart.add', $product->id) }}" method="POST" style="display:inline;">
       @csrf
-      <button class="btn btn-cart">Thêm vào giỏ hàng</button>
+      <button class="btn btn-cart" type="submit">Thêm vào giỏ hàng</button>
       </form>
       @endauth
-
         @guest
       <a href="onclick=" showLoginAlert()" class="btn btn-cart">Thêm vào giỏ hàng</a>
       @endguest
@@ -195,7 +198,31 @@
       </div>
     </div>
     </div>
+    <!-- start pagination area -->
+    <div class="paginatoin-area text-center mt-4">
+    <ul class="pagination-box">
+      @if ($products->onFirstPage())
+      <li><a class="previous disabled"><i class="pe-7s-angle-left"></i></a></li>
+    @else
+      <li><a class="previous" href="{{ $products->previousPageUrl() }}"><i class="pe-7s-angle-left"></i></a></li>
+    @endif
+
+      @foreach ($products->getUrlRange(1, $products->lastPage()) as $page => $url)
+      <li class="{{ $products->currentPage() == $page ? 'active' : '' }}">
+      <a href="{{ $url }}">{{ $page }}</a>
+      </li>
+    @endforeach
+
+      @if ($products->hasMorePages())
+      <li><a class="next" href="{{ $products->nextPageUrl() }}"><i class="pe-7s-angle-right"></i></a></li>
+    @else
+      <li><a class="next disabled"><i class="pe-7s-angle-right"></i></a></li>
+    @endif
+    </ul>
+    </div>
+    <!-- end pagination area -->
   </div>
+
 
 
 

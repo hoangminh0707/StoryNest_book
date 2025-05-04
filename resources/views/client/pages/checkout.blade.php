@@ -329,7 +329,7 @@
           </div>
     
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary w-100" id="saveAddressBtn">Xác nhận địa chỉ</button>
+            <button type="button" class="btn btn-sqr w-100" id="saveAddressBtn">Xác nhận địa chỉ</button>
           </div>
         </div>
       </div>
@@ -359,7 +359,7 @@
                                 <div class="text-end">
                                     <p class="mb-0">{{ number_format($method->default_fee) }}₫</p>
                                     @if($method->image)
-                                        <img src="{{ asset($method->image) }}" alt="{{ $method->name }}" style="width: 50px;">
+                                        <img src="{{ Storage::url($method->image) }}" alt="{{ $method->name }}" style="width: 50px;">
                                     @endif
                                 </div>
                             </div>
@@ -370,7 +370,7 @@
           </div>
     
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary w-100" id="saveShippingBtn">Xác nhận phương thức</button>
+            <button type="button" class="btn btn-sqr w-100" id="saveShippingBtn">Xác nhận phương thức</button>
           </div>
         </div>
       </div>
@@ -399,7 +399,7 @@
                                     <small class="text-muted">{{ $method->description }}</small>
                                 </div>
                                 @if($method->image)
-                                    <img src="{{ asset($method->image) }}" alt="{{ $method->name }}" style="width: 50px;">
+                                    <img src="{{ Storage::url($method->image) }}" alt="{{ $method->name }}" style="width: 50px;">
                                 @endif
                             </div>
                         </label>
@@ -409,7 +409,7 @@
           </div>
     
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary w-100" id="savePaymentBtn">Xác nhận thanh toán</button>
+            <button type="button" class="btn btn-sqr w-100" id="savePaymentBtn">Xác nhận thanh toán</button>
           </div>
         </div>
       </div>
@@ -429,40 +429,52 @@
     
           <div class="modal-body">
             @foreach($vouchers as $v)
-                <div class="voucher-item mb-3 p-3 border rounded">
-                    <div class="d-flex align-items-start">
-                        <input type="radio" name="selected_voucher" id="voucher{{ $v->id }}" value="{{ $v->id }}" class="form-check-input mt-1 me-2"
-                            {{ session('checkout_voucher') == $v->id ? 'checked' : '' }}>
-    
-                        <label for="voucher{{ $v->id }}" class="w-100">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <strong>{{ $v->code }}</strong>
-                                    <br>
-                                    <small class="text-muted">
-                                        {{ $v->description ?? 'Áp dụng cho đơn hàng đủ điều kiện' }} <br>
-                                        Đơn từ {{ number_format($v->min_order_value) }}₫
-                                        @if($v->expires_at)
-                                            | HSD: {{ \Carbon\Carbon::parse($v->expires_at)->format('d/m/Y') }}
-                                        @endif
-                                    </small>
-                                </div>
-                                <div class="text-end">
-                                    @if($v->type === 'fixed')
-                                        <span class="badge bg-success">-{{ number_format($v->value) }}₫</span>
-                                    @else
-                                        <span class="badge bg-success">-{{number_format($v->value) }}%</span>
-                                    @endif
-                                </div>
-                            </div>
-                        </label>
+            @php
+            $isUsable = $cartTotal >= $v->min_order_value;
+        @endphp
+        
+        <div class="voucher-item mb-3 p-3 border rounded {{ !$isUsable ? 'bg-light text-muted' : '' }}">
+            <div class="d-flex align-items-start">
+                <input type="radio"
+                       name="selected_voucher"
+                       id="voucher{{ $v->id }}"
+                       value="{{ $v->id }}"
+                       class="form-check-input mt-1 me-2"
+                       {{ !$isUsable ? 'disabled' : '' }}
+                       {{ session('checkout_voucher') == $v->id && $isUsable ? 'checked' : '' }}>
+        
+                <label for="voucher{{ $v->id }}" class="w-100">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>{{ $v->code }}</strong><br>
+                            <small class="text-muted">
+                                {{ $v->description ?? 'Áp dụng cho đơn hàng đủ điều kiện' }}<br>
+                                Đơn từ {{ number_format($v->min_order_value) }}₫
+                                @if($v->expires_at)
+                                    | HSD: {{ \Carbon\Carbon::parse($v->expires_at)->format('d/m/Y') }}
+                                @endif
+                            </small>
+                        </div>
+                        <div class="text-end">
+                            @if($v->type === 'fixed')
+                                <span class="badge bg-success">-{{ number_format($v->value) }}₫</span>
+                            @else
+                                <span class="badge bg-success">-{{ number_format($v->value) }}%</span>
+                            @endif
+                        </div>
                     </div>
-                </div>
+                </label>
+            </div>
+            @if (!$isUsable)
+                <small class="text-danger d-block mt-1">Đơn hàng chưa đủ điều kiện</small>
+            @endif
+        </div>
+        
             @endforeach
           </div>
     
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary w-100" id="saveVoucherBtn">Áp dụng</button>
+            <button type="button" class="btn btn-sqr w-100" id="saveVoucherBtn">Áp dụng</button>
           </div>
     
         </div>

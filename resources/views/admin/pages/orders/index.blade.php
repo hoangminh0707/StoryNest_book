@@ -97,17 +97,9 @@
                                                 <i class="fa fa-eye"></i>
                                             </a>
                                             <!-- <a href="{{ route('admin.orders.editStatus', $order->id) }}" class="btn btn-warning btn-sm me-1">
-                                                                                            <i class="fa fa-sync-alt"></i>
-                                                                                        </a> -->
-                                            <form action="{{ route('admin.orders.destroy', $order->id) }}" method="POST"
-                                                class="d-inline"
-                                                onsubmit="return confirm('Bạn có chắc chắn muốn xóa đơn hàng này?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger ">Xóa
-                                                    <i class="fa fa-trash"></i>
-                                                </button>
-                                            </form>
+                                                                                                    <i class="fa fa-sync-alt"></i>
+                                                                                                </a> -->
+
                                         </td>
                                     </tr>
                                 @empty

@@ -26,4 +26,47 @@ class NotificationAdminController extends Controller
 
         ]);
     }
+
+
+    public function fetchUserNotifications()
+    {
+        $user = auth()->user();
+        $notifications = $user->notifications()->latest()->take(10)->get();
+
+
+        $data = $notifications->map(function ($noti) {
+            $orderId = $noti->data['order_id'] ?? null;
+            $order = \App\Models\Order::with('orderItems.product.thumbnail')->find($orderId);
+
+
+            $firstImage = 'images/default.jpg'; // fallback nằm ở public/images
+
+            if ($order && $order->orderItems->isNotEmpty()) {
+                $product = $order->orderItems->first()->product;
+
+                $thumbnail = $product->thumbnail; // lấy ảnh chính
+
+                if ($thumbnail && $thumbnail->image_path && file_exists(storage_path('app/public/' . $thumbnail->image_path))) {
+                    $firstImage = 'storage/' . $thumbnail->image_path;
+                }
+            }
+
+            return [
+                'title' => 'Cập nhật đơn hàng #' . ($order->order_code ?? '...'),
+                'message' => $noti->data['message'] ?? '',
+                'detail' => $noti->data['status_label'] ?? '',
+                'url' => route('orders.show', $orderId),
+                'time' => $noti->created_at->diffForHumans(),
+                'image' => asset($firstImage),
+            ];
+        });
+
+
+        return response()->json([
+            'count' => $notifications->count(),
+            'notifications' => $data,
+        ]);
+    }
+
+
 }

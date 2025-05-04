@@ -67,33 +67,60 @@
       <h4 class="section-title">🛒 Sản phẩm</h4>
       <div class="order-items">
       @foreach($order->orderItems as $item)
-      <div class="order-item">
-      <div>
-      <strong>{{ $item->product_name }}</strong><br>
-      SL: {{ $item->quantity }} × {{ number_format($item->price) }} VND
-      </div>
-      <div><strong>{{ number_format($item->total) }} VND</strong></div>
-      </div>
+      @php
+      $productImage = $item->product?->thumbnail
+      ?? $item->productVariant?->image
+      ?? asset('images/no-image.png'); // ảnh mặc định nếu không có
+      @endphp
+      <a href="{{ route('product.show', $item->product->slug) }}">
+        <div class="order-item d-flex align-items-start mb-3 text-dark">
+        <img src="{{ Storage::url($productImage->image_path) }}" alt="{{ $item->product_name }}"
+        style="width: 60px; height: 60px; object-fit: cover;" class="me-3 rounded border">
+
+        <div class="flex-grow-1">
+        <strong>{{ $item->product_name }}</strong><br>
+        SL: {{ $item->quantity }} × {{ number_format($item->price) }} VND
+        </div>
+
+        <div class="text-end" style="min-width: 100px;">
+        <strong>{{ number_format($item->total) }} VND</strong>
+        </div>
+        </div>
+      </a>
     @endforeach
       </div>
     </div>
+
 
     {{-- Thông tin thanh toán --}}
     <div class="order-section">
       <h4 class="section-title">💳 Thanh toán</h4>
       <ul class="order-info">
       <li><strong>Tạm tính:</strong> {{ number_format($order->total_amount) }} VND</li>
+
+
+      <li><strong>Giảm giá:</strong> – {{ number_format($order->discount_amount) ?? '0' }} VND</li>
+
       <li><strong>Phí vận chuyển:</strong> {{ number_format($order->shipping_fee) }} VND</li>
-      <li><strong>Thành tiền:</strong> <span class="text-success">{{ number_format($order->final_amount) }} VND</span>
+
+      <li><strong>Thành tiền:</strong>
+        <span class="text-success">{{ number_format($order->final_amount) }} VND</span>
       </li>
+
       <li><strong>Phương thức:</strong> {{ $order->payment->paymentMethod->name ?? '---' }}</li>
-      <li><strong>Trạng thái:</strong> <span
-        class="badge bg-{{ $statusColors[$order->status] ?? 'secondary' }} text-white">{{ ucfirst($statusLabels[$order->status] ?? $order->status) }}</span>
+
+      <li><strong>Trạng thái:</strong>
+        <span class="badge bg-{{ $statusColors[$order->status] ?? 'secondary' }} text-white">
+        {{ ucfirst($statusLabels[$order->status] ?? $order->status) }}
+        </span>
       </li>
+
       <li><strong>Đặt lúc:</strong> {{ $order->created_at->format('H:i d/m/Y') }}</li>
       </ul>
     </div>
-    @if (in_array($order->status, ['pending', 'processing']))
+
+
+    @if (in_array($order->status, ['pending', 'confirmed']))
     <div class="mt-4">
       <form action="{{ route('orders.cancel', $order->id) }}" method="POST"
       onsubmit="return confirm('Bạn có chắc muốn huỷ đơn hàng này?');">

@@ -133,6 +133,39 @@
                         </div>
                     @endif
 
+                    {{-- Form cập nhật trạng thái --}}
+                    <form method="POST" action="{{ route('admin.orders.updateStatus', $order->id) }}" class="mt-3">
+                        @csrf
+                        @method('PUT')
+
+                        <div class="row g-2 align-items-end">
+                            <div class="col-md-6">
+                                <label class="form-label">Cập nhật trạng thái:</label>
+                                <select name="status" class="form-select" required>
+                                    <option value="">-- Chọn trạng thái --</option>
+                                    @php
+                                        $validTransitions = [
+                                            'pending' => ['confirmed'],
+                                            'confirmed' => ['shipped'],
+                                            'shipped' => ['delivered'],
+                                            'delivered' => ['completed'],
+                                        ];
+                                    @endphp
+
+                                    @foreach($validTransitions[$order->status] ?? [] as $nextStatus)
+                                        <option value="{{ $nextStatus }}">
+                                            {{ $statusLabels[$nextStatus] ?? ucfirst($nextStatus) }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <button type="submit" class="btn btn-primary">Cập nhật</button>
+                            </div>
+                        </div>
+                    </form>
+
+
                     {{-- Nút quay lại --}}
                     <div class="mt-4">
                         <a href="{{ route('admin.orders.index') }}" class="btn btn-secondary">

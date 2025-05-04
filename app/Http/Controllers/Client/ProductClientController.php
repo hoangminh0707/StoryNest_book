@@ -146,7 +146,8 @@ class ProductClientController extends Controller
                 $groupedAttributes[$attributeName][] = [
                     'variant_id' => $variant->id,
                     'value' => $attrValue->value,
-                    'price' => $variant->variant_price
+                    'price' => $variant->variant_price,
+                    'stock_quantity' => $variant->stock_quantity,
                 ];
             }
         }
@@ -226,7 +227,7 @@ class ProductClientController extends Controller
         if (auth()->check()) {
             $canReview = OrderItem::whereHas('order', function ($q) {
                 $q->where('user_id', auth()->id())
-                    ->where('status', 'completed');
+                    ->where('status', 'delivered');
             })
                 ->where('product_id', $product->id)
                 ->exists();

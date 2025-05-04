@@ -11,6 +11,7 @@
     <meta name="robots" content="noindex, follow" />
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="https://i.ibb.co/WpKLtySw/Logo-Story-Nest-Book.jpg">
 
@@ -40,6 +41,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <!-- Laravel Echo + PusherJS -->
+    <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.11.3/dist/echo.iife.js"></script>
 
 
 
@@ -92,6 +96,61 @@
         });
     }
 
+    @auth
+
+
+        let lastNotificationCount = 0;
+
+        function fetchNotifications() {
+            fetch('{{ route('user.notifications.fetch') }}')
+                .then(response => response.json())
+                .then(data => {
+                    const badge = document.getElementById('noti-count');
+                    const label = document.getElementById('noti-count-label');
+                    const container = document.getElementById('noti-container');
+
+                    if (data.count > lastNotificationCount) {
+                        const sound = document.getElementById('notification-sound');
+                        if (sound) {
+                            sound.play().catch(e => {
+                                console.warn('Trình duyệt chặn âm thanh:', e);
+                            });
+                        }
+                    }
+
+                    lastNotificationCount = data.count;
+                    if (badge) badge.innerText = data.count;
+                    if (label) label.innerText = `${data.count} mới`;
+
+                    let notiHtml = '';
+                    data.notifications.forEach(noti => {
+                        notiHtml += `
+                                  <div class="notification-item d-flex px-3 py-2 align-items-start border-bottom">
+                                    <div class="me-3 flex-shrink-0">
+                                      <img src="${noti.image}" alt="product image" class="rounded" style="width: 48px; height: 48px; object-fit: cover;">
+                                    </div>
+                                    <div class="flex-grow-1">
+                                      <a href="${noti.url}" class="text-decoration-none stretched-link">
+                                        <h6 class="fw-semibold mb-1 fs-14">${noti.title}</h6>
+                                        <p class="mb-1 text-muted fs-13">${noti.message}</p>
+                                        <p class="mb-0 text-muted fs-12"><i class="mdi mdi-clock-outline me-1"></i> ${noti.time}</p>
+                                      </a>
+                                    </div>
+                                  </div>
+                                `;
+
+
+                    });
+
+                    container.innerHTML = notiHtml || '<div class="text-center text-muted py-2">Không có thông báo nào</div>';
+                });
+        }
+
+        document.addEventListener("DOMContentLoaded", fetchNotifications);
+        setInterval(fetchNotifications, 10000);
+
+    @endauth
+
 </script>
 
 
@@ -132,6 +191,9 @@
 
     <!-- Main JS -->
     <script src="{{ asset('assetsClient/js/main.js') }}"></script>
+
+    <script src="//unpkg.com/alpinejs" defer></script>
+
 
 </body>
 

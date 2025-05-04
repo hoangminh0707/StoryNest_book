@@ -101,15 +101,17 @@
         $minPrice = $variants->min('variant_price');
         $maxPrice = $variants->max('variant_price');
         }
+        $totalStock = $variants->sum('stock_quantity');
         @endphp
           <div class="price-box">
             @if ($variants->count() === 1)
-        <span class="price-regular">{{ number_format($minPrice) }} đ</span>
+        <span id="variant-price" class="price-regular">{{ number_format($minPrice) }} đ</span>
         @elseif ($variants->count() > 1)
-        <span class="price-regular">{{ number_format($minPrice) }} đ -
-        {{ number_format($maxPrice) }} đ </span>
+        <span id="variant-price" class="price-regular">
+        {{ number_format($minPrice) }} đ - {{ number_format($maxPrice) }} đ
+        </span>
         @else
-        <span class="price-regular">{{ number_format($product->price) }}</span>
+        <span id="variant-price" class="price-regular">{{ number_format($product->price) }} đ</span>
         @endif
           </div>
           <div class="product-voucher">
@@ -130,48 +132,59 @@
         @endforeach
             </ul>
           </div>
+          @if ($product->status !== 'discontinued')
           <form id="add-to-cart-form" action="{{ route('cart.add', $product->id) }}" method="POST"
-            style="display:inline;">
-            @csrf
-            <input type="hidden" name="price" id="product_price">
-            <input type="hidden" name="product_variant_id" id="product_variant_id">
+          style="display:inline;">
+          @csrf
+          <input type="hidden" name="price" id="product_price">
+          <input type="hidden" name="product_variant_id" id="product_variant_id">
 
-            <div class="availability">
-            <i class="fa fa-check-circle"></i>
-            <span>Số Lượng : {{ $product->quantity }}</span>
-            </div>
-            <p class="pro-desc">{{ $product->description }}</p>
-            <div class="quantity-cart-box d-flex align-items-center gap-2">
-            <h6 class="option-title mb-0">SL:</h6>
-            <div class="input-group quantity-input" style="width: 120px;">
-              <button class="btn btn-outline-secondary btn-sm" type="button" onclick="changeQty(-1)">-</button>
-              <input type="number" name="quantity" class="form-control text-center" value="1" min="1">
-              <button class="btn btn-outline-secondary btn-sm" type="button" onclick="changeQty(1)">+</button>
-            </div>
-
-            <div class="action_link">
-              @if ($product->quantity > 0)
-          <button type="submit" class="btn btn-cart2" id="add-to-cart-btn">
-          Thêm vào giỏ hàng
-          </button>
+          <div class="availability">
+          <i class="fa fa-check-circle"></i>
+          <span id="stock-info">
+            Số Lượng :
+            @if ($product->product_type === 'variable')
+          {{ $variants->sum('stock_quantity') }}
         @else
-          <button class="btn btn-cart2" id="add-to-cart-btn" disabled>
-          Sản phẩm đã hết hàng
-          </button>
+          {{ $product->quantity }}
         @endif
-            </div>
-            </div>
+          </span>
+          </div>
 
+          <p class="pro-desc">{{ $product->description }}</p>
 
-            @foreach ($groupedAttributes as $attributeName => $attributeValues)
+          <div class="quantity-cart-box d-flex align-items-center gap-2">
+          <h6 class="option-title mb-0">SL:</h6>
+          <div class="input-group quantity-input" style="width: 120px;">
+            <button class="btn btn-outline-secondary btn-sm" type="button" onclick="changeQty(-1)">-</button>
+            <input type="number" name="quantity" class="form-control text-center" value="1" min="1">
+            <button class="btn btn-outline-secondary btn-sm" type="button" onclick="changeQty(1)">+</button>
+          </div>
+
+          @php
+          $isAvailable = $product->product_type === 'variable'
+          ? $variants->sum('stock_quantity') > 0
+          : $product->quantity > 0;
+        @endphp
+
+          <div class="action_link">
+            @if ($isAvailable)
+          <button type="submit" class="btn btn-cart2" id="add-to-cart-btn">Thêm vào giỏ hàng</button>
+        @else
+          <button class="btn btn-cart2" id="add-to-cart-btn" disabled>Sản phẩm đã hết hàng</button>
+        @endif
+          </div>
+          </div>
+
+          @foreach ($groupedAttributes as $attributeName => $attributeValues)
           <div class="pro-size">
           <h6 class="option-title">{{ $attributeName }} </h6>
           <select name="variant_id" id="{{ strtolower($attributeName) }}_variant_id" class="form-control"
-          style="width : 100% ; max-width: 120px;">
+          style="width: 100%; max-width: 120px;">
           <option value="">Chọn {{ $attributeName }}</option>
           @foreach ($attributeValues as $attribute)
-        <option value="{{ $attribute['variant_id'] }}"
-        data-price="{{ number_format($attribute['price'])  }}">
+        <option value="{{ $attribute['variant_id'] }}" data-price="{{ $attribute['price']}}"
+        data-stock="{{ $attribute['stock_quantity'] }}">
         {{ $attribute['value'] }}
         </option>
         @endforeach
@@ -179,6 +192,12 @@
           </div>
         @endforeach
           </form>
+      @else
+        <div class="alert alert-warning mt-3">
+        <strong>Lưu ý:</strong> Sản phẩm này hiện đã <strong>ngừng kinh doanh</strong> và không thể mua.
+        </div>
+      @endif
+
 
           <div class="useful-links">
             <a href="{{ route('wishlist.add', $product->id) }}" data-bs-toggle="tooltip" title="Wishlist">
@@ -424,36 +443,61 @@
 
 
   <script>
-    window.onload = function () {
-    document.querySelectorAll('.form-control').forEach(function (selectElement) {
-      selectElement.addEventListener('change', function () {
-      let selectedOption = selectElement.options[selectElement.selectedIndex];
-      // console.log('Selected option:', selectedOption);  // Kiểm tra option đã chọn
+    document.addEventListener('DOMContentLoaded', function () {
+    const selects = document.querySelectorAll('select[name="variant_id"]');
+    const stockInfo = document.getElementById('stock-info');
+    const priceBox = document.getElementById('variant-price');
+    const addToCartBtn = document.getElementById('add-to-cart-btn');
 
-      let newPrice = selectedOption.dataset.price;
-      // console.log('Selected price:', newPrice);  // Kiểm tra giá trị data-price
+    // 👉 Lưu giá ban đầu
+    const defaultPriceText = priceBox ? priceBox.innerText : '';
 
-      if (newPrice) {
-        document.getElementById('product-price').innerText = newPrice.toLocaleString() + " đ";
-      } else {
-        document.getElementById('product-price').innerText = '{{ number_format($product->price) }} đ';
-      }
+    if (selects.length > 0) {
+      selects.forEach(select => {
+      select.addEventListener('change', function () {
+        const selectedOption = this.options[this.selectedIndex];
+        const stock = parseInt(selectedOption.getAttribute('data-stock')) || 0;
+        const price = parseFloat(selectedOption.getAttribute('data-price')) || 0;
+
+        // 👉 Nếu người dùng chưa chọn gì
+        if (!selectedOption.value) {
+        if (stockInfo) stockInfo.innerText = `Số Lượng : {{ $variants->sum('stock_quantity') }}`;
+        if (priceBox) priceBox.innerText = defaultPriceText;
+        addToCartBtn.setAttribute('disabled', true);
+        addToCartBtn.innerText = 'Chọn biến thể';
+        return;
+        }
+
+        // ✅ Nếu đã chọn biến thể
+        if (stock > 0) {
+        stockInfo.innerText = `Số Lượng : ${stock}`;
+        addToCartBtn.removeAttribute('disabled');
+        addToCartBtn.innerText = 'Thêm vào giỏ hàng';
+        } else {
+        stockInfo.innerText = `Sản phẩm đã hết hàng`;
+        addToCartBtn.setAttribute('disabled', true);
+        addToCartBtn.innerText = 'Sản phẩm đã hết hàng';
+        }
+
+        if (priceBox && !isNaN(price)) {
+        priceBox.innerText = new Intl.NumberFormat('vi-VN').format(price) + ' đ';
+        }
       });
+      });
+    }
     });
-    };
+
+
+
 
     function changeQty(change) {
     const input = document.querySelector('input[name="quantity"]');
     let value = parseInt(input.value);
     if (!isNaN(value)) {
       value += change;
-      if (value < 1) value = 1;
-      input.value = value;
+      if (value < 1) value = 1; input.value = value;
     }
-    }
-
-
-  </script>
+    } </script>
 
 
 

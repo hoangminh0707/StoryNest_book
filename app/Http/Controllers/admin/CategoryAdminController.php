@@ -51,8 +51,18 @@ class CategoryAdminController extends Controller
 
     public function destroy(Categories $category)
     {
+        // Kiểm tra nếu danh mục đang gán sản phẩm
+        if ($category->products()->exists()) {
+            return redirect()->route('admin.categories.index')
+                ->with('error', 'Không thể xoá danh mục vì đang chứa sản phẩm.');
+        }
+
+        // Nếu không có sản phẩm → xoá
         $category->voucherConditions()->delete();
         $category->delete();
-        return redirect()->route('admin.categories.index')->with('success', 'Danh mục đã bị xóa!');
+
+        return redirect()->route('admin.categories.index')
+            ->with('success', 'Danh mục đã bị xóa thành công!');
     }
+
 }

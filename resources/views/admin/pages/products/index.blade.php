@@ -49,6 +49,13 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
+                                    <a class="nav-link {{ request('status') == 'discontinued' ? 'active fw-semibold' : '' }}"
+                                        href="{{ route('admin.products.index', ['status' => 'discontinued']) }}">
+                                        Ngưng kinh doanh <span
+                                            class="badge bg-danger-subtle text-danger align-middle rounded-pill ms-1">{{ $counts['discontinued'] ?? 0 }}</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
                                     <a class="nav-link {{ request('status') == 'draft' ? 'active fw-semibold' : '' }}"
                                         href="{{ route('admin.products.index', ['status' => 'draft']) }}">
                                         Nháp <span
@@ -79,6 +86,14 @@
                             </div>
                         </div>
 
+                        {{-- Đã đăng --}}
+                        <div class="tab-pane {{ request('status') == 'discontinued' ? 'active' : '' }}"
+                            id="productnav-discontinued" role="tabpanel">
+                            <div id="table-product-list-discontinued" class="table-card gridjs-border-none">
+                                @include('admin.pages.products.partials.product-table', ['products' => $products])
+                            </div>
+                        </div>
+
                         {{-- Nháp --}}
                         <div class="tab-pane {{ request('status') == 'draft' ? 'active' : '' }}" id="productnav-draft"
                             role="tabpanel">
@@ -102,5 +117,50 @@
         </div>
     </div>
 
+
+
+    <!-- Modal cập nhật trạng thái sản phẩm -->
+    <div class="modal fade" id="bulkStatusModal" tabindex="-1" aria-labelledby="bulkStatusModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form id="bulk-status-form" method="POST" action="{{ route('admin.products.bulkUpdateStatus') }}">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="bulkStatusModalLabel">Cập nhật trạng thái sản phẩm</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="product_ids" id="selected-product-ids">
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Chọn trạng thái</label>
+                            <select class="form-select" name="status" required>
+                                <option value="">-- Chọn trạng thái --</option>
+                                <option value="published" {{ old('status') == 'published' ? 'selected' : '' }}>Đã đăng
+                                </option>
+                                <option value="draft" {{ old('status') == 'draft' ? 'selected' : '' }}>Nháp</option>
+                                <option value="discontinued" {{ old('status') == 'discontinued' ? 'selected' : '' }}>Ngừng
+                                    kinh doanh</option>
+                            </select>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-primary">Cập nhật</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function setSelectedProductId(id, currentStatus = '') {
+            const input = document.getElementById('selected-product-ids');
+            const select = document.getElementById('status');
+            if (input) input.value = id;
+            if (select && currentStatus) select.value = currentStatus;
+        }
+
+    </script>
 
 @endsection

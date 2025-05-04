@@ -23,6 +23,9 @@
 <script src="{{ asset('assets/libs/prismjs/prism.js') }}"></script>
 <script src="{{ asset('assets/libs/list.pagination.js/list.pagination.min.js') }}"></script>
 
+
+
+
 <!-- listjs init -->
 {{--
 <script src="{{ asset('assets/js/pages/listjs.init.js') }}"></script> --}}

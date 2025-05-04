@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Notifications\OrderStatusNotification;
 
 class OrderAdminController extends Controller
 {
@@ -74,7 +75,27 @@ class OrderAdminController extends Controller
         ]);
 
         $order = Order::findOrFail($id);
-        $order->update(['status' => $request->status]);
+
+        // Kiểm soát trạng thái hợp lệ
+        $validTransitions = [
+            'pending' => ['confirmed'],
+            'confirmed' => ['shipped'],
+            'shipped' => ['delivered'],
+            'delivered' => ['completed'],
+            'completed' => [],
+            'cancelled' => [],
+        ];
+
+        $current = $order->status;
+        $next = $request->status;
+
+        if (!in_array($next, $validTransitions[$current] ?? [])) {
+            return back()->with('error', "Không thể chuyển từ trạng thái '$current' sang '$next'.");
+        }
+
+        $order->update(['status' => $next]);
+        $order->user->notify(new OrderStatusNotification($order)); // ✅ Đúng
+
 
         return redirect()->route('admin.orders.index')->with('success', 'Cập nhật trạng thái thành công.');
     }

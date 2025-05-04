@@ -178,7 +178,8 @@ class CheckoutClientController extends Controller
             'eligibleProductIds',
             'shippingFee',
             'shipping',
-            'payment'
+            'payment',
+            'cartTotal'
         ));
     }
 
@@ -372,13 +373,6 @@ class CheckoutClientController extends Controller
                 'status' => 'confirmed',
             ]);
 
-            $admins = User::whereHas('roles', function ($query) {
-                $query->where('name', 'admin');
-            })->get();
-
-            foreach ($admins as $admin) {
-                $admin->notify(new NewOrderNotification($order));
-            }
 
             if ($logVoucher) {
                 $logVoucher['order_id'] = $order->id;
@@ -388,10 +382,6 @@ class CheckoutClientController extends Controller
             foreach ($cartItems as $item) {
                 $product = Product::where('id', $item->product_id)->lockForUpdate()->first();
 
-                if ($product->quantity < $item->quantity) {
-                    throw new \Exception("Sản phẩm '{$product->name}' không đủ hàng.");
-                }
-
                 if ($item->product_variant_id) {
                     $variant = ProductVariant::where('id', $item->product_variant_id)->lockForUpdate()->first();
 
@@ -400,9 +390,13 @@ class CheckoutClientController extends Controller
                     }
 
                     $variant->decrement('stock_quantity', $item->quantity);
-                }
+                } else {
+                    if ($product->quantity < $item->quantity) {
+                        throw new \Exception("Sản phẩm '{$product->name}' không đủ hàng.");
+                    }
 
-                $product->decrement('quantity', $item->quantity);
+                    $product->decrement('quantity', $item->quantity);
+                }
 
                 OrderItem::create([
                     'order_id' => $order->id,
@@ -415,6 +409,7 @@ class CheckoutClientController extends Controller
                 ]);
             }
 
+
             Payment::create([
                 'order_id' => $order->id,
                 'amount' => $finalAmount,
@@ -424,6 +419,16 @@ class CheckoutClientController extends Controller
 
             $cart->cartItems()->delete();
             $cart->delete();
+
+            $order->load('items');
+
+            $admins = User::whereHas('roles', function ($q) {
+                $q->where('name', 'admin');
+            })->get();
+
+            foreach ($admins as $admin) {
+                $admin->notify(new NewOrderNotification($order));
+            }
 
             session()->forget(['checkout_voucher', 'checkout_shipping_method', 'checkout_address_id', 'pending_checkout']);
 
@@ -541,10 +546,6 @@ class CheckoutClientController extends Controller
             foreach ($cartItems as $item) {
                 $product = Product::where('id', $item->product_id)->lockForUpdate()->first();
 
-                if ($product->quantity < $item->quantity) {
-                    throw new \Exception("Sản phẩm '{$product->name}' không đủ hàng.");
-                }
-
                 if ($item->product_variant_id) {
                     $variant = ProductVariant::where('id', $item->product_variant_id)->lockForUpdate()->first();
 
@@ -553,9 +554,13 @@ class CheckoutClientController extends Controller
                     }
 
                     $variant->decrement('stock_quantity', $item->quantity);
-                }
+                } else {
+                    if ($product->quantity < $item->quantity) {
+                        throw new \Exception("Sản phẩm '{$product->name}' không đủ hàng.");
+                    }
 
-                $product->decrement('quantity', $item->quantity);
+                    $product->decrement('quantity', $item->quantity);
+                }
 
                 OrderItem::create([
                     'order_id' => $order->id,
