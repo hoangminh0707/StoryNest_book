@@ -71,13 +71,13 @@ class AdminController extends Controller
                 });
             }
         ])
-        ->orderByDesc('total_sales') // Sắp xếp theo tổng sản phẩm có đơn hàng
-        ->take(5) // Lấy 5 danh mục có tổng bán cao nhất
-        ->get();
-        
+            ->orderByDesc('total_sales') // Sắp xếp theo tổng sản phẩm có đơn hàng
+            ->take(5) // Lấy 5 danh mục có tổng bán cao nhất
+            ->get();
+
         $categoryLabels = $topCategories->pluck('name')->toArray();
         $categoryValues = $topCategories->pluck('total_sales')->toArray();
-        
+
 
 
         // Best-Selling Products: top 5 theo tổng số lượng bán
@@ -156,12 +156,12 @@ class AdminController extends Controller
             'recentOrders'
         ));
     }
- 
+
 
     public function getRevenueData(Request $request)
     {
         $range = $request->input('date_range', 'year');
-    
+
         $from = match ($range) {
             'today' => now()->startOfDay(),
             'yesterday' => now()->subDay()->startOfDay(),
@@ -169,28 +169,28 @@ class AdminController extends Controller
             'year' => now()->startOfYear(),
             default => now()->startOfWeek(),
         };
-    
+
         $to = match ($range) {
             'today', 'yesterday' => now()->endOfDay(),
             'month' => now()->endOfMonth(),
             'year' => now()->endOfYear(),
             default => now()->endOfWeek(),
         };
-    
+
         $data = Order::selectRaw('DATE(created_at) as date, COUNT(*) as orders, SUM(final_amount) as revenue')
             ->whereBetween('created_at', [$from, $to])
             ->groupBy('date')
             ->orderBy('date')
             ->get();
-    
+
         return response()->json([
             'labels' => $data->pluck('date')->map(fn($d) => \Carbon\Carbon::parse($d)->format('d/m'))->toArray(),
             'orders' => $data->pluck('orders')->toArray(),
             'revenues' => $data->pluck('revenue')->toArray(),
         ]);
     }
-    
 
-    
-    
+
+
+
 }

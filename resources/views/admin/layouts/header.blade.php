@@ -477,9 +477,7 @@
                                         data-key="t-basic-elements">
                                         Danh sách bài viết
                                     </a>
-                                    <a href="forms-elements.html" class="nav-link" data-key="t-basic-elements">
-                                        Danh sách flash sale
-                                    </a>
+
                                 </li>
 
                             </ul>

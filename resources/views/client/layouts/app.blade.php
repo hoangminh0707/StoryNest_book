@@ -13,7 +13,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="https://i.ibb.co/WpKLtySw/Logo-Story-Nest-Book.jpg">
+    <link rel="shortcut icon" href="{{ asset('assets/images/2.png') }}">
+
 
     <!-- CSS
 	============================================ -->
@@ -125,19 +126,19 @@
                     let notiHtml = '';
                     data.notifications.forEach(noti => {
                         notiHtml += `
-                                  <div class="notification-item d-flex px-3 py-2 align-items-start border-bottom">
-                                    <div class="me-3 flex-shrink-0">
-                                      <img src="${noti.image}" alt="product image" class="rounded" style="width: 48px; height: 48px; object-fit: cover;">
-                                    </div>
-                                    <div class="flex-grow-1">
-                                      <a href="${noti.url}" class="text-decoration-none stretched-link">
-                                        <h6 class="fw-semibold mb-1 fs-14">${noti.title}</h6>
-                                        <p class="mb-1 text-muted fs-13">${noti.message}</p>
-                                        <p class="mb-0 text-muted fs-12"><i class="mdi mdi-clock-outline me-1"></i> ${noti.time}</p>
-                                      </a>
-                                    </div>
-                                  </div>
-                                `;
+                                      <div class="notification-item d-flex px-3 py-2 align-items-start border-bottom">
+                                        <div class="me-3 flex-shrink-0">
+                                          <img src="${noti.image}" alt="product image" class="rounded" style="width: 48px; height: 48px; object-fit: cover;">
+                                        </div>
+                                        <div class="flex-grow-1">
+                                          <a href="${noti.url}" class="text-decoration-none stretched-link">
+                                            <h6 class="fw-semibold mb-1 fs-14">${noti.title}</h6>
+                                            <p class="mb-1 text-muted fs-13">${noti.message}</p>
+                                            <p class="mb-0 text-muted fs-12"><i class="mdi mdi-clock-outline me-1"></i> ${noti.time}</p>
+                                          </a>
+                                        </div>
+                                      </div>
+                                    `;
 
 
                     });
