@@ -550,12 +550,14 @@ class CheckoutClientController extends Controller
                     $variant = ProductVariant::where('id', $item->product_variant_id)->lockForUpdate()->first();
 
                     if ($variant->stock_quantity < $item->quantity) {
+                        $err = "Biến thể của sản phẩm '" . $product->name . "' không đủ hàng.";
                         throw new \Exception("Biến thể của sản phẩm '{$product->name}' không đủ hàng.");
                     }
 
                     $variant->decrement('stock_quantity', $item->quantity);
                 } else {
                     if ($product->quantity < $item->quantity) {
+                        $err = "Sản phẩm '" . $product->name . "' không đủ hàng.";
                         throw new \Exception("Sản phẩm '{$product->name}' không đủ hàng.");
                     }
 
@@ -601,7 +603,7 @@ class CheckoutClientController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             \Log::error('Lỗi khi xử lý đơn sau thanh toán COD: ' . $e->getMessage());
-            return redirect()->route('checkout')->with('error', 'Đã xảy ra lỗi khi xử lý đơn hàng sau thanh toán.');
+            return redirect()->route('checkout')->with('error', $err);
         }
     }
 

@@ -53,14 +53,14 @@
           @foreach ($cartItems as $item)
 
           <tr>
-          <td class="pro-thumbnail"><a href="{{ route('product.show', $item->product->id) }}">
+          <td class="pro-thumbnail"><a href="{{ route('product.show', $item->product->slug) }}">
           @if ($item->product && $item->product->images->isNotEmpty())
         <img class="img-fluid" src="{{ Storage::url($item->product->images->first()->image_path) }}"
         alt="{{ $item->product->name }}" />
         @endif
           </a></td>
           <td class="pro-title">
-          <a href="{{ route('product.show', $item->product->id) }}">{{ $item->product->name }}</a>
+          <a href="{{ route('product.show', $item->product->slug) }}">{{ $item->product->name }}</a>
           <br>
           @if ($item->variant && $item->variant->attributeValues->isNotEmpty())
           @foreach ($item->variant->attributeValues as $attributeValue)

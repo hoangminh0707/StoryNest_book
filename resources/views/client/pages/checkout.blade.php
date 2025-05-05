@@ -197,7 +197,7 @@
                                       <tbody>
                                         @foreach($cartItems as $item)
                                           <tr>
-                                              <td><a href="{{ route('product.show', $item->product->id) }}">{{ $item->product->name }} <strong> × {{ $item->quantity }}</strong></a>
+                                              <td><a href="{{ route('product.show', $item->product->slug) }}">{{ $item->product->name }} <strong> × {{ $item->quantity }}</strong></a>
                                                 @if($item->productVariant)
                                                 <br>
                                                 @foreach($item->productVariant->attributeValues as $attributeValue)
