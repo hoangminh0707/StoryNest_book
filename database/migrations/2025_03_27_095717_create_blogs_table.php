@@ -16,9 +16,10 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id'); // Người viết bài
             $table->string('title'); // Tiêu đề bài viết
             $table->text('content'); // Nội dung bài viết
+            $table->enum('status', ['published', 'draft', 'archived']);
+            $table->string('image')->nullable();
             $table->enum('status', ['draft', 'published'])->default('draft'); // Trạng thái bài viết
             $table->timestamps(); // created_at & updated_at
-
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
