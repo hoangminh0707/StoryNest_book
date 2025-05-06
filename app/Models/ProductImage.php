@@ -15,7 +15,6 @@ class ProductImage extends Model
         'is_thumbnail',
     ];
 
-    // Mối quan hệ N-1 với Product
     public function product()
     {
         return $this->belongsTo(Product::class);

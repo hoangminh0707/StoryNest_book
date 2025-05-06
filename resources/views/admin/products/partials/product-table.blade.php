@@ -1,107 +1,125 @@
 <table class="table table-bordered align-middle mb-0">
     <thead>
         <tr>
-            <th>
-                <input type="checkbox" id="select-all" class="form-check-input">
-            </th>
+            <th>#</th>
             <th>Ảnh</th>
             <th>Tên sản phẩm</th>
-            <th>Loại</th>
+            <th>Danh mục</th>
             <th>Biến thể</th>
             <th>Giá</th>
-            <th>Trạng thái</th>
+            <th>Số lượng</th>
             <th>Ngày tạo</th>
             <th>Hành động</th>
         </tr>
     </thead>
     <tbody>
         @forelse($products as $product)
-        <tr>
-            <td>
-                <input type="checkbox" class="product-checkbox form-check-input" data-product-id="{{ $product->id }}">
-            </td>
-            <td>
-                @if($product->thumbnail)
-                <img src="{{ asset('storage/' . $product->thumbnail->image_path) }}" alt="Thumbnail" width="60">
-                @else
-                <em>Không có</em>
-                @endif
-            </td>
-            <td>{{ $product->name }}</td>
-            <td>
-                @if($product->product_type == 'variable')
-                <span class="badge bg-info">Có biến thể</span>
-                @else
-                <span class="badge bg-secondary">Đơn giản</span>
-                @endif
-            </td>
-            <td>
-                @if($product->product_type === 'variable' && $product->variants->count())
-                <ul class="list-unstyled mb-0">
-                    @foreach($product->variants as $variant)
-                    <li>
-                       
-                        @if($variant->attributeValues->count())
-                        <ul class="text-muted small">
-                            @foreach($variant->attributeValues as $attrValue)
-                            <li>{{ $attrValue->value }}</li>
+            <tr>
+                <td>{{ $loop->iteration }}</td>
+                <td>
+                    @php
+                        $thumbnail = $product->images->firstWhere('is_thumbnail', true);
+                    @endphp
+                    @if($thumbnail)
+                        <img src="{{ Storage::url($thumbnail->image_path) }}" alt="Thumbnail" width="50">
+                    @else
+                        <span>Không có ảnh</span>
+                    @endif
+                </td>
+                <td>{{ $product->name }}</td>
+                <td>
+                    @foreach ($product->categories as $category)
+                        <span class="badge bg-primary">{{ $category->name }}</span>
+                    @endforeach
+                </td>
+                <td>
+                    @if($product->product_type === 'variable' && $product->variants->count())
+                        <ul class="list-unstyled mb-0">
+                            @foreach($product->variants as $variant)
+                                <li>
+                                    @if($variant->attributeValues->count())
+                                        <ul class="text-muted small">
+                                            @foreach($variant->attributeValues as $attrValue)
+                                                <li>{{ $attrValue->value }}</li>
+                                            @endforeach
+                                        </ul>
+                                    @endif
+                                </li>
                             @endforeach
                         </ul>
-                        @endif
-                    </li>
-                    @endforeach
-                </ul>
-                @else
-                <span class="text-muted">Không có</span>
-                @endif
-            </td>
-            <td>
-                @if($product->product_type === 'variable' && $product->variants->count())
-                    <ul class="list-unstyled mb-0">
-                        @foreach($product->variants as $variant)
+                    @else
+                        <span class="text-muted">Không có</span>
+                    @endif
+                </td>
+                <td>
+                    @if($product->product_type === 'variable' && $product->variants->count())
+                        <ul class="list-unstyled mb-0">
+                            @foreach($product->variants as $variant)
+                                <li>
+                                    <span class="text-muted">Giá:</span> {{ number_format($variant->variant_price, 0, ',', '.') }} đ
+                                </li>
+                            @endforeach
+                        </ul>
+                    @else
+                        <span>{{ number_format($product->price, 0, ',', '.') }} đ</span>
+                    @endif
+                </td>
+                <td>
+                    @if($product->product_type === 'variable' && $product->variants->count())
+                        <ul class="list-unstyled mb-0">
+                            @foreach($product->variants as $variant)
+                                <li>
+                                    <span class="text-muted">Số lượng:</span> {{ $variant->stock_quantity }}
+                                </li>
+                            @endforeach
+                        </ul>
+                    @else
+                        <span>Số lượng: {{ $product->quantity }}</span>
+                    @endif
+                </td>
+                <td>{{ $product->created_at->format('d/m/Y') }}</td>
+                <td data-column-id="action" class="gridjs-td text-center">
+                    <div class="dropdown">
+                        <button class="btn btn-soft-secondary btn-sm" type="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            ...
+                        </button>
+
+                        <ul class="dropdown-menu dropdown-menu-end" data-popper-placement="bottom-end">
                             <li>
-                                
-                                <span class="text-muted">Giá:</span> {{ number_format($variant->variant_price, 0, ',', '.') }} đ
+                                <a class="dropdown-item" href="{{ route('admin.products.show', $product->id) }}">
+                                    <i class="ri-eye-fill align-bottom me-2 text-muted"></i> Xem
+                                </a>
                             </li>
-                        @endforeach
-                    </ul>
-                @else
-                    <!-- Hiển thị giá của sản phẩm khi không có biến thể -->
-                    <span>{{ number_format($product->price, 0, ',', '.') }} đ</span>
-                @endif
-            </td>
-            <td>
-                <span class="badge bg-{{ $product->status == 'published' ? 'success' : 'secondary' }}">
-                    {{ $product->status == 'published' ? 'Đã đăng' : 'Nháp' }}
-                </span>
-            </td>
-            <td>{{ $product->created_at->format('d/m/Y') }}</td>
-            <td>
-                <a href="{{ route('products.show', $product->id) }}" class="btn btn-sm btn-info" title="Xem chi tiết">
-                    <i class="ri-eye-line"></i>
-                </a>
-                <a href="{{ route('products.edit', $product->id) }}" class="btn btn-sm btn-warning" title="Chỉnh sửa">
-                    <i class="ri-edit-line"></i>
-                </a>
-                <form action="{{ route('products.destroy', $product->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Bạn có chắc chắn muốn xoá sản phẩm này?');">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-sm btn-danger" title="Xoá sản phẩm">
-                        <i class="ri-delete-bin-line"></i>
-                    </button>
-                </form>
-            </td>
-        </tr>
+                            <li>
+                                <a class="dropdown-item" href="{{ route('admin.products.edit', $product->id) }}">
+                                    <i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Sửa
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="dropdown-item text-primary" data-bs-toggle="modal"
+                                    data-bs-target="#bulkStatusModal"
+                                    onclick="setSelectedProductId({{ $product->id }}, '{{ $product->status }}')">
+                                    <i class="ri-loop-left-line align-bottom me-2 text-muted"></i> Cập nhật trạng thái
+                                </a>
+
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
         @empty
-        <tr>
-            <td colspan="9" class="text-center">Không có sản phẩm nào</td>
-        </tr>
+            <tr>
+                <td colspan="9" class="text-center">Không có sản phẩm nào</td>
+            </tr>
         @endforelse
     </tbody>
 </table>
 
+
+
 @if ($products->hasPages())
-<div class="d-flex justify-content-center mt-3">
-    {{ $products->links('pagination::bootstrap-5') }}
-</div>
+    <div class="d-flex justify-content-center mt-3">
+        {{ $products->links('pagination::bootstrap-5') }}
+    </div>
 @endif

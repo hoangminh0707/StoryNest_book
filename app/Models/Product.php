@@ -12,20 +12,19 @@ class Product extends Model
     protected $fillable = [
         'name',
         'description',
-        'price',
-        'category_id',
         'author_id',
         'publisher_id',
-        'product_type',
         'status',
+        'product_type',
+        'price',
+        'quantity'
     ];
 
     // Mối quan hệ với Category
-    public function category()
+    public function categories()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsToMany(Categories::class, 'category_product', 'product_id', 'category_id');
     }
-
     // Mối quan hệ với Author
     public function author()
     {
@@ -57,4 +56,53 @@ class Product extends Model
     {
         return $this->belongsToMany(Attribute::class, 'product_attribute');
     }
+    public function voucherConditions()
+    {
+        return $this->hasMany(VoucherCondition::class);
+    }
+
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+    //
+
+
+    public function cartItems()
+    {
+        return $this->hasMany(CartItem::class);
+    }
+
+
+
+    public function productAttributes()
+    {
+        // bảng trung gian product_attribute
+        return $this->hasMany(ProductAttribute::class);
+    }
+
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
+    public function vouchers()
+    {
+        return $this->belongsToMany(Voucher::class, 'voucher_conditions', 'product_id', 'voucher_id')
+            ->where('condition_type', 'product');
+    }
+
+
+
 }
