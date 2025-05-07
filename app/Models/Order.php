@@ -1,16 +1,26 @@
 <?php
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+use App\Models\UserAddress;
+use App\Models\ShippingMethod;
+use App\Models\OrderItem;
+
+
 
 class Order extends Model
 {
     use HasFactory;
 
     protected $fillable = [
+        'order_code',
         'user_id',
-        'user_address_id',
+        'full_name',
+        'user_address',
+        'phone',
         'voucher_id',
         'shipping_method_id',
         'total_amount',
@@ -20,7 +30,6 @@ class Order extends Model
         'status',
     ];
 
-    // Relationships
 
     public function user()
     {
@@ -47,8 +56,16 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
+    public function items()
+    {
+        return $this->hasMany(OrderItem::class, 'order_id');
+    }
+
+
+
     public function payment()
     {
         return $this->hasOne(Payment::class);
     }
+
 }

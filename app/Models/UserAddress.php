@@ -4,6 +4,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+
 class UserAddress extends Model
 {
     use HasFactory;
@@ -24,8 +25,15 @@ class UserAddress extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function orders()
+
+    public function fullAddress()
     {
-        return $this->hasMany(Order::class);
+        return "{$this->address_line}, {$this->ward}, {$this->district}, {$this->city}";
     }
+
+    public function orders()
+{
+    return $this->hasMany(Order::class, 'user_address_id');
+}
+
 }

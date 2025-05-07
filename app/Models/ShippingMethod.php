@@ -10,7 +10,6 @@ class ShippingMethod extends Model
     use HasFactory;
 
     protected $fillable = [
-        
         'name',
         'provider',
         'default_fee',
@@ -19,8 +18,10 @@ class ShippingMethod extends Model
         'is_active',
     ];
 
+
     public function orders()
     {
         return $this->hasMany(Order::class, 'shipping_method_id');
     }
+
 }

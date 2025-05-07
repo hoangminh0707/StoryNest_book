@@ -1,27 +1,45 @@
 <?php
 
-namespace App\Models;   
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use App\Models\PaymentDetail; 
 use App\Models\Order;  
 
-use Illuminate\Database\Eloquent\Model;
+
+
 
 class Payment extends Model
 {
+
+    use HasFactory;
+
     protected $fillable = [
-        'order_id',
-        'amount',
-        'payment_method',
-        'status',
+        'order_id', 
+        'amount', 
+        'payment_method', 
+        'status'
     ];
 
-    public function details()
-    {
-        return $this->hasMany(PaymentDetail::class);
-    }
+        public function order()
+        {
+            return $this->belongsTo(Order::class);
+        }
 
-    public function order()
-    {
-        return $this->belongsTo(Order::class);
-    }
+        public function paymentDetail()
+        {
+            return $this->hasOne(PaymentDetail::class);
+        }
+
+        public function details()
+        {
+            return $this->hasMany(PaymentDetail::class);
+        }
+        public function paymentMethod()
+        {
+            return $this->belongsTo(PaymentMethod::class, 'payment_method');
+        }
+   
 }

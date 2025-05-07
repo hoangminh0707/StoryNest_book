@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 
 class OrderItem extends Model
 {
@@ -13,12 +15,16 @@ class OrderItem extends Model
         'order_id',
         'product_id',
         'product_variant_id',
-        'quantity',
+        'product_name',
         'price',
-        'total_price',
+        'quantity',
+        'total',
     ];
 
     // Relationships
+
+
+    // Quan hệ với Order
     public function order()
     {
         return $this->belongsTo(Order::class);
@@ -33,4 +39,5 @@ class OrderItem extends Model
     {
         return $this->belongsTo(ProductVariant::class);
     }
+
 }
