@@ -1,190 +1,268 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
+
+// ========== ADMIN CONTROLLERS ==========
 use App\Http\Controllers\admin\AdminController;
-use App\Http\Controllers\admin\LoginController;
-use App\Http\Controllers\admin\RegisterController;
-use App\Http\Controllers\admin\UserController;
-use App\Http\Controllers\admin\RolesController;
-use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\ProductController;
-use App\Http\Controllers\Admin\ProductImageController;
-use App\Http\Controllers\Admin\ProductVariantController;
-use App\Http\Controllers\Admin\PublisherController;
-use App\Http\Controllers\Admin\AuthorController;
-use App\Http\Controllers\Admin\AttributeController;
-use App\Http\Controllers\Admin\AttributeValueController;
-use App\Http\Controllers\Admin\CommentController;
-use App\Http\Controllers\Admin\ShippingMethodController;
-use App\Http\Controllers\Admin\VoucherConditionController;
-use App\Http\Controllers\Admin\BannerController;
-use App\Http\Controllers\Admin\BlogController;
+use App\Http\Controllers\admin\LoginAdminController;
+use App\Http\Controllers\admin\RegisterAdminController;
+use App\Http\Controllers\admin\UserAdminController;
+use App\Http\Controllers\admin\RolesAdminController;
+use App\Http\Controllers\Admin\ProductAdminController;
+use App\Http\Controllers\Admin\CategoryAdminController;
+use App\Http\Controllers\Admin\PublisherAdminController;
+use App\Http\Controllers\Admin\AttributeAdminController;
+use App\Http\Controllers\Admin\AttributeValueAdminController;
+use App\Http\Controllers\Admin\AuthorAdminController;
+use App\Http\Controllers\Admin\CommentAdminController;
+use App\Http\Controllers\Admin\ShippingMethodAdminController;
+use App\Http\Controllers\Admin\VoucherAdminController;
+use App\Http\Controllers\Admin\BannerAdminController;
+use App\Http\Controllers\Admin\BlogAdminController;
+use App\Http\Controllers\Admin\OrderAdminController;
+use App\Http\Controllers\Admin\ReviewAdminController;
+use App\Http\Controllers\Admin\PaymentAdminController;
+use App\Http\Controllers\Admin\PaymentMethodAdminController;
+use App\Http\Controllers\Admin\NotificationAdminController;
+
+// ========== CLIENT CONTROLLERS ==========
+use App\Http\Controllers\Client\ProductClientController;
+use App\Http\Controllers\Client\AuthClientController;
+use App\Http\Controllers\Client\WishlistClientController;
+use App\Http\Controllers\Client\CartClientController;
+use App\Http\Controllers\Client\UserAddressClientController;
+use App\Http\Controllers\Client\CheckoutClientController;
+use App\Http\Controllers\Client\OrderClientController;
+use App\Http\Controllers\Client\VerificationClientController;
+use App\Http\Controllers\Client\ProfileClientController;
+use App\Http\Controllers\Client\BlogClientController;
+use App\Http\Controllers\Client\CommentClientController;
+use App\Http\Controllers\Client\ReviewCLientController;
+use App\Http\Controllers\Client\VnpayController;
+use App\Http\Controllers\Client\MomoController;
+use App\Http\Controllers\Client\ContactController;
+
+
+require base_path('routes/channels.php');
 
 
 
 
+//
+// ─── CLIENT ROUTES ────────────────────────────────────────────────────────────────
+//
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+Route::get('/', [ProductClientController::class, 'index'])->name('index');
+Route::get('/shop', [ProductClientController::class, 'shop'])->name('shop');
 
-Route::get('/', function () {
-    return view('client.pages.index');
-})->name('home');
+Route::get('/login', [AuthClientController::class, 'showLogin'])->name('login');
+Route::post('/login', [AuthClientController::class, 'login']);
+Route::get('/register', [AuthClientController::class, 'showRegister'])->name('register');
+Route::post('/register', [AuthClientController::class, 'register']);
+Route::post('/logout', [AuthClientController::class, 'logout'])->name('logout');
 
-Route::get('/shop', function () {
-    return view('client.pages.shop');
-})->name('shop');
-
-Route::get('/about', function () {
-    return view('client.pages.about');
-})->name('about');
-
-Route::get('/blog', function () {
-    return view('client.pages.blog');
-})->name('blog');
-
-Route::get('/cart', function () {
-    return view('client.pages.cart');
-})->name('cart');
-
-Route::get('/checkout', function () {
-    return view('client.pages.checkout');
-})->name('checkout');
+Route::get('/about', [ProductClientController::class, 'about'])->name('about');// Blog - Client
+Route::get('/blog', [BlogClientController::class, 'index'])->name('blogs.index');
+Route::get('/blog/{id}', [BlogClientController::class, 'show'])->name('blogs.show');
+// Blog - Client
+Route::get('/blog', [BlogClientController::class, 'index'])->name('blogs.index');
+Route::get('/blog/{id}', [BlogClientController::class, 'show'])->name('blogs.show');
 
 Route::get('/contact', function () {
     return view('client.pages.contact');
 })->name('contact');
 
-Route::get('/post', function () {
-    return view('client.pages.post');
-})->name('post');
-
-Route::get('/product', function () {
-    return view('client.pages.product');
-})->name('product');
+Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
 
 
 
-Route::get('/admin', [AdminController::class, 'dashboard'])->middleware(['auth', 'role:admin'])->name('admin.dashboard');
-
-Route::get('/admin/login', [LoginController::class, 'showLoginAdminForm'])->name('admin.login');
-Route::post('/admin/login', [LoginController::class, 'login']);
-Route::post('/admin/logout', [LoginController::class, 'logout'])->name('admin.logout');
 
 
-Route::get('/admin/register', [RegisterController::class, 'showAdminRegistrationForm'])->name('register.admin.form');
+// Xác thực Email, Hồ sơ, Địa chỉ người dùng
+Route::middleware(['auth'])->group(function () {
+    // Email verification
+    Route::get('/email/verify', [VerificationClientController::class, 'notice'])->name('verification.notice');
+    Route::get('/email/verify/{id}/{hash}', [VerificationClientController::class, 'verify'])->name('verification.verify');
+    Route::post('/email/resend', [VerificationClientController::class, 'resend'])->name('verification.resend');
 
-Route::post('/admin/register', [RegisterController::class, 'registerAdmin'])->name('register.admin');
+    // Hồ sơ cá nhân
+    Route::get('/profile', [ProfileClientController::class, 'index'])->name('profile.index');
+    Route::put('/profile', [ProfileClientController::class, 'update'])->name('profile.update');
+    Route::get('/profile/change-email', [ProfileClientController::class, 'showChangeEmailForm'])->name('profile.email.change.form');
+    Route::post('/profile/change-email', [ProfileClientController::class, 'changeEmail'])->name('profile.email.change');
+    Route::get('/profile/change-password', [ProfileClientController::class, 'showChangePasswordForm'])->name('profile.password.form');
+    Route::post('/profile/change-password', [ProfileClientController::class, 'changePassword'])->name('profile.password.update');
 
-Route::prefix('admin')->name('admin.')->group(function () {
-    Route::get('/users', [UserController::class, 'index'])->name('userIndex'); // Danh sách người dùng
-    Route::get('/users/create', [UserController::class, 'create'])->name('userCreate'); // Hiển thị form tạo người dùng
-    Route::post('/users/add', [UserController::class, 'add'])->name('userAdd');         // Lưu người dùng mới
-    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('userEdit'); // Form sửa người dùng
-    Route::put('/users/{user}', [UserController::class, 'update'])->name('userUpdate'); // Cập nhật người dùng
-    Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('userDelete'); // Xóa người dùng
+    // Địa chỉ người dùng
+    Route::get('/addresses', [UserAddressClientController::class, 'index'])->name('addresses.index');
+    Route::post('/addresses', [UserAddressClientController::class, 'store'])->name('addresses.store');
+    Route::post('/addresses/set-default/{id}', [UserAddressClientController::class, 'setDefault'])->name('addresses.setDefault');
+    Route::get('/addresses/{id}/edit', [UserAddressClientController::class, 'edit'])->name('addresses.edit');
+    Route::put('/addresses/{id}', [UserAddressClientController::class, 'update'])->name('addresses.update');
+    Route::delete('/addresses/{id}', [UserAddressClientController::class, 'destroy'])->name('addresses.destroy');
+
+
+    // Sản phẩm (chi tiết)
+    Route::get('/product/{slug}', [ProductClientController::class, 'show'])->name('product.show');
+
+
+    // Bình luận cho bài viết
+    Route::post('/blogs/{blog}/comments', [CommentClientController::class, 'store'])->name('comments.store');
+    Route::get('/blog/{id}', [BlogClientController::class, 'show'])->name('client.blog.show');
+
+    Route::post('/comments', [CommentClientController::class, 'store'])->name('comments.store');
+
+
+    //Giỏ hàng
+    Route::get('/cart', [CartClientController::class, 'index'])->name('cart.index');
+    Route::post('/cart/add/{id}', [CartClientController::class, 'addToCart'])->name('cart.add');
+    Route::post('/cart/update/{product}', [CartClientController::class, 'update'])->name('cart.update');
+    Route::post('/cart/remove/{product}', [CartClientController::class, 'remove'])->name('cart.remove');
+
+    Route::get('/notifications/fetch', [NotificationAdminController::class, 'fetchUserNotifications'])->name('user.notifications.fetch');
+});
+
+// Người dùng phải đăng nhập và xác thực email để sử dụng
+Route::middleware(['auth', 'verified'])->group(function () {
+
+    // Wishlist
+    Route::get('/wishlist', [WishlistClientController::class, 'index'])->name('wishlist.index');
+    Route::get('/wishlist/add/{productId}', [WishlistClientController::class, 'add'])->name('wishlist.add');
+    Route::delete('/wishlist/{productId}', [WishlistClientController::class, 'remove'])->name('wishlist.remove');
+
+
+    // Checkout & Orders
+    Route::get('/checkout', [CheckoutClientController::class, 'show'])->name('checkout');
+    Route::post('/checkout', [CheckoutClientController::class, 'submit'])->name('checkout.submit');
+    Route::post('/checkout/update-address', [CheckoutClientController::class, 'updateAddress'])->name('checkout.updateAddress');
+    Route::post('/checkout/update-shipping', [CheckoutClientController::class, 'updateShipping'])->name('checkout.updateShipping');
+    Route::post('/checkout/update-payment', [CheckoutClientController::class, 'updatePayment'])->name('checkout.updatePayment');
+    Route::post('/checkout/update-voucher', [CheckoutClientController::class, 'updateVoucher'])->name('checkout.updateVoucher');
+
+    // Thanh toán online
+    Route::get('/vnpay/payment', [VnpayController::class, 'createPaymentUrl'])->name('vnpay.payment');
+    Route::get('/vnpay/callback', [VnpayController::class, 'handleCallback'])->name('vnpay.callback');
+
+    Route::get('/momo/payment', [MomoController::class, 'createPayment'])->name('momo.payment');
+    Route::get('/momo/return', [MomoController::class, 'handleReturn'])->name(name: 'momo.callback');
+    Route::post('/momo/callback', [MomoController::class, 'handleCallback']);
+
+
+
+    Route::get('/orders/success', [OrderClientController::class, 'success'])->name('orders.success');
+    Route::view('/orders/failed', 'client.pages.orders.failed')->name('orders.failed');
+    Route::get('/orders', [OrderClientController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{id}', [OrderClientController::class, 'show'])->name('orders.show');
+    Route::put('/orders/{order}/cancel', [OrderClientController::class, 'cancel'])->name('orders.cancel');
+
+
+    Route::post('/reviews', [ReviewCLientController::class, 'store'])->name('reviews.store');
+
 });
 
 
 
-Route::get('/admin-Roles', [RolesController::class, 'index'])->middleware(['auth', 'role:admin'])->name('admin.roleIndex');
+//
+// ─── ADMIN ROUTES ──────────────────────────────────────────────────────────────────
+//
 
-Route::get('/admin-addRole', [RolesController::class, 'create'])->name('admin.roleCreate');
-Route::post('/admin-addRole', [RolesController::class, 'add'])->name('admin.addRole');
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->group(function () {
+    // Đăng nhập / Đăng ký / Dashboard
+    Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('/revenue-data', [AdminController::class, 'getRevenueData']);
 
-Route::get('/admin-editRole/{role}', [RolesController::class, 'edit'])->name('admin.roleEdit');
-Route::put('/admin-editRole/{role}', [RolesController::class, 'update'])->name('admin.updateRole');
+    Route::get('/login', [LoginAdminController::class, 'showLoginAdminForm'])->name('login');
+    Route::post('/login', [LoginAdminController::class, 'login']);
+    Route::post('/logout', [LoginAdminController::class, 'logout'])->name('logout');
+    Route::get('/register', [RegisterAdminController::class, 'showAdminRegistrationForm'])->name('register.form');
+    Route::post('/register', [RegisterAdminController::class, 'registerAdmin'])->name('register');
 
-Route::delete('/admin-destroyRole/{role}', [RolesController::class, 'destroy'])->name('admin.destroyRole');
+    // Quản lý người dùng
+    Route::get('/users', [UserAdminController::class, 'index'])->name('userIndex');
+    Route::get('/users/create', [UserAdminController::class, 'create'])->name('userCreate');
+    Route::post('/users/add', [UserAdminController::class, 'add'])->name('userAdd');
+    Route::get('/users/{user}/edit', [UserAdminController::class, 'edit'])->name('userEdit');
+    Route::put('/users/{user}', [UserAdminController::class, 'update'])->name('userUpdate');
+    Route::delete('/users/{id}', [UserAdminController::class, 'destroy'])->name('userDelete');
 
+    // Phân quyền
+    Route::get('/roles', [RolesAdminController::class, 'index'])->name('roleIndex');
+    Route::get('/roles/create', [RolesAdminController::class, 'create'])->name('roleCreate');
+    Route::post('/roles', [RolesAdminController::class, 'add'])->name('addRole');
+    Route::get('/roles/{role}/edit', [RolesAdminController::class, 'edit'])->name('roleEdit');
+    Route::put('/roles/{role}', [RolesAdminController::class, 'update'])->name('updateRole');
+    Route::delete('/roles/{role}', [RolesAdminController::class, 'destroy'])->name('destroyRole');
 
-// 📌 Quản lý Danh mục sản phẩm (Categories)
-Route::resource('admin/categories', CategoryController::class);
+    // Danh mục sản phẩm
+    Route::resource('categories', CategoryAdminController::class);
 
-// 📌 Quản lý Sản phẩm (Products)
-Route::resource('admin/products', ProductController::class);
-Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
-// Route để hiển thị form sửa sản phẩm
-// Route::get('products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
-// // Route để xử lý cập nhật sản phẩm
-// Route::put('products/{product}', [ProductController::class, 'update'])->name('products.update');
-// Route để xóa ảnh của sản phẩm
-// Route::delete('products/image/{image}', [ProductController::class, 'deleteImage'])->name('products.image.delete');
-// Route::delete('products/{id}/image', [ProductController::class, 'deleteImage'])->name('products.image.delete');
-
-
-// 📌 Quản lý Nhà xuất bản (Publishers)
-Route::resource('admin/publishers', PublisherController::class);
-
-// 📌 Quản lý Tác giả (Authors)
-Route::resource('admin/authors', AuthorController::class);
-
-// 📌 Quản lý Thuộc tính (Attributes)
-Route::resource('attributes', AttributeController::class);
-Route::resource('attribute_values', AttributeValueController::class);
-
-// Các route cho biến thể sản phẩm
-Route::resource('product_variants', ProductVariantController::class);
-
-// Route cho danh sách ảnh sản phẩm
-Route::resource('product-images', ProductImageController::class);
-
-//Bình luận
-Route::resource('comments', App\Http\Controllers\Admin\CommentController::class)->only(['index', 'destroy']);
-Route::patch('comments/{id}/approve', [App\Http\Controllers\Admin\CommentController::class, 'approve'])->name('comments.approve');
+    // Sản phẩm
+    Route::resource('products', ProductAdminController::class);
+    Route::get('/products/{product}/edit', [ProductAdminController::class, 'edit'])->name('products.edit');
+    Route::put('/products/{product}', [ProductAdminController::class, 'update'])->name('products.update');
+    Route::delete('/products/images/{id}', [ProductAdminController::class, 'destroyImage'])->name('products.images.destroy');
+    Route::post('/products/bulk-delete', [ProductAdminController::class, 'bulkDelete'])->name('products.bulkDelete');
+    Route::post('/products/bulk-update-status', [ProductAdminController::class, 'bulkUpdateStatus'])->name('products.bulkUpdateStatus');
 
 
+    // Tác giả - Nhà xuất bản
+    Route::resource('publishers', PublisherAdminController::class);
+    Route::resource('authors', AuthorAdminController::class);
 
-//Đánh giá
-Route::resource('reviews', \App\Http\Controllers\Admin\ReviewController::class)->only(['index', 'show', 'destroy']);
-Route::get('reviews/{id}/approve', [\App\Http\Controllers\Admin\ReviewController::class, 'approve'])->name('reviews.approve');
-
-//Payment
-
-Route::resource('payments', \App\Http\Controllers\Admin\PaymentController::class)->only([
-    'index',
-    'show',
-    'destroy'
-]);
-
-Route::post('payments/{id}/update-status', [\App\Http\Controllers\Admin\PaymentController::class, 'updateStatus'])
-    ->name('payments.updateStatus');
-
-//Hình thức vận chuyển 
-Route::resource('shipping-methods', ShippingMethodController::class);
-Route::patch('/shipping-methods/{id}/toggle', [ShippingMethodController::class, 'toggleStatus'])->name('shipping-methods.toggle');
+    // Thuộc tính
+    Route::resource('attributes', AttributeAdminController::class);
+    Route::resource('attribute-values', AttributeValueAdminController::class);
 
 
-//Voucher 
-Route::resource('vouchers', App\Http\Controllers\Admin\VoucherController::class);
-Route::patch('vouchers/{id}/toggle-status', [\App\Http\Controllers\Admin\VoucherController::class, 'toggleStatus'])->name('vouchers.toggle-status');
-Route::patch('vouchers/{voucher}', [\App\Http\Controllers\Admin\VoucherController::class, 'toggleStatus'])->name('vouchers.show');
-Route::patch('vouchers/{voucher}', [\App\Http\Controllers\Admin\VoucherController::class, 'update'])->name('vouchers.update');
+    // Bình luận 
+    Route::resource('comments', CommentAdminController::class)->except(['create', 'store']);
 
-Route::resource('orders', \App\Http\Controllers\Admin\OrderController::class)->only([
-    'index',
-    'show',
-    'destroy'
-]);
-Route::get('orders/{order}/edit-status', [\App\Http\Controllers\Admin\OrderController::class, 'editStatus'])->name('orders.editStatus');
-Route::put('orders/{order}/update-status', [\App\Http\Controllers\Admin\OrderController::class, 'updateStatus'])->name('orders.updateStatus');
+    // Duyệt và hủy duyệt bình luận
+    Route::get('comments/{id}/approve', [CommentAdminController::class, 'approve'])->name('comments.approve');
+    Route::get('comments/{id}/disapprove', [CommentAdminController::class, 'disapprove'])->name('comments.disapprove');
+
+    // Trả lời bình luận
+    Route::post('comments/{commentId}/reply', [CommentAdminController::class, 'reply'])->name('comments.reply');
 
 
-Route::resource('admin/banners', BannerController::class); // Tạo các route cho các phương thức resource
-Route::delete('banners/bulk-delete', [BannerController::class, 'bulkDelete'])->name('banners.bulk-delete');  // Route cho bulk delete
-Route::patch('banners/{id}/toggle', [BannerController::class, 'toggleStatus'])->name('banners.toggle');
+    // đánh giá
+    Route::resource('reviews', ReviewAdminController::class)->only(['index', 'show', 'destroy']);
+    Route::patch('reviews/{id}/approve', [ReviewAdminController::class, 'approve'])->name('reviews.approve');
 
-Route::prefix('admin')->group(function () {
-    Route::resource('blogs', BlogController::class);
-    Route::post('blogs/mass-delete', [BlogController::class, 'massDelete'])->name('admin.blogs.massDelete');
+    // Đơn hàng
+    Route::resource('orders', OrderAdminController::class)->only(['index', 'show', 'destroy']);
+    Route::get('orders/{order}/edit-status', [OrderAdminController::class, 'editStatus'])->name('orders.editStatus');
+    Route::put('orders/{order}/update-status', [OrderAdminController::class, 'updateStatus'])->name('orders.updateStatus');
+
+    // Thanh toán
+    Route::resource('payments', PaymentAdminController::class)->only(['index', 'show', 'destroy']);
+    Route::post('payments/{id}/update-status', [PaymentAdminController::class, 'updateStatus'])->name('payments.updateStatus');
+    Route::patch('payment-methods/{id}/toggle', [PaymentMethodAdminController::class, 'toggle'])->name('payment-methods.toggle');
+    // Vận chuyển
+    Route::resource('shipping-methods', ShippingMethodAdminController::class);
+    Route::post('shipping-methods/{id}/toggle-status', [ShippingMethodAdminController::class, 'toggleStatus'])->name('shipping-methods.toggle-status');
+
+    // Mã giảm giá
+    Route::resource('vouchers', VoucherAdminController::class);
+    Route::patch('vouchers/{id}/toggle-status', [VoucherAdminController::class, 'toggleStatus'])->name('vouchers.toggle-status');
+    Route::patch('vouchers/{voucher}', [VoucherAdminController::class, 'update'])->name('vouchers.update');
+
+    // Banner
+    Route::resource('banners', BannerAdminController::class);
+    Route::delete('banners/bulk-delete', [BannerAdminController::class, 'bulkDelete'])->name('banners.bulk-delete');
+    Route::patch('banners/{id}/toggle', [BannerAdminController::class, 'toggleStatus'])->name('banners.toggle');
+
+    // Blog
+    Route::post('blogs/upload', [BlogAdminController::class, 'upload'])->name('blogs.upload');
+    Route::post('/admin/blogs/upload-image', [BlogAdminController::class, 'uploadImage'])->name('admin.blogs.uploadImage');
+    Route::resource('blogs', BlogAdminController::class);
+    Route::post('blogs/mass-delete', [BlogAdminController::class, 'massDelete'])->name('blogs.massDelete');
+
+    //Payment_method
+    Route::resource('payment-methods', PaymentMethodAdminController::class);
+    Route::post('payment-methods/{paymentMethod}/toggle-status', [PaymentMethodAdminController::class, 'toggleStatus'])->name('payment-methods.toggle-status');
+
+
+    // thông báo admin
+    Route::get('/admin/notifications/fetch', [NotificationAdminController::class, 'fetch'])->name('notifications.fetch');
+
 });
-
-

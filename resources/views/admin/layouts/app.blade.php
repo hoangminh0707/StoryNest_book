@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable">
+<html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg"
+    data-sidebar-image="none" data-preloader="disable">
 
 
 <head>
@@ -10,7 +11,12 @@
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
+    <link rel="shortcut icon" href="{{ asset('assets/images/2.png') }}">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.materialdesignicons.com/6.5.95/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+
     <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
 
     <!-- Sweet Alert css-->
@@ -24,6 +30,8 @@
     <!-- Thêm Link CSS -->
     <link href="https://cdn.jsdelivr.net/npm/list.js@2.3.1/dist/list.min.css" rel="stylesheet">
 
+    <!-- SimpleBar CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplebar@latest/dist/simplebar.min.css" />
 
     <!-- Layout config Js -->
     <script src="{{ asset('assets/js/layout.js') }}"></script>
@@ -35,13 +43,46 @@
     <link href="{{ asset('assets/css/app.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- custom Css-->
     <link href="{{ asset('assets/css/custom.min.css') }}" rel="stylesheet" type="text/css" />
+
+
+    <!-- SimpleBar JS -->
+    <script src="https://cdn.jsdelivr.net/npm/simplebar@latest/dist/simplebar.min.js"></script>
+
 </head>
+<script>
+    // Thông Báo Thành Công
+    document.addEventListener('DOMContentLoaded', function () {
+
+
+        @if (session('success'))
+            Swal.fire({
+                title: 'Thành công!',
+                text: '{{ session("success") }}',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+        @endif
+
+        @if (session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi!',
+                text: '{{ session('error') }}',
+                timer: 4000,
+                showConfirmButton: false
+            });
+        @endif
+});
+
+</script>
 
 <body>
+
     @include('admin.layouts.header')
     @yield('content')
     @include('admin.layouts.footer')
     @yield('scripts')
+
 </body>
 
 </html>
