@@ -118,20 +118,27 @@
           </div>
           <div class="product-voucher">
             <ul class="voucher-list">
-            @foreach ($vouchers as $voucher)
-          <li style="padding: 5px; margin-bottom: 5px; background: #f5f5f5; border-radius: 5px;">
-            <span style="font-weight: bold; color: #ff5722;">{{ $voucher->code }}</span>:
-            @if ($voucher->type === "fixed")
-          Giảm {{ number_format($voucher->value) }} đ
+            @if ($bestVoucher)
+          <div
+            class="alert alert-success d-flex justify-content-between align-items-center p-3 rounded shadow-sm mt-3">
+            <div>
+            <strong>🎁 Ưu đãi tốt nhất: </strong>
+            <span class="text-primary">{{ $bestVoucher->code }}</span> -
+            @if ($bestVoucher->type === 'percent')
+          Giảm {{ number_format($bestVoucher->value) }}%
+          @if ($bestVoucher->max_discount_amount)
+          (Tối đa {{ number_format($bestVoucher->max_discount_amount) }}₫)
+          @endif
         @else
-          Giảm {{ number_format($voucher->value) }}%
+          Giảm {{ number_format($bestVoucher->value) }}₫
         @endif
-            @if ($voucher->expires_at)
-          <small style="color: gray;">(HSD:
-          {{ \Carbon\Carbon::parse($voucher->expires_at)->format('d/m/Y') }})</small>
+            </div>
+            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+            data-bs-target="#voucherModal">
+            Xem thêm ưu đãi
+            </button>
+          </div>
         @endif
-          </li>
-        @endforeach
             </ul>
           </div>
           @if ($product->status !== 'discontinued')
@@ -440,7 +447,51 @@
   </main>
 
 
+  <!-- Modal: Tất cả ưu đãi áp dụng -->
+  <div class="modal fade" id="voucherModal" tabindex="-1" aria-labelledby="voucherModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+      <h5 class="modal-title" id="voucherModalLabel">Tất cả ưu đãi áp dụng</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+      </div>
+      <div class="modal-body">
+      @forelse($vouchers as $voucher)
+      <div class="voucher-item p-3 mb-3 rounded shadow-sm border bg-light">
+        <div class="d-flex justify-content-between align-items-center">
+        <div>
+        <strong>{{ $voucher->code }}</strong> -
+        @if ($voucher->type === 'percent')
+        {{ number_format($voucher->value) }}%
+        @if ($voucher->max_discount_amount)
+        (Tối đa {{ number_format($voucher->max_discount_amount) }}₫)
+      @endif
+      @else
+        {{ number_format($voucher->value) }}₫
+      @endif
+        </div>
+        <div class="text-muted small">
+        HSD:
+        {{ $voucher->expires_at ? \Carbon\Carbon::parse($voucher->expires_at)->format('d/m/Y') : 'Không giới hạn' }}
+        </div>
+        </div>
 
+        @if ($voucher->min_order_value)
+      <div class="mt-1 small text-secondary">
+      Đơn tối thiểu: {{ number_format($voucher->min_order_value) }}₫
+      </div>
+      @endif
+      </div>
+    @empty
+      <p>Không có voucher áp dụng.</p>
+    @endforelse
+      </div>
+      <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+      </div>
+    </div>
+    </div>
+  </div>
 
 
 
@@ -501,7 +552,8 @@
       value += change;
       if (value < 1) value = 1; input.value = value;
     }
-    } </script>
+    } 
+  </script>
 
 
 
