@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 
 // ========== ADMIN CONTROLLERS ==========
@@ -146,7 +147,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/momo/return', [MomoController::class, 'handleReturn'])->name(name: 'momo.callback');
     Route::post('/momo/callback', [MomoController::class, 'handleCallback']);
 
+});
+Route::get('/contact', function () {
+    return view('client.pages.contact')->name('contact');
+});
+Route::get('/post', function () {
+    return view('client.pages.post')->name('post');
+});
 
+
+// Blog - Client
+Route::get('/blog', [BlogController::class, 'index'])->name('blogs.index');
+Route::get('/blog/{id}', [BlogController::class, 'show'])->name('blogs.show');
+
+// Bình luận cho bài viết
+Route::post('/blogs/{blog}/comments', [CommentController::class, 'store'])->name('comments.store');
 
     Route::get('/orders/success', [OrderClientController::class, 'success'])->name('orders.success');
     Route::view('/orders/failed', 'client.pages.orders.failed')->name('orders.failed');
@@ -256,6 +271,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::post('/admin/blogs/upload-image', [BlogAdminController::class, 'uploadImage'])->name('admin.blogs.uploadImage');
     Route::resource('blogs', BlogAdminController::class);
     Route::post('blogs/mass-delete', [BlogAdminController::class, 'massDelete'])->name('blogs.massDelete');
+
 
     //Payment_method
     Route::resource('payment-methods', PaymentMethodAdminController::class);

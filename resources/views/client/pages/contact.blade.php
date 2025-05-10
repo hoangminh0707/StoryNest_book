@@ -6,8 +6,10 @@
 
 @section('content')
 
+
   <main>
     <div class="contact-area section-padding pt-0">
+
     <div class="container">
       <div class="row">
 
@@ -15,6 +17,7 @@
       <div class="col-lg-6">
         <div class="contact-message">
         <h4 class="contact-title">Hãy cho chúng tôi biết bạn đang cần gì!</h4>
+
 
         @if(session('success'))
       <div class="alert alert-success">{{ session('success') }}</div>
@@ -31,6 +34,7 @@
           </div>
           <div class="col-lg-6 col-md-6 col-sm-6">
             <input name="email" placeholder="Email *" type="email" required>
+
           </div>
           <div class="col-lg-6 col-md-6 col-sm-6">
             <input name="subject" placeholder="Tiêu đề *" type="text">
@@ -47,6 +51,7 @@
           </div>
         </form>
         </div>
+
       </div>
 
       {{-- Thông tin liên hệ --}}
@@ -66,9 +71,12 @@
         </div>
       </div>
 
+
       </div>
     </div>
     </div>
   </main>
+
+
 
 @endsection

@@ -126,6 +126,7 @@
                     let notiHtml = '';
                     data.notifications.forEach(noti => {
                         notiHtml += `
+
                                       <div class="notification-item d-flex px-3 py-2 align-items-start border-bottom">
                                         <div class="me-3 flex-shrink-0">
                                           <img src="${noti.image}" alt="product image" class="rounded" style="width: 48px; height: 48px; object-fit: cover;">

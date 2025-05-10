@@ -5,6 +5,7 @@
 
 @section('content')
 
+
   <style>
     .quantity-input .btn {
     padding: 0.25rem 0.5rem;
@@ -26,6 +27,7 @@
           <li class="breadcrumb-item active" aria-current="page">{{ $product->name}}</li>
           </ul>
         </nav>
+
         </div>
       </div>
       </div>
@@ -313,6 +315,8 @@
           <label for="star{{ $i }}" style="margin-right: 10px;">{{ $i }} ⭐</label>
           @endfor
             </div>
+
+
             </div>
             <div class="buttons">
             <button class="btn btn-sqr" type="submit">Đánh giá sản phẩm</button>

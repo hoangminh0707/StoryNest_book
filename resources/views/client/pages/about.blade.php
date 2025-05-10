@@ -1,6 +1,7 @@
 @extends('client.layouts.app')
 
 @section('content')
+
   <!-- breadcrumb area start -->
   <div class="breadcrumb-area">
     <div class="container">
@@ -13,7 +14,6 @@
           <li class="breadcrumb-item active" aria-current="page">Giới thiệu</li>
         </ul>
         </nav>
-      </div>
       </div>
     </div>
     </div>
@@ -52,12 +52,14 @@
   <!-- choosing area start -->
   <div class="choosing-area section-padding pt-0">
     <div class="container">
+
     <div class="row">
       <div class="col-12">
       <div class="section-title text-center">
         <h2 class="title">Tại sao chọn chúng tôi</h2>
         <p>Cuộc sống đầy thử thách, nơi mọi người tự do tìm kiếm và phát triển bản thân.</p>
       </div>
+
       </div>
     </div>
     <div class="row mbn-30">
@@ -183,12 +185,14 @@
   <!-- team area start -->
   <div class="team-area section-padding">
     <div class="container">
+
     <div class="row">
       <div class="col-12">
       <div class="section-title text-center">
         <h2 class="title">Đội ngũ của chúng tôi</h2>
         <p>Chúng tôi là những người đam mê sách, luôn nỗ lực mang đến cho bạn những trải nghiệm tuyệt vời nhất khi mua
         sắm tại StoryNet-Book.</p>
+
       </div>
       </div>
     </div>

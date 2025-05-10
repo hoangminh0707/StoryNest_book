@@ -26,6 +26,8 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrapFive();
 
+
+
         View::composer('*', function ($view) {
             // Dữ liệu mặc định
             $statusLabels = [
@@ -86,5 +88,6 @@ class AppServiceProvider extends ServiceProvider
                 'danhMucHanhTrang' => $danhMucHanhTrang,
             ]);
         });
+
     }
 }
