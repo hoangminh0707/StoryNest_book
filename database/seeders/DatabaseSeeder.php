@@ -13,9 +13,17 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-            BlogSeeder::class,
-        ]);
-        $this->call(ContactSeeder::class);
-    }
 
+            AuthorSeeder::class,
+            CategorySeeder::class,
+            PublisherSeeder::class,
+            ProductSeeder::class,
+            ProductVariantSeeder::class,
+            AttributeSeeder::class,
+            AttributeValueSeeder::class,
+            ProductVariantAttributeSeeder::class,
+            CommentSeeder::class,
+        ]);
+    }
+    
 }

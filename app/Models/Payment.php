@@ -1,12 +1,19 @@
 <?php
 
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\PaymentDetail; 
+use App\Models\Order;  
+
+
+
 
 class Payment extends Model
 {
+
     use HasFactory;
 
     protected $fillable = [
@@ -25,4 +32,14 @@ class Payment extends Model
         {
             return $this->hasOne(PaymentDetail::class);
         }
+
+        public function details()
+        {
+            return $this->hasMany(PaymentDetail::class);
+        }
+        public function paymentMethod()
+        {
+            return $this->belongsTo(PaymentMethod::class, 'payment_method');
+        }
+   
 }
