@@ -20,6 +20,11 @@ class ProductVariant extends Model
     {
         return $this->belongsTo(Product::class);
     }
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class); 
+    }
+
 
     // Mối quan hệ 1-N với AttributeValue
     public function attributeValues()
@@ -31,6 +36,4 @@ class ProductVariant extends Model
             'attribute_value_id'
         );
     }
-
-
 }
