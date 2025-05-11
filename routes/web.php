@@ -23,6 +23,8 @@ use App\Http\Controllers\Admin\ReviewAdminController;
 use App\Http\Controllers\Admin\PaymentAdminController;
 use App\Http\Controllers\Admin\PaymentMethodAdminController;
 use App\Http\Controllers\Admin\NotificationAdminController;
+use App\Http\Controllers\Admin\StockController;
+
 
 // ========== CLIENT CONTROLLERS ==========
 use App\Http\Controllers\Client\ProductClientController;
@@ -260,6 +262,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     //Payment_method
     Route::resource('payment-methods', PaymentMethodAdminController::class);
     Route::post('payment-methods/{paymentMethod}/toggle-status', [PaymentMethodAdminController::class, 'toggleStatus'])->name('payment-methods.toggle-status');
+
+    //Tồn kho 
+    Route::get('stocks', [StockController::class, 'index'])->name('stocks.index');
+    Route::post('stocks/update', [StockController::class, 'updateStock'])->name('stocks.update');
+    Route::get('stocks/history/{productId}', [StockController::class, 'showHistory'])->name('stocks.history');
+
 
 
     // thông báo admin

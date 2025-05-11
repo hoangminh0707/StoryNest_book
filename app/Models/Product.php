@@ -102,7 +102,15 @@ class Product extends Model
         return $this->belongsToMany(Voucher::class, 'voucher_conditions', 'product_id', 'voucher_id')
             ->where('condition_type', 'product');
     }
+   // Tính tổng tồn kho cho sản phẩm đơn và sản phẩm biến thể
+    public function getTotalStockAttribute()
+    {
+        if ($this->product_type === 'simple') {
+            return $this->quantity;  // Tồn kho cho sản phẩm đơn
+        }
 
+        return $this->variants->sum('stock_quantity');  // Tổng tồn kho của các biến thể
+    }
 
 
 }
