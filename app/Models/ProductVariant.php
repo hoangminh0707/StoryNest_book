@@ -11,8 +11,6 @@ class ProductVariant extends Model
 
     protected $fillable = [
         'product_id',
-        'sku',
-        'variant_name',
         'variant_price',
         'stock_quantity',
     ];
@@ -22,13 +20,18 @@ class ProductVariant extends Model
     {
         return $this->belongsTo(Product::class);
     }
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class); 
+    }
+
 
     // Mối quan hệ 1-N với AttributeValue
     public function attributeValues()
     {
         return $this->belongsToMany(
             AttributeValue::class,
-            'product_variant_attributes',
+            'product_variant_attributes', // bảng trung gian
             'product_variant_id',
             'attribute_value_id'
         );

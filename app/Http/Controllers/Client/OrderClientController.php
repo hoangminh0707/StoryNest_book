@@ -1,0 +1,54 @@
+<?php
+
+namespace App\Http\Controllers\Client;
+
+use App\Http\Controllers\Controller;
+
+use Illuminate\Http\Request;
+use App\Models\Order;
+use Illuminate\Support\Facades\Auth;
+
+class OrderClientController extends Controller
+{
+
+    public function index()
+    {
+        $orders = Order::with('orderItems')
+            ->where('user_id', Auth::id())
+            ->orderByDesc('created_at')
+            ->get();
+
+        return view('client.pages.orders.index', compact('orders'));
+    }
+
+
+    public function show($id)
+    {
+        $order = Order::with(['orderItems', 'userAddress', 'shippingMethod', 'payment.paymentMethod'])->findOrFail($id);
+
+        // Kiểm tra quyền truy cập
+        if ($order->user_id !== auth()->id()) {
+            abort(403, 'Bạn không có quyền truy cập đơn hàng này.');
+        }
+
+        return view('client.pages.orders.show', compact('order'));
+    }
+
+    public function cancel(Order $order)
+    {
+        if (!in_array($order->status, ['pending', 'confirmed'])) {
+            return back()->with('error', 'Không thể huỷ đơn hàng đã được giao hoặc huỷ trước đó.');
+        }
+
+        $order->status = 'cancelled';
+        $order->save();
+
+        return redirect()->route('orders.show', $order->id)->with('success', 'Đơn hàng đã được huỷ thành công.');
+    }
+
+
+    public function success()
+    {
+        return view('client.pages.orders.success');
+    }
+}

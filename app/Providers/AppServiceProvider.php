@@ -7,6 +7,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\Models\Wishlist;
 use App\Models\Cart;
+use App\Models\Categories;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,26 +24,69 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-<<<<<<< HEAD
-        Paginator::useBootstrap();
-=======
+        Paginator::useBootstrapFive();
+
+
+
         View::composer('*', function ($view) {
+            // Dữ liệu mặc định
+            $statusLabels = [
+                'pending' => 'Chờ xử lý',
+                'confirmed' => 'Đã xác nhận',
+                'shipped' => 'Đang giao',
+                'delivered' => 'Đã giao',
+                'completed' => 'Đã hoàn thành',
+                'cancelled' => 'Đã hủy',
+            ];
+
+            $statusColors = [
+                'pending' => 'warning',
+                'confirmed' => 'primary',
+                'shipped' => 'info',
+                'delivered' => 'success',
+                'completed' => 'success',
+                'cancelled' => 'secondary',
+            ];
+
+            $wishlistItems = collect();
+            $cartItems = collect();
+
             if (auth()->check()) {
-                // Lấy danh sách yêu thích
                 $wishlistItems = Wishlist::with('product')->where('user_id', auth()->id())->get();
-    
-                // Lấy giỏ hàng và sản phẩm tương ứng
-                $cart = Cart::with('items.product')->where('user_id', auth()->id())->first();
+
+                $cart = Cart::with('items.product', 'items.variant.attributeValues')
+                    ->where('user_id', auth()->id())
+                    ->first();
+
                 $cartItems = $cart?->items ?? collect();
-    
-                // Truyền cả hai vào view
-                $view->with('wishlistItems', $wishlistItems);
-                $view->with('cartItems', $cartItems);
-            } else {
-                $view->with('wishlistItems', collect());
-                $view->with('cartItems', collect());
             }
+
+            $danhMucSachs = Categories::with('childrenRecursive')
+                ->where('name', 'Sách')
+                ->first();
+
+            $danhMucDungCu = Categories::with('childrenRecursive')
+                ->where('name', 'VPP-Dụng cụ học sinh')
+                ->first();
+
+            $danhMucDoChoi = Categories::with('childrenRecursive')
+                ->where('name', 'Đồ chơi')
+                ->first();
+
+            $danhMucHanhTrang = Categories::with('childrenRecursive')
+                ->where('name', 'Hành trang đến trường')
+                ->first();
+
+            $view->with([
+                'statusLabels' => $statusLabels,
+                'statusColors' => $statusColors,
+                'wishlistItems' => $wishlistItems,
+                'cartItems' => $cartItems,
+                'danhMucSachs' => $danhMucSachs,
+                'danhMucDungCu' => $danhMucDungCu,
+                'danhMucDoChoi' => $danhMucDoChoi,
+                'danhMucHanhTrang' => $danhMucHanhTrang,
+            ]);
         });
->>>>>>> 52a20b2e4275f828d69d7e21cf4676d4abf41dd5
     }
 }
