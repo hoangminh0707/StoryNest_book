@@ -15,8 +15,6 @@
         </ul>
         </nav>
       </div>
-
-      </div>
     </div>
     </div>
   </div>
@@ -61,6 +59,7 @@
         <h2 class="title">Tại sao chọn chúng tôi</h2>
         <p>Cuộc sống đầy thử thách, nơi mọi người tự do tìm kiếm và phát triển bản thân.</p>
       </div>
+
       </div>
     </div>
     <div class="row mbn-30">

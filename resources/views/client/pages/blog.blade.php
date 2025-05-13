@@ -1,8 +1,8 @@
 @extends('client.layouts.app')
 
 
-@section('title', 'Blog')
 
+@section('title', 'Blog')
 
 @section('content')
 <div class="breadcrumb-area">
@@ -21,6 +21,7 @@
       </div>
     </div>
   </div>
+
 </div>
 
 <div class="blog-main-wrapper section-padding">
@@ -103,12 +104,15 @@
                             <h4>{{ $blog->title }}</h4>
                         </a>
 
+
           <!-- end pagination area -->
         </div>
       </div>
     </div>
   </div>
 </div>
+
+
 
 
 @endsection

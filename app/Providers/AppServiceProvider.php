@@ -88,5 +88,6 @@ class AppServiceProvider extends ServiceProvider
                 'danhMucHanhTrang' => $danhMucHanhTrang,
             ]);
         });
+
     }
 }

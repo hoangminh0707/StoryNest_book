@@ -25,8 +25,6 @@
 }
 
 
-
-
 </style>
 
   <main>
@@ -43,16 +41,6 @@
           <li class="breadcrumb-item active" aria-current="page">checkout</li>
           </ul>
         </nav>
-<section class="hero-section position-relative padding-large" style="background-image: url(assetClient/images/banner-image-bg-1.jpg); background-size: cover; background-repeat: no-repeat; background-position: center; height: 400px;">
-    <div class="hero-content">
-      <div class="container">
-        <div class="row">
-          <div class="text-center">
-            <h1>Thanh toán</h1>
-            <div class="breadcrumbs">
-              <span class="item text-decoration-underline">Thanh toán</span>
-            </div>
-          </div>
         </div>
       </div>
       </div>
@@ -311,36 +299,171 @@
  
 
 {{-- Model của phần chọn địa chỉ --}}
-    <div class="modal fade" id="addressModal" tabindex="-1" aria-labelledby="addressModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-scrollable">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="addressModalLabel">Chọn địa chỉ giao hàng</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
-          </div>
-    
-          <div class="modal-body">
-            @foreach($addresses as $address)
+<div class="modal fade" id="addressModal" tabindex="-1" aria-labelledby="addressModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addressModalLabel">Chọn địa chỉ giao hàng</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+        </div>
+  
+        <div class="modal-body">
+          <!-- Tabs -->
+          <ul class="nav nav-tabs mb-3" id="addressTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="existing-tab" data-bs-toggle="tab" data-bs-target="#existing" type="button" role="tab">📍 Chọn địa chỉ có sẵn</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="new-tab" data-bs-toggle="tab" data-bs-target="#new" type="button" role="tab">➕ Thêm địa chỉ mới</button>
+            </li>
+          </ul>
+  
+          <!-- Tab Content -->
+          <div class="tab-content" id="addressTabContent">
+  
+            <!-- Danh sách địa chỉ -->
+            <div class="tab-pane fade show active" id="existing" role="tabpanel">
+              @foreach($addresses as $address)
                 <div class="address-item mb-3 p-3 border rounded @if($defaultAddress && $defaultAddress->id == $address->id) border-primary @endif">
-                    <div class="d-flex align-items-start">
-                        <input type="radio" name="selected_address" id="address{{ $address->id }}" value="{{ $address->id }}" class="form-check-input mt-1 me-2" {{ $defaultAddress && $defaultAddress->id == $address->id ? 'checked' : '' }}>
-                        
-                        <label for="address{{ $address->id }}" class="w-100">
-                            <div class="d-flex justify-content-between">
-                                <span class="fw-bold">{{ $address->full_name }} | {{ $address->phone }}</span>
-                                @if($address->is_default)
-                                    <span class="badge bg-success">Mặc định</span>
-                                @endif
-                            </div>
-                            <small class="text-muted">{{ $address->address_line }}, {{ $address->ward }}, {{ $address->district }}, {{ $address->city }}</small>
-                        </label>
-                    </div>
+                  <div class="d-flex align-items-start">
+                    <input type="radio" name="selected_address" id="address{{ $address->id }}" value="{{ $address->id }}" class="form-check-input mt-1 me-2" {{ $defaultAddress && $defaultAddress->id == $address->id ? 'checked' : '' }}>
+  
+                    <label for="address{{ $address->id }}" class="w-100">
+                      <div class="d-flex justify-content-between">
+                        <span class="fw-bold">{{ $address->full_name }} | {{ $address->phone }}</span>
+                        @if($address->is_default)
+                          <span class="badge bg-success">Mặc định</span>
+                        @endif
+                      </div>
+                      <small class="text-muted">{{ $address->address_line }}, {{ $address->ward }}, {{ $address->district }}, {{ $address->city }}</small>
+                    </label>
+                  </div>
                 </div>
-            @endforeach
+              @endforeach
+              <div class="modal-footer">
+                <button type="button" class="btn btn-sqr w-100" id="saveAddressBtn">Xác nhận địa chỉ</button>
+              </div>
+            </div>
+            
+  
+            <!-- Form thêm địa chỉ mới -->
+            <div class="tab-pane fade" id="new" role="tabpanel">
+              <form id="addAddressForm" class="mt-3">
+                @csrf
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label">Họ tên</label>
+                    <input type="text" name="full_name" class="form-control" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Số điện thoại</label>
+                    <input type="text" name="phone" class="form-control" required>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">Tỉnh/Thành</label>
+                    <select name="city" id="city" class="form-control" required></select>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">Quận/Huyện</label>
+                    <select name="district" id="district" class="form-control" required></select>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">Phường/Xã</label>
+                    <select name="ward" id="ward" class="form-control" required></select>
+                  </div>
+                  <div class="col-md-12">
+                    <label class="form-label">Địa chỉ cụ thể</label>
+                    <input type="text" name="address_line" class="form-control" required>
+                  </div>
+                  <div class="form-check ms-3">
+                    <input class="form-check-input" type="checkbox" name="is_default" id="is_default">
+                    <label class="form-check-label" for="is_default">Đặt làm địa chỉ mặc định</label>
+                  </div>
+                  <div class="mt-3">
+                    <button type="submit" class="btn btn-sqr">💾 Lưu địa chỉ</button>
+                  </div>
+                </div>
+              </form>
+            </div>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+  document.getElementById('addAddressForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+  
+    fetch("{{ route('addresses.store') }}", {
+      method: "POST",
+      headers: {
+        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+      },
+      body: formData
+    })
+    .then(response => {
+      if (!response.ok) throw new Error('Lỗi khi lưu địa chỉ');
+      return response.text();
+    })
+    .then(() => {
+      location.reload();
+    })
+    .catch(error => {
+      alert("Đã xảy ra lỗi: " + error.message);
+    });
+  });
+  </script>
+  
+
+
+            <script>
+                async function loadProvinces() {
+                const res = await fetch("https://provinces.open-api.vn/api/?depth=3");
+                const data = await res.json();
+            
+                const citySelect = document.getElementById('city');
+                const districtSelect = document.getElementById('district');
+                const wardSelect = document.getElementById('ward');
+            
+                citySelect.innerHTML = '<option value="">Chọn tỉnh/thành</option>';
+                districtSelect.innerHTML = '<option value="">Chọn quận/huyện</option>';
+                wardSelect.innerHTML = '<option value="">Chọn phường/xã</option>';
+            
+                data.forEach(city => {
+                  const opt = new Option(city.name, city.name);
+                  opt.dataset.districts = JSON.stringify(city.districts);
+                  citySelect.appendChild(opt);
+                });
+            
+                citySelect.onchange = () => {
+                  const selected = citySelect.options[citySelect.selectedIndex];
+                  const districts = JSON.parse(selected.dataset.districts || "[]");
+                  districtSelect.innerHTML = '<option value="">Chọn quận/huyện</option>';
+                  wardSelect.innerHTML = '<option value="">Chọn phường/xã</option>';
+                  districts.forEach(d => {
+                  const opt = new Option(d.name, d.name);
+                  opt.dataset.wards = JSON.stringify(d.wards);
+                  districtSelect.appendChild(opt);
+                  });
+                };
+            
+                districtSelect.onchange = () => {
+                  const selected = districtSelect.options[districtSelect.selectedIndex];
+                  const wards = JSON.parse(selected.dataset.wards || "[]");
+                  wardSelect.innerHTML = '<option value="">Chọn phường/xã</option>';
+                  wards.forEach(w => {
+                  const opt = new Option(w.name, w.name);
+                  wardSelect.appendChild(opt);
+                  });
+                };
+                }
+            
+                document.addEventListener("DOMContentLoaded", loadProvinces);
+              </script>
     
-          <div class="modal-footer">
-            <button type="button" class="btn btn-sqr w-100" id="saveAddressBtn">Xác nhận địa chỉ</button>
+        
           </div>
         </div>
       </div>

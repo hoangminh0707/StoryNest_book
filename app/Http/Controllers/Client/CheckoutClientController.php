@@ -99,6 +99,58 @@ class CheckoutClientController extends Controller
             })
             ->get();
 
+
+        // ✅ Tự động chọn voucher tốt nhất nếu chưa chọn
+        if (!session()->has('checkout_voucher')) {
+            $priceMap = $cartItems->mapWithKeys(fn($item) => [$item->product_id => $item->price * $item->quantity]);
+
+            $bestVoucherObj = $vouchers->map(function ($v) use ($priceMap, $cartItems) {
+                $applicableProductIds = collect();
+
+                foreach ($v->conditions as $cond) {
+                    if ($cond->condition_type === 'product' && $cond->product_id) {
+                        $applicableProductIds->push($cond->product_id);
+                    } elseif ($cond->condition_type === 'category' && $cond->category_id) {
+                        $applicableProductIds = $applicableProductIds->merge(
+                            $cartItems->filter(function ($item) use ($cond) {
+                                return $item->product->categories->pluck('id')->contains($cond->category_id);
+                            })->pluck('product_id')
+                        );
+                    } elseif ($cond->condition_type === 'null') {
+                        $applicableProductIds = $applicableProductIds->merge($cartItems->pluck('product_id'));
+                    }
+                }
+
+                if ($v->conditions->isEmpty()) {
+                    $applicableProductIds = $cartItems->pluck('product_id');
+                }
+
+                $total = $priceMap->only($applicableProductIds->unique()->all())->sum();
+
+
+                if ($total < $v->min_order_value) {
+                    return null;
+                }
+
+                $discount = 0;
+                if ($v->type === 'percent') {
+                    $discount = min($total * ($v->value / 100), $v->max_discount_amount ?? INF);
+                } elseif ($v->type === 'fixed') {
+                    $discount = min($v->value, $total);
+                }
+
+                return (object) [
+                    'voucher' => $v,
+                    'discount' => $discount,
+                ];
+            })->filter()->sortByDesc('discount')->first();
+
+            if ($bestVoucherObj) {
+                session(['checkout_voucher' => $bestVoucherObj->voucher->id]);
+            }
+        }
+
+
         $eligibleProductIds = collect();
 
         // Áp dụng voucher nếu có

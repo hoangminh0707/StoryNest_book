@@ -51,6 +51,7 @@
           </div>
         </form>
         </div>
+
       </div>
 
       {{-- Thông tin liên hệ --}}
@@ -69,11 +70,13 @@
         </div>
         </div>
       </div>
+
+
       </div>
     </div>
     </div>
   </main>
 
 
-@endsection
 
+@endsection
