@@ -11,47 +11,6 @@
     padding: 0.25rem 0.5rem;
     font-size: 0.9rem;
     }
-
-    /* Voucher tốt nhất ngoài trang */
-    .best-voucher {
-    border: 1px solid #d1e7dd;
-    background-color: #f0fdf4;
-    padding: 16px;
-    border-radius: 12px;
-    margin-top: 20px;
-    position: relative;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
-    }
-
-    .best-voucher .badge {
-    font-size: 14px;
-    background-color: #28a745;
-    color: white;
-    padding: 6px 10px;
-    border-radius: 8px;
-    margin-bottom: 8px;
-    display: inline-block;
-    }
-
-    .best-voucher p {
-    margin: 5px 0;
-    font-weight: bold;
-    color: #1a1a1a;
-    }
-
-    /* Modal voucher */
-    .voucher-item {
-    background-color: #f8f9fa;
-    border-left: 5px solid #0d6efd;
-    padding: 12px;
-    border-radius: 6px;
-    transition: all 0.2s ease-in-out;
-    }
-
-    .voucher-item:hover {
-    background-color: #e9f3ff;
-    transform: scale(1.01);
-    }
   </style>
 
   <main>
@@ -312,7 +271,7 @@
           <div class="total-reviews">
           <div class="rev-avatar">
           <img
-            src="{{ asset($review->user->avatar ?? 'https://i.ibb.co/WpKLtySw/Logo-Story-Nest-Book.jpg') }}"
+            src="{{ Storage::url($review->user->avatar ?? 'https://i.ibb.co/WpKLtySw/Logo-Story-Nest-Book.jpg') }}"
             alt="User Avatar">
           </div>
 
@@ -343,46 +302,44 @@
           <p>Chưa có đánh giá nào cho sản phẩm này.</p>
         @endif
 
-              @if ($canReview)
+              @if ($canReview && !$hasReviewed)
+            {{-- Hiện form đánh giá --}}
             <div class="form-group row">
             <div class="col">
             <form action="{{ route('reviews.store') }}" method="POST">
             @csrf
             <input type="hidden" name="product_id" value="{{ $product->id }}">
-            <label class="col-form-label"><span class="text-danger">*</span>
-              Đánh giá của bạn</label>
+            <label class="col-form-label">
+              <span class="text-danger">*</span> Đánh giá của bạn
+            </label>
             <textarea name="comment" class="form-control" required></textarea>
-            </div>
-            </div>
-            <div class="form-group row">
-            <div class="col">
-            <label class="col-form-label"><span class="text-danger">*</span>
-            Đánh giá</label>
+
+            <label class="col-form-label mt-3">
+              <span class="text-danger">*</span> Đánh giá
+            </label>
             @for ($i = 5; $i >= 1; $i--)
           <input type="radio" id="star{{ $i }}" name="rating" value="{{ $i }}" required>
           <label for="star{{ $i }}" style="margin-right: 10px;">{{ $i }} ⭐</label>
           @endfor
-            </div>
 
-            </div>
-            <div class="buttons">
-            <button class="btn btn-sqr" type="submit">Đánh giá sản phẩm</button>
+            <button type="submit" class="btn btn-sqr mt-3">Gửi đánh giá</button>
             </form>
             </div>
-          </div> <!-- end of review-form -->
-        @else
-        <p class="text-muted">Bạn cần mua sản phẩm này trước khi có thể đánh giá.</p>
+            </div>
+        @elseif ($canReview && $hasReviewed)
+          <p class="text-success">🎉 Bạn đã đánh giá sản phẩm này. Cảm ơn bạn!</p>
         @endif
+
+            </div>
             </div>
           </div>
           </div>
         </div>
         </div>
-      </div>
-      <!-- product details reviews end -->
+        <!-- product details reviews end -->
       </div>
       <!-- product details wrapper end -->
-    </div>
+      </div>
     </div>
     </div>
     <!-- page main wrapper end -->
@@ -515,26 +472,6 @@
         {{ $voucher->expires_at ? \Carbon\Carbon::parse($voucher->expires_at)->format('d/m/Y') : 'Không giới hạn' }}
         </div>
         </div>
-
-        @if ($voucher->min_order_value)
-      <div class="mt-1 small text-secondary">
-      Đơn tối thiểu: {{ number_format($voucher->min_order_value) }}₫
-      </div>
-      @endif
-      </div>
-    @empty
-      <p>Không có voucher áp dụng.</p>
-    @endforelse
-      </div>
-      <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-      </div>
-    </div>
-    </div>
-  </div>
-
-
-
 
         @if ($voucher->min_order_value)
       <div class="mt-1 small text-secondary">

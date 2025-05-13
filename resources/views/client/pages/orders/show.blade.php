@@ -70,8 +70,13 @@
       @php
       $productImage = $item->product?->thumbnail
       ?? $item->productVariant?->image
-      ?? asset('images/no-image.png'); // ảnh mặc định nếu không có
+      ?? asset('images/no-image.png');
+
+      $hasReviewed = \App\Models\Review::where('user_id', auth()->id())
+      ->where('product_id', $item->product_id)
+      ->exists();
       @endphp
+
       <a href="{{ route('product.show', $item->product->slug) }}">
         <div class="order-item d-flex align-items-start mb-3 text-dark">
         <img src="{{ Storage::url($productImage->image_path) }}" alt="{{ $item->product_name }}"
@@ -87,9 +92,42 @@
         </div>
         </div>
       </a>
+
+      @if($order->status === 'delivered')
+      @if(!$hasReviewed)
+      <form action="{{ route('reviews.store') }}" method="POST" class="mt-2">
+        @csrf
+        <input type="hidden" name="product_id" value="{{ $item->product_id }}">
+
+        <div class="mb-1 d-flex align-items-center gap-1">
+        <label class="form-label small mb-0 me-2">Đánh giá:</label>
+        @for ($i = 1; $i <= 5; $i++)
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="rating" id="rating{{ $item->id }}_{{ $i }}"
+        value="{{ $i }}" required>
+        <label class="form-check-label small" for="rating{{ $item->id }}_{{ $i }}">{{ $i }} ⭐</label>
+      </div>
+      @endfor
+        </div>
+
+        <div class="mb-1">
+        <textarea name="comment" class="form-control form-control-sm" rows="2" placeholder="Viết nhận xét..."
+        required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-sm btn-sqr">Gửi đánh giá</button>
+      </form>
+      @else
+      <div class="mt-2 text-success small">
+      ✔️ Bạn đã đánh giá sản phẩm này
+      </div>
+      @endif
+      @endif
+
     @endforeach
       </div>
     </div>
+
 
 
     {{-- Thông tin thanh toán --}}
