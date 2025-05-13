@@ -364,7 +364,6 @@
           @endfor
             </div>
 
-
             </div>
             <div class="buttons">
             <button class="btn btn-sqr" type="submit">Đánh giá sản phẩm</button>
@@ -537,6 +536,22 @@
 
 
 
+        @if ($voucher->min_order_value)
+      <div class="mt-1 small text-secondary">
+      Đơn tối thiểu: {{ number_format($voucher->min_order_value) }}₫
+      </div>
+      @endif
+      </div>
+    @empty
+      <p>Không có voucher áp dụng.</p>
+    @endforelse
+      </div>
+      <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+      </div>
+    </div>
+    </div>
+  </div>
 
 
 
@@ -597,7 +612,8 @@
       value += change;
       if (value < 1) value = 1; input.value = value;
     }
-    } </script>
+    }
+  </script>
 
 
 

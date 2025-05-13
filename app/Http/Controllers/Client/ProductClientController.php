@@ -250,10 +250,3 @@ class ProductClientController extends Controller
             'canReview'
         ));
     }
-
-
-    public function about()
-    {
-        return view('client.pages.about');
-    }
-}

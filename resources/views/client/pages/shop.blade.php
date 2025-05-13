@@ -8,9 +8,6 @@
 
 @section('content')
 
-
-
-
   <div class="breadcrumb-area">
     <div class="container">
     <div class="row">
