@@ -170,7 +170,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->group(function () {
     // Đăng nhập / Đăng ký / Dashboard
     Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
-    Route::get('/revenue-data', [AdminController::class, 'getRevenueData']);
 
     Route::get('/login', [LoginAdminController::class, 'showLoginAdminForm'])->name('login');
     Route::post('/login', [LoginAdminController::class, 'login']);

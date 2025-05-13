@@ -400,7 +400,7 @@
                     <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="{{ route('admin.dashboard') }}">
-                            <i class="ri-dashboard-line"></i> Dashboard
+                            <i class="ri-dashboard-line"></i> Thống kê
                         </a>
                     </li>
                     <li class="nav-item">
@@ -446,6 +446,9 @@
                                     </a>
                                     <a href="{{ route('admin.attributes.index') }}" class="nav-link">
                                         Thuộc tính
+                                    </a>
+                                    <a href="{{ route('admin.stocks.index') }}" class="nav-link">
+                                        Kho hàng
                                     </a>
 
                                 </li>
