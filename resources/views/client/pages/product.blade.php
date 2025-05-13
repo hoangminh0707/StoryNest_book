@@ -323,7 +323,6 @@
           @endfor
             </div>
 
-
             </div>
             <div class="buttons">
             <button class="btn btn-sqr" type="submit">Đánh giá sản phẩm</button>
