@@ -95,11 +95,13 @@
 
             <div class="form-group">
                 <label for="is_active">Kích hoạt</label>
-                <input class="form-check-input" type="checkbox" id="is_active" name="is_active" value="1" {{ old('is_active') ? 'checked' : '' }}>
+                <input class="form-check-input" type="checkbox" id="is_active" name="is_active" value="1"
+                    {{ old('is_active', $voucher->is_active ?? false) ? 'checked' : '' }}>
                 @error('is_active')
-                <div class="text-danger">{{ $message }}</div>
+                    <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
+
 
             <div class="mb-3">
                 <label class="form-label">Điều kiện áp dụng</label>

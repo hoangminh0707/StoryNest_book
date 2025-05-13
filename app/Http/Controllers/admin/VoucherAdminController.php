@@ -51,25 +51,8 @@ class VoucherAdminController extends Controller
     // Lưu voucher mới
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'code' => 'required|string|unique:vouchers,code',
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'type' => 'required|in:fixed,percent',
-            'value' => 'required|numeric|min:0',
-            'max_discount_amount' => 'nullable|numeric|min:0',
-            'min_order_value' => 'nullable|numeric|min:0',
-            'expires_at' => 'nullable|date',
-            'max_usage' => 'nullable|integer|min:0',
-            'is_active' => 'nullable|boolean',
-            'condition_type' => 'nullable|in:product,category',
-            'product_ids' => 'nullable|array',
-            'product_ids.*' => 'exists:products,id',
-            'category_ids' => 'nullable|array',
-            'category_ids.*' => 'exists:categories,id',
-        ]);
+        $validated = $this->validateVoucherStore($request);
 
-        // Lưu voucher
         $voucher = Voucher::create([
             'code' => $validated['code'],
             'name' => $validated['name'],
@@ -85,29 +68,7 @@ class VoucherAdminController extends Controller
             'condition_type' => $validated['condition_type'] ?? null,
         ]);
 
-        // Gắn điều kiện sản phẩm
-        if (($validated['condition_type'] ?? null) === 'product') {
-            foreach ($validated['product_ids'] ?? [] as $productId) {
-                VoucherCondition::create([
-                    'voucher_id' => $voucher->id,
-                    'condition_type' => 'product',
-                    'product_id' => $productId,
-                ]);
-            }
-        }
-
-        // Gắn điều kiện danh mục
-        if (($validated['condition_type'] ?? null) === 'category') {
-            foreach ($validated['category_ids'] ?? [] as $categoryId) {
-                VoucherCondition::create([
-                    'voucher_id' => $voucher->id,
-                    'condition_type' => 'category',
-                    'category_id' => $categoryId,
-                ]);
-            }
-        }
-
-        // dd($request->all());
+        $this->syncConditions($voucher, $validated);
 
         return redirect()->route('admin.vouchers.index')
             ->with('success', 'Tạo voucher thành công.');
@@ -166,26 +127,8 @@ class VoucherAdminController extends Controller
     public function update(Request $request, $id)
     {
         $voucher = Voucher::findOrFail($id);
+        $validated = $this->validateVoucherUpdate($request, $voucher);
 
-        $validated = $request->validate([
-            'code' => 'required|string|unique:vouchers,code,' . $voucher->id,
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'type' => 'required|in:fixed,percent',
-            'value' => 'required|numeric|min:0',
-            'max_discount_amount' => 'nullable|numeric|min:0',
-            'min_order_value' => 'nullable|numeric|min:0',
-            'expires_at' => 'nullable|date',
-            'max_usage' => 'nullable|integer|min:0',
-            'is_active' => 'nullable|boolean',
-            'condition_type' => 'nullable|in:product,category',
-            'product_ids' => 'nullable|array',
-            'product_ids.*' => 'exists:products,id',
-            'category_ids' => 'nullable|array',
-            'category_ids.*' => 'exists:categories,id',
-        ]);
-
-        // Cập nhật voucher
         $voucher->update([
             'code' => $validated['code'],
             'name' => $validated['name'],
@@ -200,35 +143,12 @@ class VoucherAdminController extends Controller
             'condition_type' => $validated['condition_type'] ?? null,
         ]);
 
-        // Xóa điều kiện cũ
         $voucher->conditions()->delete();
-
-        // Gắn lại điều kiện mới nếu có
-        if (($validated['condition_type'] ?? null) === 'product') {
-            foreach ($validated['product_ids'] ?? [] as $productId) {
-                $voucher->conditions()->create([
-                    'condition_type' => 'product',
-                    'product_id' => $productId,
-                ]);
-            }
-        }
-
-        if (($validated['condition_type'] ?? null) === 'category') {
-            foreach ($validated['category_ids'] ?? [] as $categoryId) {
-                $voucher->conditions()->create([
-                    'condition_type' => 'category',
-                    'category_id' => $categoryId,
-                ]);
-            }
-        }
+        $this->syncConditions($voucher, $validated);
 
         return redirect()->route('admin.vouchers.index')
             ->with('success', 'Cập nhật voucher thành công.');
     }
-
-
-
-
 
 
 
@@ -252,4 +172,71 @@ class VoucherAdminController extends Controller
 
         return redirect()->route('admin.vouchers.index')->with('success', 'Xóa mã giảm giá thành công.');
     }
+
+    protected function syncConditions(Voucher $voucher, array $validated)
+    {
+        if (($validated['condition_type'] ?? null) === 'product') {
+            foreach ($validated['product_ids'] ?? [] as $productId) {
+                $voucher->conditions()->create([
+                    'condition_type' => 'product',
+                    'product_id' => $productId,
+                ]);
+            }
+        }
+
+        if (($validated['condition_type'] ?? null) === 'category') {
+            foreach ($validated['category_ids'] ?? [] as $categoryId) {
+                $voucher->conditions()->create([
+                    'condition_type' => 'category',
+                    'category_id' => $categoryId,
+                ]);
+            }
+        }
+    }
+
+
+    protected function validateVoucherStore(Request $request)
+    {
+        return $request->validate([
+            'code' => 'required|string|unique:vouchers,code',
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'type' => 'required|in:fixed,percent',
+            'value' => 'required|numeric|min:0|max:10000000', // giảm tối đa 10 triệu
+            'max_discount_amount' => 'nullable|numeric|min:0|max:10000000',
+            'min_order_value' => 'nullable|numeric|min:0',
+            'expires_at' => 'nullable|date',
+            'max_usage' => 'nullable|integer|min:0',
+            'is_active' => 'nullable|boolean',
+            'condition_type' => 'nullable|in:product,category',
+            'product_ids' => 'nullable|array',
+            'product_ids.*' => 'exists:products,id',
+            'category_ids' => 'nullable|array',
+            'category_ids.*' => 'exists:categories,id',
+        ]);
+    }
+
+
+    protected function validateVoucherUpdate(Request $request, Voucher $voucher)
+    {
+        return $request->validate([
+            'code' => 'required|string|unique:vouchers,code,' . $voucher->id,
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'type' => 'required|in:fixed,percent',
+            'value' => 'required|numeric|min:0',
+            'max_discount_amount' => 'nullable|numeric|min:0',
+            'min_order_value' => 'nullable|numeric|min:0',
+            'expires_at' => 'nullable|date',
+            'max_usage' => 'nullable|integer|min:0',
+            'is_active' => 'nullable|boolean',
+            'condition_type' => 'nullable|in:product,category',
+            'product_ids' => 'nullable|array',
+            'product_ids.*' => 'exists:products,id',
+            'category_ids' => 'nullable|array',
+            'category_ids.*' => 'exists:categories,id',
+        ]);
+    }
+
+
 }
