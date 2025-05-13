@@ -6,6 +6,7 @@
 
 @section('content')
 
+
   <main>
     <!-- breadcrumb area start -->
     <div class="breadcrumb-area">
@@ -20,6 +21,7 @@
           <li class="breadcrumb-item active" aria-current="page">cart</li>
           </ul>
         </nav>
+
         </div>
       </div>
       </div>

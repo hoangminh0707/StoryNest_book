@@ -26,6 +26,7 @@
 
 
 
+
 </style>
 
   <main>
@@ -42,6 +43,16 @@
           <li class="breadcrumb-item active" aria-current="page">checkout</li>
           </ul>
         </nav>
+<section class="hero-section position-relative padding-large" style="background-image: url(assetClient/images/banner-image-bg-1.jpg); background-size: cover; background-repeat: no-repeat; background-position: center; height: 400px;">
+    <div class="hero-content">
+      <div class="container">
+        <div class="row">
+          <div class="text-center">
+            <h1>Thanh toán</h1>
+            <div class="breadcrumbs">
+              <span class="item text-decoration-underline">Thanh toán</span>
+            </div>
+          </div>
         </div>
       </div>
       </div>
