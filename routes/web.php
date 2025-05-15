@@ -24,6 +24,8 @@ use App\Http\Controllers\Admin\PaymentAdminController;
 use App\Http\Controllers\Admin\PaymentMethodAdminController;
 use App\Http\Controllers\Admin\NotificationAdminController;
 use App\Http\Controllers\Admin\StockController;
+use App\Http\Controllers\Admin\FlashDealController;
+
 
 
 // ========== CLIENT CONTROLLERS ==========
@@ -267,7 +269,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::post('stocks/update', [StockController::class, 'updateStock'])->name('stocks.update');
     Route::get('stocks/history/{productId}', [StockController::class, 'showHistory'])->name('stocks.history');
 
+    // flash_deals 
+    Route::resource('flash_deals', FlashDealController::class);
 
+    // AJAX route lấy biến thể sản phẩm
+    Route::post('flash_deals/get_variants', [FlashDealController::class, 'getVariants'])->name('flash_deals.getVariants');
 
     // thông báo admin
     Route::get('/admin/notifications/fetch', [NotificationAdminController::class, 'fetch'])->name('notifications.fetch');
