@@ -432,16 +432,25 @@
                                         curve: 'smooth' // Đường cong mượt mà
                                     },
                                     markers: {
-                                        size: 6, // Kích thước marker trên đường
+                                        size: 8, // Kích thước marker trên đường
                                         colors: '#6c757d', // Màu marker giống màu đường
                                         strokeColor: '#fff', // Màu viền marker
                                         strokeWidth: 2
                                     }
                                 }
                             ],
-
+                            xaxis: {
+                                categories: @json($revenueLabels),
+                               
+                                labels: {
+                                    style: {
+                                        fontSize: '12px',
+                                        fontWeight: 500
+                                    }
+                                }
+                            },
                             yaxis: [{
-
+                                  
                                     labels: {
                                         formatter: function(val) {
                                             return val.toLocaleString('vi-VN'); // Định dạng doanh thu
@@ -450,7 +459,7 @@
                                 },
                                 {
                                     opposite: true,
-
+                                 
                                     labels: {
                                         formatter: function(val) {
                                             return val + ' đơn'; // Định dạng đơn hàng

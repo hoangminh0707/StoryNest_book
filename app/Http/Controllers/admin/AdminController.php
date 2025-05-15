@@ -93,19 +93,23 @@ class AdminController extends Controller
     
         // Biểu đồ đơn hàng & doanh thu
         $filteredOrders = Order::whereBetween('created_at', [$fromDate, $toDate])->get();
-    
+
         $totalOrdersAll = $filteredOrders->count();
         $totalRevenue = $filteredOrders->sum('final_amount');
-    
-        $revenueByDay = $filteredOrders->groupBy(function ($order) {
-            return $order->created_at->format('d M');
+
+        // Gom theo ngày (Y-m-d) để dễ sắp xếp
+        $groupedByDate = $filteredOrders->groupBy(function ($order) {
+            return $order->created_at->format('Y-m-d'); // Dùng định dạng này để sắp đúng
         });
-        
-    
-        $revenueLabels = $revenueByDay->keys();
-        $revenueValues = $revenueByDay->map(fn($orders) => $orders->sum('final_amount') )->values();
-        $orderCounts = $revenueByDay->map(fn($orders) => $orders->count())->values();
-    
+
+        // Sắp xếp theo key ngày tăng dần
+        $sortedByDate = $groupedByDate->sortKeys();
+
+        // Tạo nhãn và dữ liệu
+        $revenueLabels = $sortedByDate->keys()->map(fn($date) => \Carbon\Carbon::parse($date)->format('d M'));
+        $revenueValues = $sortedByDate->map(fn($orders) => $orders->sum('final_amount'))->values();
+        $orderCounts = $sortedByDate->map(fn($orders) => $orders->count())->values();
+                                                                                                                                                                
         // Trạng thái đơn hàng
         $statusGroups = $filteredOrders->groupBy('status');
         $statusChartLabels = $statusGroups->keys();
