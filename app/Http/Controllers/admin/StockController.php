@@ -169,17 +169,42 @@ class StockController extends Controller
     public function showHistory($productId)
     {
         $product = Product::findOrFail($productId);
-        $stockLogs = StockLog::with([
+    
+        // Lấy toàn bộ log để tính toán tồn kho
+        $allLogs = StockLog::with([
             'product',
             'variant.attributeValues.attribute', 
             'admin'
         ])
         ->where('product_id', $productId)
-        ->orderByDesc('created_at')
-        ->paginate(15);
-        
+        ->orderBy('created_at', 'asc') // quan trọng để tính đúng
+        ->get();
+    
+        // Tính toán stock_before và stock_after tạm thời
+        $stock = 0;
+        foreach ($allLogs as $log) {
+            $log->stock_before = $stock;
+            $stock += $log->change_quantity;
+            $log->stock_after = $stock;
+        }
+    
+        // Sắp xếp lại theo thời gian mới nhất để hiển thị
+        $allLogs = $allLogs->sortByDesc('created_at')->values();
+    
+        // Phân trang thủ công
+        $page = request()->get('page', 1);
+        $perPage = 15;
+        $pagedLogs = $allLogs->forPage($page, $perPage);
+        $stockLogs = new \Illuminate\Pagination\LengthAwarePaginator(
+            $pagedLogs,
+            $allLogs->count(),
+            $perPage,
+            $page,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
     
         return view('admin.pages.stocks.history', compact('product', 'stockLogs'));
     }
+    
     
 }
