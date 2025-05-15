@@ -1,6 +1,8 @@
 @extends('client.layouts.app')
 
+
 @section('title', 'Blog')
+
 
 @section('content')
 <div class="breadcrumb-area">
@@ -14,6 +16,7 @@
               <li class="breadcrumb-item active" aria-current="page">blog</li>
             </ul>
           </nav>
+
         </div>
       </div>
     </div>
@@ -97,6 +100,8 @@
             </ul>
           </div>
 
+                            <h4>{{ $blog->title }}</h4>
+                        </a>
 
           <!-- end pagination area -->
         </div>
@@ -104,7 +109,6 @@
     </div>
   </div>
 </div>
-
 
 
 @endsection

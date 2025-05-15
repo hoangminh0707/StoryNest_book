@@ -313,6 +313,7 @@
           <label for="star{{ $i }}" style="margin-right: 10px;">{{ $i }} ⭐</label>
           @endfor
             </div>
+
             </div>
             <div class="buttons">
             <button class="btn btn-sqr" type="submit">Đánh giá sản phẩm</button>
