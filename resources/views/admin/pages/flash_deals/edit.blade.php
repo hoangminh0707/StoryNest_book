@@ -62,6 +62,24 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+                 <div class="mb-3">
+                    <label for="usage_limit" class="form-label fw-semibold">
+                            Giới hạn số lần sử dụng
+                            <small class="text-muted">(Có thể để trống nếu không giới hạn)</small>
+                        </label>
+                        <input
+                            type="text"
+                            name="usage_limit"
+                            id="usage_limit"
+                            class="form-control @error('usage_limit') is-invalid @enderror"
+                            value="{{ old('usage_limit', $flashDeal->usage_limit) }}"
+                            placeholder="Nhập số lần sử dụng tối đa">
+                        @error('usage_limit')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+
 
                     <div class="mb-3">
                         <label for="product_id" class="form-label fw-semibold">Sản phẩm <span class="text-danger">*</span></label>

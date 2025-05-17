@@ -14,23 +14,16 @@ class FlashDealController extends Controller
     public function index(Request $request)
     {
         $query = FlashDeal::query();
-    
-        // Tìm theo tiêu đề nếu có
+
         if ($request->filled('search_title')) {
             $query->where('title', 'like', '%' . $request->search_title . '%');
         }
-    
-       
-    
-        // Lấy dữ liệu có phân trang
+
         $flashDeals = $query->orderBy('created_at', 'desc')->paginate(10);
-    
-        // Giữ lại các tham số tìm kiếm khi phân trang
-        $flashDeals->appends($request->only(['search_title', 'created_at']));
-    
+        $flashDeals->appends($request->only(['search_title']));
+
         return view('admin.pages.flash_deals.index', compact('flashDeals'));
     }
-    
 
     public function create()
     {
@@ -38,19 +31,16 @@ class FlashDealController extends Controller
         return view('admin.pages.flash_deals.create', compact('products'));
     }
 
-    // AJAX: lấy biến thể theo product_id
     public function getVariants(Request $request)
     {
         $request->validate([
             'product_id' => 'required|exists:products,id',
         ]);
 
-        // Lấy các biến thể có liên kết với các thuộc tính
         $variants = ProductVariant::with('attributeValues.attribute')
             ->where('product_id', $request->product_id)
             ->get();
 
-        // Map ra dữ liệu phù hợp để trả về JSON
         $data = $variants->map(function ($variant) {
             $variantName = $variant->attributeValues->map(function ($value) {
                 return $value->attribute->name . ': ' . $value->value;
@@ -63,8 +53,9 @@ class FlashDealController extends Controller
             ];
         });
 
-        return Response()->json($data);
+        return response()->json($data);
     }
+
     protected function validateFlashDeal(Request $request)
     {
         $messages = [
@@ -79,13 +70,15 @@ class FlashDealController extends Controller
             'end_time.date' => 'Thời gian kết thúc phải là định dạng ngày hợp lệ.',
             'end_time.after_or_equal' => 'Thời gian kết thúc phải lớn hơn hoặc bằng thời gian bắt đầu.',
 
+            'usage_limit.integer' => 'Giới hạn lượt dùng phải là số nguyên.',
+            'usage_limit.min' => 'Giới hạn lượt dùng phải lớn hơn hoặc bằng 1.',
+
             'product_id.required' => 'Bạn phải chọn sản phẩm.',
             'product_id.exists' => 'Sản phẩm được chọn không tồn tại.',
 
             'variant_ids.required' => 'Bạn phải chọn ít nhất một biến thể.',
             'variant_ids.array' => 'Dữ liệu biến thể không hợp lệ.',
             'variant_ids.min' => 'Bạn phải chọn ít nhất một biến thể.',
-
             'variant_ids.*.exists' => 'Biến thể được chọn không tồn tại.',
 
             'discount_percent.required' => 'Phần trăm giảm giá không được để trống.',
@@ -98,6 +91,7 @@ class FlashDealController extends Controller
             'title' => ['required', 'string', 'max:255'],
             'start_time' => ['required', 'date'],
             'end_time' => ['required', 'date', 'after_or_equal:start_time'],
+            'usage_limit' => ['nullable', 'integer', 'min:1'],
             'product_id' => ['required', 'exists:products,id'],
             'variant_ids' => ['required', 'array', 'min:1'],
             'variant_ids.*' => ['exists:product_variants,id'],
@@ -109,19 +103,18 @@ class FlashDealController extends Controller
     {
         $validated = $this->validateFlashDeal($request);
 
-
-        // Tạo flash deal
         $flashDeal = FlashDeal::create([
             'title' => $request->title,
             'start_time' => $request->start_time,
             'end_time' => $request->end_time,
+            'usage_limit' => $request->usage_limit ?? 0,
+            'used_count' => 0,
         ]);
 
-        // Lấy biến thể được chọn
         $variants = ProductVariant::whereIn('id', $request->variant_ids)->get();
 
         foreach ($variants as $variant) {
-            $discountPrice = round($variant->price * (1 - $request->discount_percent / 100), 2);
+            $discountPrice = round($variant->variant_price * (1 - $request->discount_percent / 100), 2);
 
             FlashSaleProductVariant::updateOrCreate(
                 [
@@ -134,28 +127,25 @@ class FlashDealController extends Controller
             );
         }
 
-        return redirect()->route('admin.flash_deals.index')->with('success', 'Tạo flash deal thành công với biến thể được chọn.');
+        return redirect()->route('admin.flash_deals.index')->with('success', 'Tạo flash deal thành công.');
     }
+
     public function edit($id)
     {
         $flashDeal = FlashDeal::with('flashSaleVariants.productVariant')->findOrFail($id);
-    
-        // Lấy product_id dựa trên biến thể flash deal đầu tiên
+
         $productId = $flashDeal->flashSaleVariants->first()->productVariant->product_id ?? null;
-    
-        // Lấy tất cả biến thể của sản phẩm này (nếu có)
+
         $variants = $productId
             ? ProductVariant::with('attributeValues.attribute')
                 ->where('product_id', $productId)
                 ->get()
             : collect();
-    
-        // Lấy danh sách sản phẩm để dropdown
+
         $products = Product::all();
-    
+
         return view('admin.pages.flash_deals.edit', compact('flashDeal', 'products', 'variants'));
     }
-    
 
     public function update(Request $request, $id)
     {
@@ -166,12 +156,11 @@ class FlashDealController extends Controller
             'title' => $request->title,
             'start_time' => $request->start_time,
             'end_time' => $request->end_time,
+            'usage_limit' => $request->usage_limit ?? 0,
         ]);
 
-        // Xóa hết các biến thể flash sale cũ trước khi cập nhật mới
         FlashSaleProductVariant::where('flash_deal_id', $flashDeal->id)->delete();
 
-        // Lấy biến thể được chọn và cập nhật
         $variants = ProductVariant::whereIn('id', $request->variant_ids)->get();
 
         foreach ($variants as $variant) {
@@ -195,10 +184,7 @@ class FlashDealController extends Controller
     {
         $flashDeal = FlashDeal::findOrFail($id);
 
-        // Xóa các biến thể liên quan trước
         FlashSaleProductVariant::where('flash_deal_id', $flashDeal->id)->delete();
-
-        // Xóa flash deal
         $flashDeal->delete();
 
         return redirect()->route('admin.flash_deals.index')->with('success', 'Xóa flash deal thành công.');
