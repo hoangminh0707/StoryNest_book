@@ -200,8 +200,8 @@
 
 
           <div class="useful-links">
-            <a href="{{ route('wishlist.add', $product->id) }}" data-bs-toggle="tooltip" title="Wishlist">
-            <i class="pe-7s-like"></i> wishlist
+            <a href="{{ route('wishlist.add', $product->id) }}" data-bs-toggle="tooltip" >
+            <i class="pe-7s-like"></i> Thêm vào yêu thích
             </a>
           </div>
           </div>
@@ -344,8 +344,8 @@
       <div class="col-12">
         <!-- section title start -->
         <div class="section-title text-center">
-        <h2 class="title">Related Products</h2>
-        <p class="sub-title">Add related products to weekly lineup</p>
+        <h2 class="title">Khám Phá Sản Phẩm Liên Quan</h2>
+        <p class="sub-title">Tìm thêm những sản phẩm phù hợp với nhu cầu của bạn ngay dưới đây!</p>
         </div>
         <!-- section title start -->
       </div>
@@ -375,7 +375,7 @@
           </div>
           <div class="button-group">
           <a href="{{ route('wishlist.add', $product->id) }}" data-bs-toggle="tooltip" data-bs-placement="left"
-          title="Add to wishlist"><i class="pe-7s-like"></i></a>
+          title="Thêm vào yêu thích"><i class="pe-7s-like"></i></a>
 
           </span>
           </a>
@@ -384,12 +384,12 @@
           @auth
         <form action="{{ route('cart.add', $product->id) }}" method="POST" style="display:inline;">
         @csrf
-        <button type="submit" class="btn btn-cart">add to cart</button>
+        <button type="submit" class="btn btn-cart">Thêm vào giỏ hàng</button>
         </form>
         @endauth
 
           @guest
-        <button onclick="showLoginAlert()" class="btn btn-cart">add to cart</button>
+        <button onclick="showLoginAlert()" class="btn btn-cart">Thêm vào giỏ hàng</button>
         @endguest
           </div>
           </figure>

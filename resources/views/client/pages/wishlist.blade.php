@@ -124,14 +124,25 @@
 
                                         <td class="pro-subtotal">
                                             @if ($isInStock)
-                                            <a href="{{ route('cart.add', $item->product->id) }}" class="btn btn-sqr">Thêm vào giỏ</a>
+                                                @if ($item->product->product_type === 'variable')
+                                                    <a href="{{ route('product.show', $item->product->slug) }}" class="btn btn-sqr">Chọn biến thể</a>
+                                                @else
+                                                    <form action="{{ route('cart.add', $item->product->id) }}" method="POST">
+                                                        @csrf
+                                                        <input type="hidden" name="from_wishlist" value="1">
+                                                        <button type="submit" class="btn btn-sqr">Thêm vào giỏ</button>
+                                                    </form>
+                                                @endif
                                             @else
-                                            <button class="btn btn-sqr disabled" disabled>Thêm vào giỏ</button>
+                                                <button class="btn btn-sqr disabled" disabled>Hết hàng</button>
                                             @endif
                                         </td>
 
+
+
+
                                         <td class="pro-remove">
-                                            <form action="{{ route('wishlist.remove', $item->product->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi yêu thích?');">
+                                            <form action="{{ route('wishlist.remove', $item->product->slug) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi yêu thích?');">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-sqr "><i class="fa fa-trash-o"></i> Xóa</button>

@@ -44,6 +44,7 @@ use App\Http\Controllers\Client\ReviewCLientController;
 use App\Http\Controllers\Client\VnpayController;
 use App\Http\Controllers\Client\MomoController;
 use App\Http\Controllers\Client\ContactController;
+use App\Http\Controllers\Client\FlashSaleController;
 
 
 require base_path('routes/channels.php');
@@ -150,6 +151,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/momo/return', [MomoController::class, 'handleReturn'])->name(name: 'momo.callback');
     Route::post('/momo/callback', [MomoController::class, 'handleCallback']);
 
+    Route::get('/flash-sale', [FlashSaleController::class, 'index'])->name('client.flash-sale.index');
 
 
     Route::get('/orders/success', [OrderClientController::class, 'success'])->name('orders.success');
