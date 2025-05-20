@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\ProductVariant;
+use App\Models\Wishlist;
 use Illuminate\Support\Facades\Auth;
 
 class CartClientController extends Controller
@@ -50,6 +51,7 @@ class CartClientController extends Controller
         if ($hasVariants && !$variantId) {
             return redirect()->back()->with('error', 'Vui lòng chọn biến thể sản phẩm trước khi thêm vào giỏ hàng.');
         }
+        
 
         // Nếu có variant, dùng giá của variant
         if ($variantId) {
@@ -82,6 +84,12 @@ class CartClientController extends Controller
                 'quantity' => $quantity,
                 'price' => $price,
             ]);
+        }
+          // ✅ XÓA KHỎI DANH SÁCH YÊU THÍCH nếu đến từ wishlist
+        if ($request->has('from_wishlist')) {
+            Wishlist::where('user_id', $userId)
+                ->where('product_id', $product->id)
+                ->delete();
         }
 
         return redirect()->back()->with('success', 'Đã thêm sản phẩm vào giỏ hàng.');
