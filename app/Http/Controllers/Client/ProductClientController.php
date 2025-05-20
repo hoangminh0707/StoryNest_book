@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use App\Models\Voucher;
 use App\Models\OrderItem;
 use App\Models\Banner;
+use App\Models\FlashDeal;
 
 
 
@@ -47,68 +48,137 @@ class ProductClientController extends Controller
                 ->whereHas('categories', function ($q) use ($sachIds) {
                     $q->whereIn('categories.id', $sachIds);
                 })
-                ->with(['author', 'images'])->get(),
+                ->with(['author', 'images'])
+                ->orderByDesc('created_at')
+                ->limit(8)
+                ->get(),
 
             'butviet' => Product::where('status', 'published')
                 ->whereHas('categories', function ($q) use ($butVietIds) {
                     $q->whereIn('categories.id', $butVietIds);
                 })
-                ->with(['author', 'images'])->get(),
+                ->with(['author', 'images'])
+                ->orderByDesc('created_at')
+                ->limit(8)
+                ->get(),
 
             'dochoi' => Product::where('status', 'published')
                 ->whereHas('categories', function ($q) use ($doChoiIds) {
                     $q->whereIn('categories.id', $doChoiIds);
                 })
-                ->with(['author', 'images'])->get(),
+                ->with(['author', 'images'])
+                ->orderByDesc('created_at')
+                ->limit(8)
+                ->get(),
 
             'khac' => Product::where('status', 'published')
                 ->whereDoesntHave('categories', function ($q) use ($allGroupIds) {
                     $q->whereIn('categories.id', $allGroupIds);
                 })
-                ->with(['author', 'images', 'categories'])->get(),
+                ->with(['author', 'images', 'categories'])
+                ->orderByDesc('created_at')
+                ->limit(8)
+                ->get(),
         ];
 
-        return view('client.pages.index', compact('products', 'menuCategories', 'banners', 'productsByCategory'));
+        $bestSellingProducts = Product::with(['images', 'variants', 'author'])
+            ->whereHas('orderItems.order', function ($query) {
+                $query->whereIn('status', ['delivered', 'completed']);
+            })
+            ->withSum(['orderItems as total_sold' => function ($query) {
+                $query->join('orders', 'orders.id', '=', 'order_items.order_id')
+                    ->whereIn('orders.status', ['delivered', 'completed']);
+            }], 'quantity')
+            ->orderByDesc('total_sold')
+            ->take(8)
+            ->get();
+
+
+
+
+        $flashSale = FlashDeal::with([
+            'flashSaleVariants.productVariant.product.images'
+        ])->latest()->first();
+
+        $flashSaleProducts = collect();
+
+
+        if ($flashSale && $flashSale->flashSaleVariants->isNotEmpty()) {
+            $flashSaleProducts = $flashSale->flashSaleVariants->map(function ($flashSaleVariant) {
+                $variant = $flashSaleVariant->productVariant;
+                $product = $variant->product;
+
+                $originalPrice = $variant->variant_price ?? 0;
+                $discountPrice = $flashSaleVariant->discount_price ?? $originalPrice;
+
+                $discountPercent = $originalPrice > 0
+                    ? round(100 * (1 - $discountPrice / $originalPrice))
+                    : 0;
+
+                $variant->discount_price = $discountPrice;
+                $variant->discount_percent = $discountPercent;
+
+                $product->flashSaleVariant = $variant;
+                $product->price = $originalPrice;
+                $product->stock = $variant->stock_quantity ?? 0;
+                $product->sold = $product->sold ?? 0;
+
+                return $product;
+            })->values();
+        }
+
+
+
+        return view('client.pages.index', compact('products', 'menuCategories', 'banners', 'productsByCategory', 'flashSale', 'flashSaleProducts', 'bestSellingProducts'));
     }
 
 
-    public function shop(Request $request)
-    {
-        $query = Product::with([
-            'author',
-            'categories',
-            'images' => function ($query) {
-                $query->where('is_thumbnail', true);
-            }
-        ]);
-
-        if ($request->has('author_id')) {
-            $query->where('author_id', $request->author_id);
+  public function shop(Request $request)
+{
+    $query = Product::with([
+        'author',
+        'categories',
+        'images' => function ($query) {
+            $query->where('is_thumbnail', true);
         }
+    ]);
 
-
-        if ($request->has('category_id')) {
-            $query->whereHas('categories', function ($q) use ($request) {
-                $q->where('categories.id', $request->category_id);
-            });
-        }
-
-
-
-        if ($request->has('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%');
-        }
-
-
-        $products = $query->paginate(12);
-
-
-
-        $authors = Author::all();
-        $categories = Categories::with('childrenRecursive')->get();
-
-        return view('client.pages.shop', compact('products', 'categories', 'authors'));
+    if ($request->has('author_id')) {
+        $query->where('author_id', $request->author_id);
     }
+
+    if ($request->has('category_id')) {
+        $query->whereHas('categories', function ($q) use ($request) {
+            $q->where('categories.id', $request->category_id);
+        });
+    }
+
+    if ($request->has('search')) {
+        $query->where('name', 'like', '%' . $request->search . '%');
+    }
+
+    $products = $query->paginate(12);
+
+    
+   $bestSellingProducts = Product::with(['orderItems.order'])
+    ->whereHas('orderItems.order', function ($query) {
+        $query->where('status', 'completed');
+    })
+    ->withSum('orderItems as total_sold', 'quantity')
+    ->orderByDesc('total_sold')
+    ->limit(8)
+    ->get();
+
+    $bestSellingProductIds = $bestSellingProducts->pluck('id')->toArray();
+
+    $authors = Author::all();
+    $categories = Categories::with('childrenRecursive')->get();
+
+
+
+    return view('client.pages.shop', compact('products', 'categories', 'authors', 'bestSellingProductIds'));
+}
+
 
 
 
@@ -235,6 +305,24 @@ class ProductClientController extends Controller
             })->where('product_id', $product->id)->exists();
         }
 
+       $totalSold = 0;
+
+        if ($product->product_type === 'simple') {
+            // Sản phẩm đơn: tính tổng quantity từ orderItems liên quan
+            $totalSold = $product->orderItems()->sum('quantity');
+        } else {
+            // Sản phẩm có biến thể: tính tổng quantity từ tất cả biến thể
+            foreach ($product->variants as $variant) {
+                $sold = $variant->orderItems()->sum('quantity');
+                $totalSold += $sold;
+            }
+        }
+
+        $product->total_sold = $totalSold;
+
+
+
+
         return view('client.pages.product', compact(
             'product',
             'thumbnail',
@@ -247,7 +335,8 @@ class ProductClientController extends Controller
             'bestVoucher',
             'discountedPrice',
             'averageRating',
-            'canReview'
+            'canReview',
+            'totalSold'
         ));
     }
 

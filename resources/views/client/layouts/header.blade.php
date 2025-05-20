@@ -1,4 +1,8 @@
 <style>
+    body {
+    overflow-x: hidden;
+  }
+
   .dropdown-menu.notifications-menu {
     width: 300px !important;
     /* nhỏ hơn */

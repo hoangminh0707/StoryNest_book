@@ -5,9 +5,9 @@
             <th>Ảnh</th>
             <th>Tên sản phẩm</th>
             <th>Danh mục</th>
-            <th>Biến thể</th>
             <th>Giá</th>
             <th>Số lượng</th>
+            <th>Đánh giá</th>
             <th>Ngày tạo</th>
             <th>Hành động</th>
         </tr>
@@ -32,51 +32,62 @@
                         <span class="badge bg-primary">{{ $category->name }}</span>
                     @endforeach
                 </td>
-                <td>
+             
+                <td class="text-center">
                     @if($product->product_type === 'variable' && $product->variants->count())
-                        <ul class="list-unstyled mb-0">
-                            @foreach($product->variants as $variant)
-                                <li>
-                                    @if($variant->attributeValues->count())
-                                        <ul class="text-muted small">
-                                            @foreach($variant->attributeValues as $attrValue)
-                                                <li>{{ $attrValue->value }}</li>
-                                            @endforeach
-                                        </ul>
-                                    @endif
-                                </li>
-                            @endforeach
-                        </ul>
-                    @else
-                        <span class="text-muted">Không có</span>
-                    @endif
-                </td>
-                <td>
-                    @if($product->product_type === 'variable' && $product->variants->count())
-                        <ul class="list-unstyled mb-0">
-                            @foreach($product->variants as $variant)
-                                <li>
-                                    <span class="text-muted">Giá:</span> {{ number_format($variant->variant_price, 0, ',', '.') }} đ
-                                </li>
-                            @endforeach
-                        </ul>
+                        @php
+                            $prices = $product->variants->pluck('variant_price');
+                            $minPrice = $prices->min();
+                            $maxPrice = $prices->max();
+                        @endphp
+                        <span>
+                            {{ number_format($minPrice, 0, ',', '.') }} đ
+                            @if($minPrice != $maxPrice)
+                                - {{ number_format($maxPrice, 0, ',', '.') }} đ
+                            @endif
+                        </span>
                     @else
                         <span>{{ number_format($product->price, 0, ',', '.') }} đ</span>
                     @endif
                 </td>
-                <td>
+
+                <td class="text-center">
                     @if($product->product_type === 'variable' && $product->variants->count())
-                        <ul class="list-unstyled mb-0">
-                            @foreach($product->variants as $variant)
-                                <li>
-                                    <span class="text-muted">Số lượng:</span> {{ $variant->stock_quantity }}
-                                </li>
-                            @endforeach
-                        </ul>
+                        @php
+                            $totalQuantity = $product->variants->sum('stock_quantity');
+                        @endphp
+                        <span >{{ $totalQuantity }}</span>
                     @else
-                        <span>Số lượng: {{ $product->quantity }}</span>
+                        <span>{{ $product->quantity }}</span>
                     @endif
                 </td>
+                <td class="text-center">
+                    @php
+                        $avgRating = round($product->reviews->avg('rating'), 1); // Trung bình điểm
+                        $totalReviews = $product->reviews->count(); // Số lượt đánh giá
+                    @endphp
+
+                    @if($totalReviews > 0)
+                        <span>
+                            {{-- Hiển thị icon sao --}}
+                            @for ($i = 1; $i <= 5; $i++)
+                                @if ($i <= floor($avgRating))
+                                <i class="text-warning mdi mdi-star"></i> 
+                                @elseif ($i - $avgRating < 1)
+                                <i class="text-warning mdi mdi-star"></i> 
+                                @else
+                                <i class="text-muted mdi mdi-star-outline"></i>
+                                @endif
+                            @endfor
+                            <br>
+                            <small>{{ $avgRating }}/5 ({{ $totalReviews }} đánh giá)</small>
+                        </span>
+                    @else
+                        <span>Chưa có đánh giá</span>
+                    @endif
+                </td>
+
+
                 <td>{{ $product->created_at->format('d/m/Y') }}</td>
                 <td data-column-id="action" class="gridjs-td text-center">
                     <div class="dropdown">

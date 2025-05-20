@@ -23,6 +23,10 @@ use App\Http\Controllers\Admin\ReviewAdminController;
 use App\Http\Controllers\Admin\PaymentAdminController;
 use App\Http\Controllers\Admin\PaymentMethodAdminController;
 use App\Http\Controllers\Admin\NotificationAdminController;
+use App\Http\Controllers\Admin\StockController;
+use App\Http\Controllers\Admin\FlashDealController;
+
+
 
 // ========== CLIENT CONTROLLERS ==========
 use App\Http\Controllers\Client\ProductClientController;
@@ -40,6 +44,7 @@ use App\Http\Controllers\Client\ReviewCLientController;
 use App\Http\Controllers\Client\VnpayController;
 use App\Http\Controllers\Client\MomoController;
 use App\Http\Controllers\Client\ContactController;
+use App\Http\Controllers\Client\FlashSaleController;
 
 
 require base_path('routes/channels.php');
@@ -146,6 +151,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/momo/return', [MomoController::class, 'handleReturn'])->name(name: 'momo.callback');
     Route::post('/momo/callback', [MomoController::class, 'handleCallback']);
 
+    Route::get('/flash-sale', [FlashSaleController::class, 'index'])->name('client.flash-sale.index');
 
 
     Route::get('/orders/success', [OrderClientController::class, 'success'])->name('orders.success');
@@ -168,7 +174,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->group(function () {
     // Đăng nhập / Đăng ký / Dashboard
     Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
-    Route::get('/revenue-data', [AdminController::class, 'getRevenueData']);
 
     Route::get('/login', [LoginAdminController::class, 'showLoginAdminForm'])->name('login');
     Route::post('/login', [LoginAdminController::class, 'login']);
@@ -261,6 +266,16 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::resource('payment-methods', PaymentMethodAdminController::class);
     Route::post('payment-methods/{paymentMethod}/toggle-status', [PaymentMethodAdminController::class, 'toggleStatus'])->name('payment-methods.toggle-status');
 
+    //Tồn kho 
+    Route::get('stocks', [StockController::class, 'index'])->name('stocks.index');
+    Route::post('stocks/update', [StockController::class, 'updateStock'])->name('stocks.update');
+    Route::get('stocks/history/{productId}', [StockController::class, 'showHistory'])->name('stocks.history');
+
+    // flash_deals 
+    Route::resource('flash_deals', FlashDealController::class);
+
+    // AJAX route lấy biến thể sản phẩm
+    Route::post('flash_deals/get_variants', [FlashDealController::class, 'getVariants'])->name('flash_deals.getVariants');
 
     // thông báo admin
     Route::get('/admin/notifications/fetch', [NotificationAdminController::class, 'fetch'])->name('notifications.fetch');
