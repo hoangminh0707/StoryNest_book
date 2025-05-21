@@ -65,6 +65,11 @@ Route::get('/register', [AuthClientController::class, 'showRegister'])->name('re
 Route::post('/register', [AuthClientController::class, 'register']);
 Route::post('/logout', [AuthClientController::class, 'logout'])->name('logout');
 
+Route::get('password/reset', [AuthClientController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('password/email', [AuthClientController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('password/reset/{token}', [AuthClientController::class, 'showResetForm'])->name('password.reset');
+Route::post('password/reset', [AuthClientController::class, 'reset'])->name('password.update');
+
 Route::get('/about', [ProductClientController::class, 'about'])->name('about');// Blog - Client
 Route::get('/blog', [BlogClientController::class, 'index'])->name('blogs.index');
 Route::get('/blog/{id}', [BlogClientController::class, 'show'])->name('blogs.show');
@@ -180,6 +185,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::post('/logout', [LoginAdminController::class, 'logout'])->name('logout');
     Route::get('/register', [RegisterAdminController::class, 'showAdminRegistrationForm'])->name('register.form');
     Route::post('/register', [RegisterAdminController::class, 'registerAdmin'])->name('register');
+   
 
     // Quản lý người dùng
     Route::get('/users', [UserAdminController::class, 'index'])->name('userIndex');
