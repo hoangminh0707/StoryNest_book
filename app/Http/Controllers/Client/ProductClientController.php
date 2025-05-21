@@ -85,10 +85,12 @@ class ProductClientController extends Controller
             ->whereHas('orderItems.order', function ($query) {
                 $query->whereIn('status', ['delivered', 'completed']);
             })
-            ->withSum(['orderItems as total_sold' => function ($query) {
-                $query->join('orders', 'orders.id', '=', 'order_items.order_id')
-                    ->whereIn('orders.status', ['delivered', 'completed']);
-            }], 'quantity')
+            ->withSum([
+                'orderItems as total_sold' => function ($query) {
+                    $query->join('orders', 'orders.id', '=', 'order_items.order_id')
+                        ->whereIn('orders.status', ['delivered', 'completed']);
+                }
+            ], 'quantity')
             ->orderByDesc('total_sold')
             ->take(8)
             ->get();
@@ -133,51 +135,51 @@ class ProductClientController extends Controller
     }
 
 
-  public function shop(Request $request)
-{
-    $query = Product::with([
-        'author',
-        'categories',
-        'images' => function ($query) {
-            $query->where('is_thumbnail', true);
+    public function shop(Request $request)
+    {
+        $query = Product::with([
+            'author',
+            'categories',
+            'images' => function ($query) {
+                $query->where('is_thumbnail', true);
+            }
+        ]);
+
+        if ($request->has('author_id')) {
+            $query->where('author_id', $request->author_id);
         }
-    ]);
 
-    if ($request->has('author_id')) {
-        $query->where('author_id', $request->author_id);
+        if ($request->has('category_id')) {
+            $query->whereHas('categories', function ($q) use ($request) {
+                $q->where('categories.id', $request->category_id);
+            });
+        }
+
+        if ($request->has('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        $products = $query->paginate(12);
+
+
+        $bestSellingProducts = Product::with(['orderItems.order'])
+            ->whereHas('orderItems.order', function ($query) {
+                $query->where('status', 'completed');
+            })
+            ->withSum('orderItems as total_sold', 'quantity')
+            ->orderByDesc('total_sold')
+            ->limit(8)
+            ->get();
+
+        $bestSellingProductIds = $bestSellingProducts->pluck('id')->toArray();
+
+        $authors = Author::all();
+        $categories = Categories::with('childrenRecursive')->get();
+
+
+
+        return view('client.pages.shop', compact('products', 'categories', 'authors', 'bestSellingProductIds'));
     }
-
-    if ($request->has('category_id')) {
-        $query->whereHas('categories', function ($q) use ($request) {
-            $q->where('categories.id', $request->category_id);
-        });
-    }
-
-    if ($request->has('search')) {
-        $query->where('name', 'like', '%' . $request->search . '%');
-    }
-
-    $products = $query->paginate(12);
-
-    
-   $bestSellingProducts = Product::with(['orderItems.order'])
-    ->whereHas('orderItems.order', function ($query) {
-        $query->where('status', 'completed');
-    })
-    ->withSum('orderItems as total_sold', 'quantity')
-    ->orderByDesc('total_sold')
-    ->limit(8)
-    ->get();
-
-    $bestSellingProductIds = $bestSellingProducts->pluck('id')->toArray();
-
-    $authors = Author::all();
-    $categories = Categories::with('childrenRecursive')->get();
-
-
-
-    return view('client.pages.shop', compact('products', 'categories', 'authors', 'bestSellingProductIds'));
-}
 
 
 
@@ -213,15 +215,16 @@ class ProductClientController extends Controller
                 'id' => $variant->id,
                 'variant_price' => $variant->variant_price,
                 'price' => $variant->variant_price,
+                'stock' => $variant->stock_quantity, // ✅ BỔ SUNG DÒNG NÀY
                 'attribute_values' => $variant->attributeValues->map(function ($av) {
                     return [
-                        'id' => $av->id,
                         'value' => $av->value,
                         'attribute' => ['name' => $av->attribute->name]
                     ];
                 })
             ];
         });
+
 
         $categories = Categories::all();
         $products = Product::with(['author', 'categories', 'images'])->get();
@@ -305,7 +308,7 @@ class ProductClientController extends Controller
             })->where('product_id', $product->id)->exists();
         }
 
-       $totalSold = 0;
+        $totalSold = 0;
 
         if ($product->product_type === 'simple') {
             // Sản phẩm đơn: tính tổng quantity từ orderItems liên quan
@@ -319,6 +322,8 @@ class ProductClientController extends Controller
         }
 
         $product->total_sold = $totalSold;
+
+
 
 
 
