@@ -55,6 +55,7 @@
     </div>
   </section>
 
+
   <div class="service-policy">
     <div class="container">
     <div class="policy-block section-padding">
@@ -77,8 +78,8 @@
           <i class="pe-7s-back"></i>
         </div>
         <div class="policy-content">
-       <h6>Đảm bảo chất lượng</h6>
-      <p>Sản phẩm chính hãng, kiểm định kỹ lưỡng</p>
+          <h6>Đảm bảo chất lượng</h6>
+          <p>Sản phẩm chính hãng, kiểm định kỹ lưỡng</p>
         </div>
         </div>
       </div>
@@ -98,11 +99,13 @@
     </div>
   </div>
 
-@include('client.pages.flash_sale_section')
+  @include('client.pages.flash_sale_section')
+
 
 @include('client.pages.products_new', ['productsByCategory' => $productsByCategory])
 @include('client.pages.bestSellingProducts')
 @include('client.pages.contact')
+
 
 
 

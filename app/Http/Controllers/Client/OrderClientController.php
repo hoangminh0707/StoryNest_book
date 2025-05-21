@@ -13,7 +13,9 @@ class OrderClientController extends Controller
 
     public function index()
     {
-        $orders = Order::with('orderItems')
+        $orders = Order::with([
+            'orderItems.variant.attributeValues.attribute' // ✅ load sâu
+        ])
             ->where('user_id', Auth::id())
             ->orderByDesc('created_at')
             ->get();
@@ -24,7 +26,13 @@ class OrderClientController extends Controller
 
     public function show($id)
     {
-        $order = Order::with(['orderItems', 'userAddress', 'shippingMethod', 'payment.paymentMethod'])->findOrFail($id);
+        $order = Order::with([
+            'orderItems.variant.attributeValues.attribute', // ✅ load thêm thông tin biến thể
+            'userAddress',
+            'shippingMethod',
+            'payment.paymentMethod'
+        ])->findOrFail($id);
+
 
         // Kiểm tra quyền truy cập
         if ($order->user_id !== auth()->id()) {

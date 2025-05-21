@@ -81,6 +81,7 @@ class ProductClientController extends Controller
                 ->get(),
         ];
 
+
         $bestSellingProducts = Product::with(['orderItems.order'])
         ->whereHas('orderItems.order') // chỉ kiểm tra có đơn hàng (bất kỳ trạng thái nào)
         ->withSum('orderItems as total_sold', 'quantity')
@@ -89,6 +90,7 @@ class ProductClientController extends Controller
         ->get();
 
     $bestSellingProductIds = $bestSellingProducts->pluck('id')->toArray();
+
 
 
 
@@ -131,31 +133,33 @@ class ProductClientController extends Controller
     }
 
 
-  public function shop(Request $request)
-{
-    $query = Product::with([
-        'author',
-        'categories',
-        'images' => function ($query) {
-            $query->where('is_thumbnail', true);
+    public function shop(Request $request)
+    {
+        $query = Product::with([
+            'author',
+            'categories',
+            'images' => function ($query) {
+                $query->where('is_thumbnail', true);
+            }
+        ]);
+
+        if ($request->has('author_id')) {
+            $query->where('author_id', $request->author_id);
         }
-    ]);
 
-    if ($request->has('author_id')) {
-        $query->where('author_id', $request->author_id);
-    }
+        if ($request->has('category_id')) {
+            $query->whereHas('categories', function ($q) use ($request) {
+                $q->where('categories.id', $request->category_id);
+            });
+        }
 
-    if ($request->has('category_id')) {
-        $query->whereHas('categories', function ($q) use ($request) {
-            $q->where('categories.id', $request->category_id);
-        });
-    }
+        if ($request->has('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
 
-    if ($request->has('search')) {
-        $query->where('name', 'like', '%' . $request->search . '%');
-    }
+        $products = $query->paginate(12);
 
-    $products = $query->paginate(12);
+
 
     
    $bestSellingProducts = Product::with(['orderItems.order'])
@@ -171,7 +175,9 @@ class ProductClientController extends Controller
     ->limit(20)
     ->get();
 
-    $bestSellingProductIds = $bestSellingProducts->pluck('id')->toArray();
+
+        $bestSellingProductIds = $bestSellingProducts->pluck('id')->toArray();
+
 
 
 
@@ -180,8 +186,9 @@ class ProductClientController extends Controller
 
 
 
-    return view('client.pages.shop', compact('products', 'categories', 'authors', 'bestSellingProductIds'));
-}
+
+        return view('client.pages.shop', compact('products', 'categories', 'authors', 'bestSellingProductIds'));
+    }
 
 
 
@@ -217,15 +224,16 @@ class ProductClientController extends Controller
                 'id' => $variant->id,
                 'variant_price' => $variant->variant_price,
                 'price' => $variant->variant_price,
+                'stock' => $variant->stock_quantity, // ✅ BỔ SUNG DÒNG NÀY
                 'attribute_values' => $variant->attributeValues->map(function ($av) {
                     return [
-                        'id' => $av->id,
                         'value' => $av->value,
                         'attribute' => ['name' => $av->attribute->name]
                     ];
                 })
             ];
         });
+
 
         $categories = Categories::all();
         $products = Product::with(['author', 'categories', 'images'])->get();
@@ -309,7 +317,7 @@ class ProductClientController extends Controller
             })->where('product_id', $product->id)->exists();
         }
 
-       $totalSold = 0;
+        $totalSold = 0;
 
         if ($product->product_type === 'simple') {
             // Sản phẩm đơn: tính tổng quantity từ orderItems liên quan
@@ -332,6 +340,8 @@ class ProductClientController extends Controller
             ->get();
 
         $bestSellingProductIds = $bestSellingProducts->pluck('id')->toArray();
+
+
 
 
 
