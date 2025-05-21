@@ -172,20 +172,7 @@
               <div class="manufacturer-name">
                 <a href="{{ route('product.show', $product->slug) }}">{{ $product->author->name}}</a>
               </div>
-              <ul class="color-categories">
-                <li>
-                  <a class="c-lightblue" href="#" title="LightSteelblue"></a>
-                </li>
-                <li>
-                  <a class="c-darktan" href="#" title="Darktan"></a>
-                </li>
-                <li>
-                  <a class="c-grey" href="#" title="Grey"></a>
-                </li>
-                <li>
-                  <a class="c-brown" href="#" title="Brown"></a>
-                </li>
-              </ul>
+           
 
               <h5 class="product-name"><a href="{{ route('product.show', $product->slug) }}">{{ $product->name }}</a>
               </h5>
@@ -233,6 +220,8 @@
   </div>
   <!-- end pagination area -->
 </div>
+@include('client.pages.contact')
+
 
 
 

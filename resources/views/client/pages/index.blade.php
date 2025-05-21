@@ -102,6 +102,8 @@
 
 @include('client.pages.products_new', ['productsByCategory' => $productsByCategory])
 @include('client.pages.bestSellingProducts')
+@include('client.pages.contact')
+
 
 
 
