@@ -62,15 +62,15 @@ class AppServiceProvider extends ServiceProvider
             }
 
             $danhMucSachs = Categories::with('childrenRecursive')
-                ->where('name', 'Sách')
+                ->where('name', 'Sách thiếu nhi')
                 ->first();
 
             $danhMucDungCu = Categories::with('childrenRecursive')
-                ->where('name', 'VPP-Dụng cụ học sinh')
+                ->where('name', 'Kinh Tế')
                 ->first();
 
             $danhMucDoChoi = Categories::with('childrenRecursive')
-                ->where('name', 'Đồ chơi')
+                ->where('name', 'Tâm lý - Kỹ năng sống')
                 ->first();
 
             $danhMucHanhTrang = Categories::with('childrenRecursive')

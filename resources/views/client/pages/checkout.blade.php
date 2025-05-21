@@ -38,7 +38,7 @@
           <ul class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.html"><i class="fa fa-home"></i></a></li>
           <li class="breadcrumb-item"><a href="shop.html">shop</a></li>
-          <li class="breadcrumb-item active" aria-current="page">checkout</li>
+          <li class="breadcrumb-item active" aria-current="page">Thanh toán</li>
           </ul>
         </nav>
         </div>
@@ -51,30 +51,7 @@
     <!-- checkout main wrapper start -->
     <div class="checkout-page-wrapper section-padding">
     <div class="container">
-      <div class="row">
-      <div class="col-12">
-        <!-- Checkout Login Coupon Accordion Start -->
-        <div class="checkoutaccordion" id="checkOutAccordion">
-        <div class="card">
-          <h6>Have A Coupon? <span data-bs-toggle="collapse" data-bs-target="#couponaccordion">Click
-            Here To Enter Your Code</span></h6>
-          <div id="couponaccordion" class="collapse" data-parent="#checkOutAccordion">
-          <div class="card-body">
-            <div class="cart-update-option">
-            <div class="apply-coupon-wrapper">
-              <form action="#" method="post" class=" d-block d-md-flex">
-              <input type="text" placeholder="Enter Your Coupon Code" required />
-              <button class="btn btn-sqr">Apply Coupon</button>
-              </form>
-            </div>
-            </div>
-          </div>
-          </div>
-        </div>
-        </div>
-        <!-- Checkout Login Coupon Accordion End -->
-      </div>
-      </div>
+    
       <div class="row">
       <!-- Checkout Billing Details -->
       <div class="col-lg-6">
@@ -282,7 +259,7 @@
                                   <input type="hidden" name="shipping_method_id" value="{{ session('checkout_shipping_method') }}">
                                   <input type="hidden" name="payment_method" value="{{ session('checkout_payment_method') }}">
                               
-                                  <button type="submit" class="btn btn-sqr">Place Order</button>
+                                  <button type="submit" class="btn btn-sqr">Đặt hàng</button>
                               </form>
                               
                               
