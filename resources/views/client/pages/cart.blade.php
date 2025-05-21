@@ -65,14 +65,13 @@
           <a href="{{ route('product.show', $item->product->slug) }}">{{ $item->product->name }}</a>
           <br>
           @if ($item->variant && $item->variant->attributeValues->isNotEmpty())
-          @foreach ($item->variant->attributeValues as $attributeValue)
-        <span class="cart-variran">Loại : {{ $attributeValue->value }} </span>
-        @endforeach
-        @else
         <span class="cart-variran">
-        Loại : Mặc Định
+        Loại : {{ $item->variant->attributeValues->pluck('value')->join(' - ') }}
         </span>
+        @else
+        <span class="cart-variran">Loại : Mặc định</span>
         @endif
+
           </td>
           <td class="pro-price"><span>{{ number_format($item->price) }} đ</span></td>
           <form action="{{ route('cart.update', $item->product_id) }}" method="POST">

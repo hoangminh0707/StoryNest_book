@@ -1,5 +1,5 @@
 <style>
-    body {
+  body {
     overflow-x: hidden;
   }
 
@@ -295,7 +295,7 @@
           @php
         $product = $item->product;
         $total += $item->price * $item->quantity;
-        @endphp
+      @endphp
           <ul>
           <li class="minicart-item">
             <div class="minicart-thumb">
@@ -312,14 +312,13 @@
               <span class="cart-price">{{ number_format($item->price * $item->quantity) }} đ</span>
               <br>
               @if ($item->variant && $item->variant->attributeValues->isNotEmpty())
-            @foreach ($item->variant->attributeValues as $attributeValue)
-          <span class="cart-variran">Loại : {{ $attributeValue->value }} </span>
-          @endforeach
-          @else
           <span class="cart-variran">
-          Loại : Mặc Định
+          Loại : {{ $item->variant->attributeValues->pluck('value')->join(' - ') }}
           </span>
+          @else
+          <span class="cart-variran">Loại : Mặc định</span>
           @endif
+
             </p>
             </div>
 
