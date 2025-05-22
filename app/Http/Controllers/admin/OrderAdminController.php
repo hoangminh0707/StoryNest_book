@@ -48,10 +48,11 @@ class OrderAdminController extends Controller
             'userAddress',
             'voucher',
             'shippingMethod',
+            'payment.details',
             'orderItems.product',
-            'orderItems.productVariant',
-            'payment.details'
+            'orderItems.productVariant.attributeValues.attribute' // ✅ Load thêm thuộc tính
         ])->findOrFail($id);
+
 
         return view('admin.pages.orders.show', compact('order'));
     }
@@ -73,26 +74,26 @@ class OrderAdminController extends Controller
         $request->validate([
             'status' => 'required|in:pending,confirmed,shipped,delivered,completed,cancelled',
         ]);
-    
+
         $order = Order::with('orderItems.productVariant', 'orderItems.product')->findOrFail($id);
-    
+
         $current = $order->status;
         $next = $request->status;
-    
+
         $validTransitions = [
-            'pending'    => ['confirmed'],
-            'confirmed'  => ['shipped'],
-            'shipped'    => ['delivered'],
-            'delivered'  => ['completed'],
-            'completed'  => [],
-            'cancelled'  => [],
+            'pending' => ['confirmed'],
+            'confirmed' => ['shipped'],
+            'shipped' => ['delivered'],
+            'delivered' => ['completed'],
+            'completed' => [],
+            'cancelled' => [],
         ];
-    
+
         if ($next === 'cancelled') {
             if (!in_array($current, ['pending', 'confirmed'])) {
                 return back()->with('error', "Không thể hủy đơn hàng ở trạng thái '$current'.");
             }
-    
+
             // Hoàn kho: kiểm tra từng sản phẩm
             foreach ($order->orderItems as $item) {
                 if ($item->product_variant_id) {
@@ -112,14 +113,14 @@ class OrderAdminController extends Controller
         } elseif (!in_array($next, $validTransitions[$current] ?? [])) {
             return back()->with('error', "Không thể chuyển từ trạng thái '$current' sang '$next'.");
         }
-    
+
         $order->update(['status' => $next]);
-    
+
         $order->user->notify(new OrderStatusNotification($order));
-    
+
         return redirect()->route('admin.orders.index')->with('success', 'Cập nhật trạng thái thành công.');
     }
-    
+
 
     /**
      * Xóa đơn hàng.

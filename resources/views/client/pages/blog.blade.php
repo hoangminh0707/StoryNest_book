@@ -100,18 +100,12 @@
               </li>
             </ul>
           </div>
-
-                            <h4>{{ $blog->title }}</h4>
-                        </a>
-
-
-          <!-- end pagination area -->
         </div>
       </div>
     </div>
   </div>
 </div>
-
+ @include('client.pages.contact')
 
 
 

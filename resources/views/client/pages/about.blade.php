@@ -259,7 +259,7 @@
   </div> <!-- end team-area -->
 
   <!-- team area end -->
-
+ @include('client.pages.contact')
 @endsection
 <style>
   .single-choose-item {

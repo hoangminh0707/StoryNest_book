@@ -84,6 +84,14 @@
 
         <div class="flex-grow-1">
         <strong>{{ $item->product_name }}</strong><br>
+        @if ($item->variant && $item->variant->attributeValues->isNotEmpty())
+        <span class="cart-variran">
+        Loại: {{ $item->variant->attributeValues->pluck('value')->join(' - ') }}
+        </span>
+      @else
+        <span class="cart-variran">Loại: Mặc định</span>
+      @endif
+        <br>
         SL: {{ $item->quantity }} × {{ number_format($item->price) }} VND
         </div>
 

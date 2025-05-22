@@ -21,7 +21,9 @@
                             <th scope="col">STT</th>
                             <th scope="col">Biến thể</th>
                             <th scope="col">Người cập nhật</th>
+                            <th scope="col">SL trước</th>
                             <th scope="col">SL thay đổi</th>
+                            <th scope="col">SL sau</th>
                             <th scope="col">Ghi chú</th>
                             <th scope="col">Thời gian</th>
                         </tr>
@@ -42,9 +44,11 @@
                                 @endif
                             </td>
                             <td class="text-center">{{ $log->admin->name }}</td>
+                            <td class="text-center">{{ $log->stock_before }}</td>
                             <td class="text-center fw-bold {{ $log->change_quantity < 0 ? 'text-danger' : 'text-success' }}">
                                 {{ $log->change_quantity > 0 ? '+' : '' }}{{ $log->change_quantity }}
                             </td>
+                            <td class="text-center">{{ $log->stock_after }}</td>
                             <td>{{ $log->note ?? '—' }}</td>
                             <td class="text-center">{{ $log->created_at->format('d/m/Y H:i') }}</td>
                         </tr>

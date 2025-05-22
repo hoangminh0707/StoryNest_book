@@ -472,6 +472,10 @@
                                         data-key="t-basic-elements">
                                         Danh sách Mã Giảm Giá
                                     </a>
+                                    <a href="{{ route('admin.flash_deals.index') }}" class="nav-link"
+                                        data-key="t-basic-elements">
+                                        Danh sách flash Sale
+                                    </a>
                                     <a href="{{ route('admin.banners.index') }}" class="nav-link"
                                         data-key="t-basic-elements">
                                         Danh sách Slider

@@ -18,7 +18,7 @@
           <ul class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.html"><i class="fa fa-home"></i></a></li>
           <li class="breadcrumb-item"><a href="shop.html">shop</a></li>
-          <li class="breadcrumb-item active" aria-current="page">cart</li>
+          <li class="breadcrumb-item active" aria-current="page">Giỏ hàng</li>
           </ul>
         </nav>
 
@@ -65,14 +65,13 @@
           <a href="{{ route('product.show', $item->product->slug) }}">{{ $item->product->name }}</a>
           <br>
           @if ($item->variant && $item->variant->attributeValues->isNotEmpty())
-          @foreach ($item->variant->attributeValues as $attributeValue)
-        <span class="cart-variran">Loại : {{ $attributeValue->value }} </span>
-        @endforeach
-        @else
         <span class="cart-variran">
-        Loại : Mặc Định
+        Loại : {{ $item->variant->attributeValues->pluck('value')->join(' - ') }}
         </span>
+        @else
+        <span class="cart-variran">Loại : Mặc định</span>
         @endif
+
           </td>
           <td class="pro-price"><span>{{ number_format($item->price) }} đ</span></td>
           <form action="{{ route('cart.update', $item->product_id) }}" method="POST">
