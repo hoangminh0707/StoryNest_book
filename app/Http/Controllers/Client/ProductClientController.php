@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Client;
 
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\categories;
@@ -310,12 +311,28 @@ class ProductClientController extends Controller
         $discountedPrice = $bestVoucherObj ? max($price - $bestVoucherObj->discount, 0) : $price;
 
         $averageRating = $product->reviews()->where('is_approved', true)->avg('rating');
+
         $canReview = false;
         if (auth()->check()) {
             $canReview = OrderItem::whereHas('order', function ($q) {
                 $q->where('user_id', auth()->id())->where('status', 'delivered');
             })->where('product_id', $product->id)->exists();
         }
+
+
+        $hasReviewed = false;
+        if (auth()->check()) {
+            $hasReviewed = \App\Models\Review::where('user_id', auth()->id())
+                ->where('product_id', $product->id)
+                ->exists();
+
+            Log::info('CHECK_REVIEW', [
+                'user_id' => auth()->id(),
+                'product_id' => $product->id,
+                'hasReviewed' => $hasReviewed,
+            ]);
+        }
+
 
         $totalSold = 0;
 
@@ -359,6 +376,7 @@ class ProductClientController extends Controller
             'discountedPrice',
             'averageRating',
             'canReview',
+            'hasReviewed'
             'totalSold',
             'bestSellingProducts'
         ));

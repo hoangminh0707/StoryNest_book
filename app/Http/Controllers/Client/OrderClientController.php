@@ -48,11 +48,30 @@ class OrderClientController extends Controller
             return back()->with('error', 'Không thể huỷ đơn hàng đã được giao hoặc huỷ trước đó.');
         }
 
+        // Cộng lại tồn kho cho từng sản phẩm
+        foreach ($order->orderItems as $item) {
+            if ($item->product_variant_id) {
+                // Nếu là biến thể
+                $variant = \App\Models\ProductVariant::find($item->product_variant_id);
+                if ($variant) {
+                    $variant->increment('stock_quantity', $item->quantity);
+                }
+            } else {
+                // Nếu là sản phẩm gốc
+                $product = \App\Models\Product::find($item->product_id);
+                if ($product) {
+                    $product->increment('quantity', $item->quantity);
+                }
+            }
+        }
+
+        // Cập nhật trạng thái đơn hàng
         $order->status = 'cancelled';
         $order->save();
 
-        return redirect()->route('orders.show', $order->id)->with('success', 'Đơn hàng đã được huỷ thành công.');
+        return redirect()->route('orders.show', $order->id)->with('success', 'Đơn hàng đã được huỷ và tồn kho đã được khôi phục.');
     }
+
 
 
     public function success()

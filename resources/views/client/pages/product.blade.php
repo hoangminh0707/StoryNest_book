@@ -320,7 +320,7 @@
           <div class="total-reviews">
           <div class="rev-avatar">
           <img
-            src="{{ asset($review->user->avatar ?? 'https://i.ibb.co/WpKLtySw/Logo-Story-Nest-Book.jpg') }}"
+            src="{{ Storage::url($review->user->avatar ?? 'https://i.ibb.co/WpKLtySw/Logo-Story-Nest-Book.jpg') }}"
             alt="User Avatar">
           </div>
 
@@ -351,60 +351,45 @@
           <p>Chưa có đánh giá nào cho sản phẩm này.</p>
         @endif
 
-              @if ($canReview)
+              @if ($canReview && !$hasReviewed)
+            {{-- Hiện form đánh giá --}}
             <div class="form-group row">
             <div class="col">
             <form id="review-section" action="{{ route('reviews.store') }}" method="POST">
             @csrf
             <input type="hidden" name="product_id" value="{{ $product->id }}">
 
-            {{-- Nội dung đánh giá --}}
-            <div class="mb-3">
-              <label class="col-form-label">
-                <span class="text-danger">*</span> Đánh giá của bạn
-              </label>
-              <textarea name="comment" class="form-control">{{ old('comment') }}</textarea>
-              @error('comment')
-                <small class="text-danger">{{ $message }}</small>
-              @enderror
-            </div>
+            <label class="col-form-label">
+              <span class="text-danger">*</span> Đánh giá của bạn
+            </label>
+            <textarea name="comment" class="form-control" required></textarea>
 
-            {{-- Số sao đánh giá --}}
-            <div class="mb-3">
-              <label class="col-form-label">
-                <span class="text-danger">*</span> Đánh giá
-              </label>
-              <div>
-                @for ($i = 5; $i >= 1; $i--)
-                  <input type="radio" id="star{{ $i }}" name="rating" value="{{ $i }}" {{ old('rating') == $i ? 'checked' : '' }}>
-                  <label for="star{{ $i }}" style="margin-right: 10px;">{{ $i }} ⭐</label>
-                @endfor
-              </div>
-              @error('rating')
-                <small class="text-danger d-block">{{ $message }}</small>
-              @enderror
-            </div>
+            <label class="col-form-label mt-3">
+              <span class="text-danger">*</span> Đánh giá
+            </label>
+            @for ($i = 5; $i >= 1; $i--)
+          <input type="radio" id="star{{ $i }}" name="rating" value="{{ $i }}" required>
+          <label for="star{{ $i }}" style="margin-right: 10px;">{{ $i }} ⭐</label>
+          @endfor
 
-            <div class="buttons">
-              <button class="btn btn-sqr" type="submit">Đánh giá sản phẩm</button>
+            <button type="submit" class="btn btn-sqr mt-3">Gửi đánh giá</button>
+            </form>
             </div>
-          </form>
-
             </div>
-          </div> <!-- end of review-form -->
-        @else
-        <p class="text-muted">Bạn cần mua sản phẩm này trước khi có thể đánh giá.</p>
+        @elseif ($canReview && $hasReviewed)
+          <p class="text-success">🎉 Bạn đã đánh giá sản phẩm này. Cảm ơn bạn!</p>
         @endif
+
+            </div>
             </div>
           </div>
           </div>
         </div>
         </div>
-      </div>
-      <!-- product details reviews end -->
+        <!-- product details reviews end -->
       </div>
       <!-- product details wrapper end -->
-    </div>
+      </div>
     </div>
     </div>
     <!-- page main wrapper end -->
@@ -659,6 +644,9 @@
       input.value = value;
     }
     }
+
+    }
+
   </script>
 
 
