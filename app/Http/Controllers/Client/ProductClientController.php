@@ -376,7 +376,7 @@ class ProductClientController extends Controller
             'discountedPrice',
             'averageRating',
             'canReview',
-            'hasReviewed'
+            'hasReviewed',
             'totalSold',
             'bestSellingProducts'
         ));
