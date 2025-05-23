@@ -34,66 +34,28 @@ class ProductClientController extends Controller
 
         $banners = Banner::whereNotNull('image_url')->get();
 
-        $sachIds = Categories::where('parent_id', 1)->pluck('id')->toArray();
-        $sachIds[] = 1;
-
-        $doChoiIds = Categories::where('parent_id', 14)->pluck('id')->toArray();
-        $doChoiIds[] = 14;
-
-        $butVietIds = [9];
-
-        $allGroupIds = array_merge($sachIds, $butVietIds, $doChoiIds);
-
-        $productsByCategory = [
-            'sach' => Product::where('status', 'published')
-                ->whereHas('categories', function ($q) use ($sachIds) {
-                    $q->whereIn('categories.id', $sachIds);
-                })
-                ->with(['author', 'images'])
-                ->orderByDesc('created_at')
-                ->limit(8)
-                ->get(),
-
-            'butviet' => Product::where('status', 'published')
-                ->whereHas('categories', function ($q) use ($butVietIds) {
-                    $q->whereIn('categories.id', $butVietIds);
-                })
-                ->with(['author', 'images'])
-                ->orderByDesc('created_at')
-                ->limit(8)
-                ->get(),
-
-            'dochoi' => Product::where('status', 'published')
-                ->whereHas('categories', function ($q) use ($doChoiIds) {
-                    $q->whereIn('categories.id', $doChoiIds);
-                })
-                ->with(['author', 'images'])
-                ->orderByDesc('created_at')
-                ->limit(8)
-                ->get(),
-
-            'khac' => Product::where('status', 'published')
-                ->whereDoesntHave('categories', function ($q) use ($allGroupIds) {
-                    $q->whereIn('categories.id', $allGroupIds);
-                })
-                ->with(['author', 'images', 'categories'])
-                ->orderByDesc('created_at')
-                ->limit(8)
-                ->get(),
-        ];
-
+        $newestProducts = Product::with(['author', 'images'])
+            ->where('status', 'published')
+            ->orderByDesc('created_at')
+            ->limit(8)
+            ->get();
 
         $bestSellingProducts = Product::with(['orderItems.order'])
-        ->whereHas('orderItems.order') // chỉ kiểm tra có đơn hàng (bất kỳ trạng thái nào)
-        ->withSum('orderItems as total_sold', 'quantity')
-        ->orderByDesc('total_sold')
-        ->limit(8)
-        ->get();
+            ->whereHas('orderItems.order', function ($q) {
+                $q->where('status', 'delivered'); // Chỉ lấy đơn hàng đã giao thành công
+            })
+            ->withSum([
+                'orderItems as total_sold' => function ($q) {
+                    $q->whereHas('order', function ($q2) {
+                        $q2->where('status', 'delivered');
+                    });
+                }
+            ], 'quantity')
+            ->orderByDesc('total_sold')
+            ->limit(8)
+            ->get();
 
-    $bestSellingProductIds = $bestSellingProducts->pluck('id')->toArray();
-
-
-
+        $bestSellingProductIds = $bestSellingProducts->pluck('id')->toArray();
 
 
 
@@ -130,7 +92,18 @@ class ProductClientController extends Controller
 
 
 
-        return view('client.pages.index', compact('products', 'menuCategories', 'banners', 'productsByCategory', 'flashSale', 'flashSaleProducts', 'bestSellingProducts'));
+        return view(
+            'client.pages.index',
+            compact(
+                'products',
+                'menuCategories',
+                'banners',
+                'newestProducts',
+                'flashSale',
+                'flashSaleProducts',
+                'bestSellingProducts'
+            )
+        );
     }
 
 
@@ -162,19 +135,21 @@ class ProductClientController extends Controller
 
 
 
-    
-   $bestSellingProducts = Product::with(['orderItems.order'])
-    ->whereHas('orderItems.order', function ($query) {
-        $query->whereIn('status', [4, 5]); // Chỉ lấy đơn hàng có status là 4 hoặc 5
-    })
-    ->withSum(['orderItems as total_sold' => function ($query) {
-        $query->whereHas('order', function ($q) {
-            $q->whereIn('status', [4, 5]); // Chỉ tính tổng số lượng từ đơn hàng có status 4 hoặc 5
-        });
-    }], 'quantity')
-    ->orderByDesc('total_sold')
-    ->limit(20)
-    ->get();
+
+        $bestSellingProducts = Product::with(['orderItems.order'])
+            ->whereHas('orderItems.order', function ($query) {
+                $query->whereIn('status', [4, 5]); // Chỉ lấy đơn hàng có status là 4 hoặc 5
+            })
+            ->withSum([
+                'orderItems as total_sold' => function ($query) {
+                    $query->whereHas('order', function ($q) {
+                        $q->whereIn('status', [4, 5]); // Chỉ tính tổng số lượng từ đơn hàng có status 4 hoặc 5
+                    });
+                }
+            ], 'quantity')
+            ->orderByDesc('total_sold')
+            ->limit(20)
+            ->get();
 
 
         $bestSellingProductIds = $bestSellingProducts->pluck('id')->toArray();
@@ -182,13 +157,18 @@ class ProductClientController extends Controller
 
 
 
-    $authors = Author::all();
-    $categories = Categories::with('childrenRecursive')->get();
+        $authors = Author::all();
+        $categories = Categories::with('childrenRecursive')->get();
 
 
 
 
-        return view('client.pages.shop', compact('products', 'categories', 'authors', 'bestSellingProductIds'));
+        return view('client.pages.shop', compact(
+            'products',
+            'categories',
+            'authors',
+            'bestSellingProductIds'
+        ));
     }
 
 
@@ -376,7 +356,7 @@ class ProductClientController extends Controller
             'discountedPrice',
             'averageRating',
             'canReview',
-            'hasReviewed'
+            'hasReviewed',
             'totalSold',
             'bestSellingProducts'
         ));
