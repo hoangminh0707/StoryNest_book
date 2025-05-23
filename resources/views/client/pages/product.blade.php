@@ -221,47 +221,50 @@
             </ul>
           </div>
           @if ($product->status !== 'discontinued')
-          <form id="add-to-cart-form" action="{{ route('cart.add', $product->id) }}" method="POST"
-          style="display:inline;">
-          @csrf
-          <input type="hidden" name="price" id="product_price">
+
           <div class="availability">
           <i class="fa fa-check-circle"></i>
           <span id="stock-info">
-            Còn :
-            @if ($product->product_type === 'variable')
-          {{ $productVariants->sum('stock_quantity') }}
+          Còn :
+          @if ($product->product_type === 'variable')
+        {{ $productVariants->sum('stock_quantity') }}
         @else
-          {{ $product->quantity }}
+        {{ $product->quantity }}
         @endif
-            sản phẩm
+          sản phẩm
           </span>
           </div>
 
           <p class="pro-desc">{{ $product->description }}</p>
-
           <div class="quantity-cart-box d-flex align-items-center gap-2">
           <h6 class="option-title mb-0">Số lượng:</h6>
           <div class="input-group quantity-input" style="width: 120px;">
-            <button class="btn btn-outline-secondary btn-sm" type="button" onclick="changeQty(-1)">-</button>
-            <input type="number" name="quantity" class="form-control text-center" value="1" min="1">
-            <button class="btn btn-outline-secondary btn-sm" type="button" onclick="changeQty(1)">+</button>
+          <button class="btn btn-outline-secondary btn-sm" type="button" onclick="changeQty(-1)">-</button>
+          <input type="number" name="quantity" id="quantity-input" class="form-control text-center" value="1"
+            min="1">
+          <button class="btn btn-outline-secondary btn-sm" type="button" onclick="changeQty(1)">+</button>
           </div>
 
-          @php
-          $isAvailable = $product->product_type === 'variable'
-          ? $productVariants->sum('stock_quantity') > 0
-          : $product->quantity > 0;
-        @endphp
-
-          <div class="action_link">
-            @if ($isAvailable)
+          {{-- Thêm vào giỏ --}}
+          <form id="add-to-cart-form" action="{{ route('cart.add', $product->id) }}" method="POST"
+          class="d-inline">
+          @csrf
+          <input type="hidden" name="variant_id" id="selected-variant-id">
+          <input type="hidden" name="price" id="product_price">
+          <input type="hidden" name="quantity" value="1" id="add-to-cart-quantity">
           <button type="submit" class="btn btn-cart2" id="add-to-cart-btn">Thêm vào giỏ hàng</button>
-        @else
-          <button class="btn btn-cart2" id="add-to-cart-btn" disabled>Sản phẩm đã hết hàng</button>
-        @endif
+          </form>
+
+          {{-- Mua ngay --}}
+          <form id="buy-now-form" method="POST" action="{{ route('cart.buy-now') }}" class="d-inline">
+          @csrf
+          <input type="hidden" name="product_id" value="{{ $product->id }}">
+          <input type="hidden" name="variant_id" id="buy-now-variant-id">
+          <input type="hidden" name="quantity" id="buy-now-quantity" value="1">
+          <button type="submit" class="btn btn-cart3">Mua ngay</button>
+          </form>
           </div>
-          </div>
+
 
           <!-- Biến thể -->
           @foreach ($groupedAttributes as $attributeName => $attributeValues)
@@ -271,19 +274,11 @@
           <div class="variant-options" data-attribute-name="{{ $attributeName }}">
           @foreach ($uniqueValues as $attr)
         <button type="button" class="variant-option"
-        data-value="{{ $attr['value'] }}">{{ $attr['value'] }}</button>
+          data-value="{{ $attr['value'] }}">{{ $attr['value'] }}</button>
         @endforeach
           </div>
           </div>
         @endforeach
-
-
-          <input type="hidden" name="variant_id" id="selected-variant-id">
-          <input type="hidden" name="product_variant_id" id="product_variant_id">
-          <input type="hidden" name="price" id="product_price">
-
-
-          </form>
       @else
         <div class="alert alert-warning mt-3">
         <strong>Lưu ý:</strong> Sản phẩm này hiện đã <strong>ngừng kinh doanh</strong> và không thể mua.
@@ -596,26 +591,28 @@
 
 
   <script>
-    const variants = @json($variants);
-    console.log(variants);
-  </script>
-
-  <script>
     document.addEventListener('DOMContentLoaded', function () {
+    const variants = @json($variants);
     const selectedAttributes = {};
     const variantButtons = document.querySelectorAll('.variant-option');
-    const addToCartBtn = document.getElementById('add-to-cart-btn');
-    const stockInfo = document.getElementById('stock-info');
-    const priceBox = document.getElementById('variant-price');
+
     const hiddenVariantId = document.getElementById('selected-variant-id');
-    const productVariantId = document.getElementById('product_variant_id');
+    const buyNowVariantId = document.getElementById('buy-now-variant-id');
     const productPrice = document.getElementById('product_price');
-    const defaultPriceText = priceBox?.innerText || '';
+    const priceBox = document.getElementById('variant-price');
+    const quantityInput = document.getElementById('quantity-input');
+    const buyNowQtyInput = document.getElementById('buy-now-quantity');
+    const addToCartQtyInput = document.getElementById('add-to-cart-quantity');
+    const stockInfo = document.getElementById('stock-info');
+    const addToCartBtn = document.getElementById('add-to-cart-btn');
+
+    const defaultPrice = priceBox?.innerText || '';
 
     variantButtons.forEach(btn => {
       const attrName = btn.closest('.variant-options').dataset.attributeName;
 
       btn.addEventListener('click', () => {
+      // set active
       btn.closest('.variant-options').querySelectorAll('.variant-option').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
 
@@ -629,7 +626,7 @@
 
       if (matchedVariant) {
         hiddenVariantId.value = matchedVariant.id;
-        productVariantId.value = matchedVariant.id;
+        buyNowVariantId.value = matchedVariant.id;
         productPrice.value = matchedVariant.price;
 
         if (matchedVariant.stock > 0) {
@@ -642,57 +639,43 @@
         stockInfo.innerText = 'Sản phẩm đã hết hàng';
         }
 
-        if (priceBox) {
         priceBox.innerText = new Intl.NumberFormat('vi-VN').format(matchedVariant.price) + ' đ';
-        }
       } else {
+        hiddenVariantId.value = '';
+        buyNowVariantId.value = '';
+        productPrice.value = '';
+        priceBox.innerText = defaultPrice;
+        stockInfo.innerText = '';
         addToCartBtn.disabled = true;
         addToCartBtn.innerText = 'Chọn đầy đủ biến thể';
-        hiddenVariantId.value = '';
-        productVariantId.value = '';
-        productPrice.value = '';
-        if (priceBox) priceBox.innerText = defaultPriceText;
-        stockInfo.innerText = '';
       }
-
-      document.querySelectorAll('.variant-options').forEach(group => {
-        const groupAttrName = group.dataset.attributeName;
-
-        group.querySelectorAll('.variant-option').forEach(optBtn => {
-        const simulated = { ...selectedAttributes, [groupAttrName]: optBtn.dataset.value };
-
-        const canSelect = variants.some(v =>
-          Object.entries(simulated).every(([k, v2]) =>
-          v.attribute_values.some(attr => attr.attribute.name === k && attr.value === v2)
-          ) && v.stock > 0
-        );
-
-        if (!canSelect) {
-          optBtn.setAttribute('disabled', 'disabled');
-          optBtn.classList.add('disabled');
-        } else {
-          optBtn.removeAttribute('disabled');
-          optBtn.classList.remove('disabled');
-        }
-        });
       });
-      });
+    });
+
+    // Đồng bộ số lượng cho cả 2 form
+    quantityInput.addEventListener('input', () => {
+      buyNowQtyInput.value = quantityInput.value;
+      if (addToCartQtyInput) addToCartQtyInput.value = quantityInput.value;
     });
     });
 
     function changeQty(change) {
-    const input = document.querySelector('input[name="quantity"]');
+    const input = document.getElementById('quantity-input');
+    const buyNowQty = document.getElementById('buy-now-quantity');
+    const addToCartQty = document.getElementById('add-to-cart-quantity');
+
     let value = parseInt(input.value);
     if (!isNaN(value)) {
       value += change;
       if (value < 1) value = 1;
       input.value = value;
-    }
-    }
 
+      // ✅ Đồng bộ ẩn
+      if (buyNowQty) buyNowQty.value = value;
+      if (addToCartQty) addToCartQty.value = value;
+    }
+    }
   </script>
-
-
 
 
 

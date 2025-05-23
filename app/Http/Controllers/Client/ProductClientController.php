@@ -362,6 +362,9 @@ class ProductClientController extends Controller
         ));
     }
 
+
+
+
     public function about()
     {
         return view('client.pages.about');
