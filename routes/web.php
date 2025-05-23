@@ -127,6 +127,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/cart/add/{id}', [CartClientController::class, 'addToCart'])->name('cart.add');
     Route::post('/cart/update/{product}', [CartClientController::class, 'update'])->name('cart.update');
     Route::post('/cart/remove/{product}', [CartClientController::class, 'remove'])->name('cart.remove');
+    Route::post('/buy-now', [CartClientController::class, 'buyNow'])->name('cart.buy-now');
 
     Route::get('/notifications/fetch', [NotificationAdminController::class, 'fetchUserNotifications'])->name('user.notifications.fetch');
 });
@@ -156,7 +157,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/momo/return', [MomoController::class, 'handleReturn'])->name(name: 'momo.callback');
     Route::post('/momo/callback', [MomoController::class, 'handleCallback']);
 
-    Route::get('/flash-sale', [FlashSaleController::class, 'index'])->name('client.flash-sale.index');
 
 
     Route::get('/orders/success', [OrderClientController::class, 'success'])->name('orders.success');
@@ -185,7 +185,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::post('/logout', [LoginAdminController::class, 'logout'])->name('logout');
     Route::get('/register', [RegisterAdminController::class, 'showAdminRegistrationForm'])->name('register.form');
     Route::post('/register', [RegisterAdminController::class, 'registerAdmin'])->name('register');
-   
+
 
     // Quản lý người dùng
     Route::get('/users', [UserAdminController::class, 'index'])->name('userIndex');

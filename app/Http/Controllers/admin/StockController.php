@@ -24,11 +24,15 @@ class StockController extends Controller
         // Khởi tạo query cơ bản
         $query = Product::with(['images'])
             ->withSum('variants', 'stock_quantity')
-            ->with(['variants' => function ($variantQuery) use ($startOfPeriod, $endOfPeriod) {
-                $variantQuery->with(['orderItems' => function ($orderItemQuery) use ($startOfPeriod, $endOfPeriod) {
-                    $orderItemQuery->whereBetween('created_at', [$startOfPeriod, $endOfPeriod]);
-                }]);
-            }]);
+            ->with([
+                'variants' => function ($variantQuery) use ($startOfPeriod, $endOfPeriod) {
+                    $variantQuery->with([
+                        'orderItems' => function ($orderItemQuery) use ($startOfPeriod, $endOfPeriod) {
+                            $orderItemQuery->whereBetween('created_at', [$startOfPeriod, $endOfPeriod]);
+                        }
+                    ]);
+                }
+            ]);
 
         // Tìm kiếm theo tên sản phẩm hoặc tên biến thể
         if ($request->filled('search')) {
@@ -87,114 +91,91 @@ class StockController extends Controller
         return view('admin.pages.stocks.update', compact('product'));
     }
 
-    // Cập nhật tồn kho cho sản phẩm và biến thể
-   public function updateStock(Request $request)
+    public function updateStock(Request $request)
     {
-        // Validate dữ liệu
         $validated = $request->validate([
             'product_id' => 'required|exists:products,id',
-            'quantity' => 'required|numeric',
+            'quantity' => 'required|numeric|not_in:0',
             'variant_id' => 'nullable|exists:product_variants,id',
             'note' => 'nullable|string',
         ], [
             'quantity.required' => 'Vui lòng nhập số lượng.',
             'quantity.numeric' => 'Số lượng phải là một số.',
+            'quantity.not_in' => 'Số lượng không được bằng 0.',
         ]);
 
-        if ($validated['quantity'] == 0) {
-            return redirect()->back()
-                ->withErrors(['quantity' => 'Số lượng không được bằng 0.'])
-                ->withInput();
-        }
+        $product = Product::findOrFail($validated['product_id']);
+        $change = $validated['quantity'];
 
-        $product = Product::findOrFail($request->product_id);
+        if (!$validated['variant_id']) {
+            // Sản phẩm đơn
+            $stockBefore = $product->quantity ?? 0;
 
-        // Nếu là sản phẩm đơn
-        if (!$request->has('variant_id')) {
-            if ($request->quantity < 0 && abs($request->quantity) > $product->quantity) {
-                return redirect()->back()
-                    ->withErrors(['quantity' => 'Số lượng nhập vào vượt quá tồn kho sản phẩm đơn!'])
-                    ->withInput();
+            if ($change < 0 && abs($change) > $stockBefore) {
+                return back()->withErrors(['quantity' => 'Số lượng vượt quá tồn kho hiện tại'])->withInput();
             }
 
-            // Cập nhật tồn kho
-            $product->quantity += $request->quantity;
+            $product->quantity = $stockBefore + $change;
             $product->save();
 
-            // Ghi log
             StockLog::create([
                 'product_id' => $product->id,
                 'variant_id' => null,
                 'admin_id' => auth()->id(),
-                'change_quantity' => $request->quantity,
-                'stock_after_change' => $product->quantity,
-                'note' => $request->note,
+                'change_quantity' => $change,
+                'note' => $validated['note'],
+                'stock_before' => $stockBefore,
+                'stock_after' => $product->quantity,
             ]);
         } else {
-            $variant = $product->variants()->findOrFail($request->variant_id);
+            // Sản phẩm có biến thể
+            $variant = ProductVariant::where('product_id', $product->id)
+                ->findOrFail($validated['variant_id']);
 
-            if ($request->quantity < 0 && abs($request->quantity) > $variant->stock_quantity) {
-                return redirect()->back()
-                    ->withErrors(['quantity' => 'Số lượng nhập vào vượt quá tồn kho biến thể hiện tại!'])
-                    ->withInput();
+            $stockBefore = $variant->stock_quantity;
+
+            if ($change < 0 && abs($change) > $stockBefore) {
+                return back()->withErrors(['quantity' => 'Số lượng vượt quá tồn kho biến thể'])->withInput();
             }
 
             // Cập nhật tồn kho
-            $variant->stock_quantity += $request->quantity;
+            $variant->stock_quantity += $change;
             $variant->save();
 
-            // Ghi log
+            $stockAfter = $variant->stock_quantity;
+
             StockLog::create([
                 'product_id' => $product->id,
                 'variant_id' => $variant->id,
                 'admin_id' => auth()->id(),
-                'change_quantity' => $request->quantity,
-                'stock_after_change' => $variant->stock_quantity,
-                'note' => $request->note,
+                'change_quantity' => $change,
+                'note' => $validated['note'],
+                'stock_before' => $stockBefore,          // chính xác
+                'stock_after' => $stockAfter,           // chính xác
             ]);
         }
 
         return redirect()->route('admin.stocks.index')->with('success', 'Cập nhật tồn kho thành công!');
     }
 
-   public function showHistory($productId)
+
+    public function showHistory($productId)
     {
         $product = Product::findOrFail($productId);
 
-        $allLogs = StockLog::with([
-            'product',
-            'variant.attributeValues.attribute',
-            'admin'
+        // Lấy lịch sử thay đổi tồn kho, kèm các quan hệ cần thiết
+        $stockLogs = StockLog::with([
+            'product.thumbnail',                        // Ảnh thumbnail của sản phẩm
+            'variant.attributeValues.attribute',        // Thông tin thuộc tính của biến thể (nếu có)
+            'admin'                                     // Thông tin người cập nhật
         ])
-        ->where('product_id', $productId)
-        ->orderBy('created_at', 'asc') // để tính stock_before đúng
-        ->get();
-
-        // Tính stock_before từ stock_after
-        $previous = 0;
-        foreach ($allLogs as $log) {
-            $log->stock_before = $previous;
-            $previous = $log->stock_after_change ?? ($previous + $log->change_quantity);
-        }
-
-        // Sắp xếp lại theo thời gian mới nhất
-        $allLogs = $allLogs->sortByDesc('created_at')->values();
-
-        // Phân trang thủ công
-        $page = request()->get('page', 1);
-        $perPage = 15;
-        $pagedLogs = $allLogs->forPage($page, $perPage);
-        $stockLogs = new \Illuminate\Pagination\LengthAwarePaginator(
-            $pagedLogs,
-            $allLogs->count(),
-            $perPage,
-            $page,
-            ['path' => request()->url(), 'query' => request()->query()]
-        );
+            ->where('product_id', $productId)
+            ->orderByDesc('created_at')                 // Sắp xếp mới nhất lên đầu
+            ->paginate(15);
 
         return view('admin.pages.stocks.history', compact('product', 'stockLogs'));
     }
 
-    
-    
+
+
 }
