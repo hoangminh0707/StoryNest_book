@@ -102,7 +102,13 @@ class ProductAdminController extends Controller
 
     public function edit($id)
     {
-        $product = Product::with(['categories', 'images', 'variants.attributeValues.attribute'])->findOrFail($id);
+        $product = Product::with(['categories', 'images', 'variants.attributeValues.attribute', 'orderItems'])->findOrFail($id);
+
+        // Nếu sản phẩm đã từng được bán → chặn sửa
+        if ($product->orderItems()->exists()) {
+            return redirect()->route('admin.products.index')
+                ->with('error', 'Sản phẩm đã được bán và không thể chỉnh sửa!');
+        }
 
         // IDs của danh mục đã chọn
         $selectedCategoryIds = $product->categories->pluck('id')->toArray();
@@ -131,6 +137,7 @@ class ProductAdminController extends Controller
         ));
     }
 
+
     public function update(Request $request, $id)
     {
         $this->validateRequest($request, $id);
@@ -138,6 +145,12 @@ class ProductAdminController extends Controller
         DB::beginTransaction();
         try {
             $product = Product::findOrFail($id);
+
+            // Kiểm tra nếu sản phẩm đã từng được bán
+            if ($product->orderItems()->exists()) {
+                return back()->with('error', 'Sản phẩm đã được bán và không thể chỉnh sửa!');
+            }
+
             $product->update(
                 $this->buildProductData($request)
             );
@@ -159,6 +172,7 @@ class ProductAdminController extends Controller
                 ->with('error', 'Lỗi khi cập nhật sản phẩm: ' . $e->getMessage());
         }
     }
+
 
     public function destroy($id)
     {
