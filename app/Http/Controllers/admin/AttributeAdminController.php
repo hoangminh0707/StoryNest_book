@@ -46,9 +46,21 @@ class AttributeAdminController extends Controller
     // Hiển thị form chỉnh sửa thuộc tính
     public function edit($id)
     {
-        $attribute = Attribute::findOrFail($id);
+        $attribute = Attribute::with('values.productVariants')->findOrFail($id);
+
+        // Kiểm tra nếu bất kỳ value nào được dùng trong sản phẩm
+        $hasUsedValue = $attribute->values->contains(function ($value) {
+            return $value->productVariants->isNotEmpty();
+        });
+
+        if ($hasUsedValue) {
+            return redirect()->route('admin.attributes.index')
+                ->with('error', 'Thuộc tính có giá trị đã được sử dụng trong sản phẩm, không thể chỉnh sửa!');
+        }
+
         return view('admin.pages.attributes.edit', compact('attribute'));
     }
+
 
     // Cập nhật thuộc tính
     public function update(Request $request, $id)
@@ -68,9 +80,23 @@ class AttributeAdminController extends Controller
     // Xóa thuộc tính
     public function destroy($id)
     {
-        $attribute = Attribute::findOrFail($id);
+        $attribute = Attribute::with('values.productVariants')->findOrFail($id);
+
+        // Kiểm tra nếu bất kỳ giá trị nào của thuộc tính đã được dùng trong sản phẩm
+        $hasUsedValue = $attribute->values->contains(function ($value) {
+            return $value->productVariants->isNotEmpty();
+        });
+
+        if ($hasUsedValue) {
+            return redirect()->route('admin.attributes.index')
+                ->with('error', 'Không thể xóa thuộc tính vì có giá trị đã được sử dụng trong sản phẩm.');
+        }
+
         $attribute->delete();
 
-        return redirect()->route('admin.attributes.index')->with('success', 'Thuộc tính đã được xóa!');
+        return redirect()->route('admin.attributes.index')
+            ->with('success', 'Thuộc tính đã được xóa!');
     }
+
+
 }
