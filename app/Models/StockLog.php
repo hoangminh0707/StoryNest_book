@@ -14,6 +14,8 @@ class StockLog extends Model
         'admin_id',
         'change_quantity',
         'note',
+        'stock_before',
+        'stock_after',
     ];
 
     // Quan hệ với Product (Sản phẩm)

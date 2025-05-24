@@ -99,12 +99,10 @@
     </div>
   </div>
 
-  @include('client.pages.flash_sale_section')
 
-
-@include('client.pages.products_new', ['productsByCategory' => $productsByCategory])
-@include('client.pages.bestSellingProducts')
-@include('client.pages.contact')
+  @include('client.pages.products_new')
+  @include('client.pages.bestSellingProducts')
+  @include('client.pages.contact')
 
 
 

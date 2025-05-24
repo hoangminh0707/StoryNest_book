@@ -51,7 +51,7 @@ class CartClientController extends Controller
         if ($hasVariants && !$variantId) {
             return redirect()->back()->with('error', 'Vui lòng chọn biến thể sản phẩm trước khi thêm vào giỏ hàng.');
         }
-        
+
 
         // Nếu có variant, dùng giá của variant
         if ($variantId) {
@@ -85,7 +85,7 @@ class CartClientController extends Controller
                 'price' => $price,
             ]);
         }
-          // ✅ XÓA KHỎI DANH SÁCH YÊU THÍCH nếu đến từ wishlist
+        // ✅ XÓA KHỎI DANH SÁCH YÊU THÍCH nếu đến từ wishlist
         if ($request->has('from_wishlist')) {
             Wishlist::where('user_id', $userId)
                 ->where('product_id', $product->id)
@@ -133,4 +133,62 @@ class CartClientController extends Controller
 
         return redirect()->back()->with('success', 'Đã xóa sản phẩm khỏi giỏ hàng.');
     }
+
+    public function buyNow(Request $request)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để mua hàng.');
+        }
+
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'quantity' => 'required|integer|min:1|max:100',
+            'variant_id' => 'nullable|exists:product_variants,id',
+        ]);
+
+        $user = auth()->user();
+        $productId = $request->product_id;
+        $variantId = $request->variant_id;
+        $quantity = $request->quantity;
+
+        $product = Product::findOrFail($productId);
+
+        // Nếu sản phẩm có biến thể mà chưa chọn => báo lỗi
+        if ($product->product_type === 'variable' && !$variantId) {
+            return back()->with('error', 'Vui lòng chọn biến thể sản phẩm để mua ngay.');
+        }
+
+
+        // Kiểm tra kho
+        if ($variantId) {
+            $variant = ProductVariant::findOrFail($variantId);
+            if ($variant->stock_quantity < $quantity) {
+                return back()->with('error', 'Sản phẩm không đủ số lượng tồn kho.');
+            }
+        } else {
+            if ($product->quantity < $quantity) {
+                return back()->with('error', 'Sản phẩm không đủ số lượng tồn kho.');
+            }
+        }
+
+        $price = $variantId
+            ? ProductVariant::findOrFail($variantId)->variant_price
+            : $product->price;
+
+        // Clear giỏ hàng cũ (nếu bạn muốn giữ đơn giản)
+        $cart = Cart::firstOrCreate(['user_id' => $user->id]);
+        $cart->items()->delete();
+
+        CartItem::create([
+            'cart_id' => $cart->id,
+            'product_id' => $productId,
+            'product_variant_id' => $variantId,
+            'quantity' => $quantity,
+            'price' => $price,
+        ]);
+
+        return redirect()->route('checkout')->with('success', 'Đang chuyển tới trang thanh toán...');
+    }
+
+
 }
