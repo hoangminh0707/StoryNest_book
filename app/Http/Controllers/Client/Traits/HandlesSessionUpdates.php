@@ -55,9 +55,23 @@ trait HandlesSessionUpdates
 
     public function handleSubmitRequest(Request $request)
     {
+        // Kiểm tra thiếu lựa chọn và hiển thị lỗi ngay
+        if (!$request->address_id) {
+            return redirect()->route('checkout')->with('error', 'Vui lòng chọn địa chỉ giao hàng.');
+        }
+
+        if (!$request->shipping_method_id && !session('checkout_shipping_method')) {
+            return redirect()->route('checkout')->with('error', 'Vui lòng chọn phương thức giao hàng.');
+        }
+
+        if (!$request->payment_method) {
+            return redirect()->route('checkout')->with('error', 'Vui lòng chọn phương thức thanh toán.');
+        }
+
+        // Validate dữ liệu hợp lệ
         $request->validate([
             'address_id' => 'required|exists:user_addresses,id',
-            'shipping_method_id' => 'required|exists:shipping_methods,id',
+            'shipping_method_id' => 'nullable|exists:shipping_methods,id',
             'payment_method' => 'required|exists:payment_methods,id',
         ]);
 
@@ -70,6 +84,7 @@ trait HandlesSessionUpdates
 
         $cartItems = $cart->cartItems;
         $totalAmount = $cartItems->sum(fn($item) => $item->price * $item->quantity);
+
         $shippingMethodId = session('checkout_shipping_method') ?? $request->shipping_method_id;
         $shippingMethod = \App\Models\ShippingMethod::find($shippingMethodId);
 
@@ -99,4 +114,5 @@ trait HandlesSessionUpdates
             default => $this->handleCODOrderCreation(),
         };
     }
+
 }
