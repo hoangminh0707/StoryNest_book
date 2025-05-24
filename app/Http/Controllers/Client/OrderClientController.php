@@ -48,24 +48,48 @@ class OrderClientController extends Controller
             return back()->with('error', 'Không thể huỷ đơn hàng đã được giao hoặc huỷ trước đó.');
         }
 
-        // Cộng lại tồn kho cho từng sản phẩm
         foreach ($order->orderItems as $item) {
             if ($item->product_variant_id) {
-                // Nếu là biến thể
+                // Biến thể
                 $variant = \App\Models\ProductVariant::find($item->product_variant_id);
                 if ($variant) {
+                    $before = $variant->stock_quantity;
                     $variant->increment('stock_quantity', $item->quantity);
+                    $after = $variant->stock_quantity;
+
+                    // Ghi vào stock_logs
+                    \App\Models\StockLog::create([
+                        'product_id' => $item->product_id,
+                        'variant_id' => $variant->id,
+                        'admin_id' => auth()->id(), // hoặc null nếu người dùng thường
+                        'change_quantity' => $item->quantity,
+                        'stock_before' => $before,
+                        'stock_after' => $after,
+                        'note' => 'Khôi phục tồn kho khi huỷ đơn #' . $order->order_code,
+                    ]);
                 }
             } else {
-                // Nếu là sản phẩm gốc
+                // Sản phẩm gốc
                 $product = \App\Models\Product::find($item->product_id);
                 if ($product) {
+                    $before = $product->quantity;
                     $product->increment('quantity', $item->quantity);
+                    $after = $product->quantity;
+
+                    // Ghi vào stock_logs
+                    \App\Models\StockLog::create([
+                        'product_id' => $product->id,
+                        'variant_id' => null,
+                        'admin_id' => auth()->id(), // hoặc null
+                        'change_quantity' => $item->quantity,
+                        'stock_before' => $before,
+                        'stock_after' => $after,
+                        'note' => 'Khôi phục tồn kho khi huỷ đơn #' . $order->order_code,
+                    ]);
                 }
             }
         }
 
-        // Cập nhật trạng thái đơn hàng
         $order->status = 'cancelled';
         $order->save();
 
