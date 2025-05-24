@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Review;
 use Illuminate\Support\Facades\DB;
 use App\Models\Refund;
 use Carbon\Carbon;
@@ -50,6 +51,9 @@ class AdminController extends Controller
     
         // Người dùng mới
         $usersToday = User::whereBetween('created_at', [$fromDate, $toDate])->count();
+
+        // Tổng người dùng 
+        $totalUsers = User::count();
     
         // Tổng số sản phẩm
         $productsCount = Product::count();
@@ -114,6 +118,77 @@ class AdminController extends Controller
         $statusGroups = $filteredOrders->groupBy('status');
         $statusChartLabels = $statusGroups->keys();
         $statusChartValues = $statusGroups->map(fn($orders) => $orders->count())->values();
+
+        // Tỷ lệ đơn hàng thành công
+        $completedOrders = $filteredOrders->where('status', 'completed')->count();
+        $successRate = $totalOrdersAll > 0
+            ? round(($completedOrders / $totalOrdersAll) * 100, 2)
+            : 0;
+        
+       $totalReviews = Review::whereBetween('created_at', [$fromDate, $toDate])->count();
+
+
+        // Tính tỉ lệ chuyển đổi đơn hàng
+        $usersWithOrders = Order::whereBetween('created_at', [$fromDate, $toDate])
+            ->whereNotNull('user_id')
+            ->pluck('user_id')
+            ->unique()
+            ->count();
+        
+        $conversionRate = $usersToday > 0
+            ? round(($usersWithOrders / $usersToday) * 100, 2)
+            : 0;
+
+        // khách hàng mới   
+       $newCustomers = User::whereBetween('created_at', [$fromDate, $toDate])
+        ->whereHas('roles', function ($query) {
+            $query->where('role_id', 4);
+        })->count();
+
+
+                
+        // Lấy sản phẩm đơn còn hàng
+        $simpleInStock = Product::where('product_type', 'simple')
+            ->where('quantity', '>', 0)
+            ->count();
+
+        // Lấy sản phẩm đơn hết hàng
+        $simpleOutOfStock = Product::where('product_type', 'simple')
+            ->where(function ($query) {
+                $query->where('quantity', '<=', 0)
+                    ->orWhereNull('quantity');
+            })
+            ->count();
+
+        // Lấy danh sách ID sản phẩm có biến thể
+        $variantProducts = Product::where('product_type', 'variant')->pluck('id');
+
+        // Đếm sản phẩm có biến thể còn hàng
+        $variantInStock = Product::whereIn('id', function ($query) {
+                $query->select('product_id')
+                    ->from('product_variants')
+                    ->groupBy('product_id')
+                    ->havingRaw('SUM(stock_quantity) > 0');
+            })
+            ->count();
+
+        // Đếm sản phẩm có biến thể hết hàng
+        $variantOutOfStock = Product::whereIn('id', function ($query) {
+                $query->select('product_id')
+                    ->from('product_variants')
+                    ->groupBy('product_id')
+                    ->havingRaw('SUM(stock_quantity) <= 0');
+            })
+            ->count();
+
+        // Tổng hợp lại
+        $inStockCount = $simpleInStock + $variantInStock;
+        $outOfStockCount = $simpleOutOfStock + $variantOutOfStock;
+
+
+
+
+
     
     
         return view('admin.pages.dashboards', compact(
@@ -134,6 +209,14 @@ class AdminController extends Controller
             'orderCounts',
             'statusChartLabels',
             'statusChartValues',
+            'successRate',
+            'conversionRate',
+            'totalUsers',
+            'newCustomers',
+            'inStockCount',
+            'outOfStockCount',
+            'totalReviews'
+
         ));
     }
     

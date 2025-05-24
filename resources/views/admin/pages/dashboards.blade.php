@@ -131,53 +131,49 @@
 
                     <div class="col-xl-3 col-md-6">
                         <!-- card -->
-                        <div class="card card-animate">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center">
-                                    <div class="flex-grow-1 overflow-hidden">
-                                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Tổng sản phẩm
-                                        </p>
+                            <div class="card card-animate">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-grow-1 overflow-hidden">
+                                            <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Sản phẩm còn hàng
+                                            </p>
+                                        </div>
+                                        <div class="flex-shrink-0">
+                                            <h5 class="text-muted fs-14 mb-0">
+                                                <i class="ri-archive-line fs-13 align-middle"></i>
+                                            </h5>
+                                        </div>
                                     </div>
-                                    <div class="flex-shrink-0">
-                                        <h5 class="text-muted fs-14 mb-0">
-                                            <i class="ri-archive-line fs-13 align-middle"></i>
-                                        </h5>
-                                    </div>
-                                </div>
 
-                                <div class="d-flex align-items-end justify-content-between mt-4">
-                                    <div>
-                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4">
-                                            <span class="counter-value" data-target="{{ $productsCount }}">
-                                                <!-- {{ number_format($productsCount) }} -->
+                                    <div class="d-flex align-items-end justify-content-between mt-4">
+                                        <div>
+                                            <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+                                                {{ $inStockCount }}
+                                            </h4>
+
+                                            <a href="{{ route('admin.stocks.index') }}" class="text-decoration">Có thể bán</a>
+                                        </div>
+                                        <div class="avatar-sm flex-shrink-0">
+                                            <span class="avatar-title bg-info-subtle rounded fs-3">
+                                                <i class="bx bx-box text-info"></i>
                                             </span>
-                                        </h4>
-
-                                        <a href="{{ route('admin.products.index') }}" class="text-decoration">Xem danh sách sản phẩm</a>
+                                        </div>
                                     </div>
-                                    <div class="avatar-sm flex-shrink-0">
-                                        <span class="avatar-title bg-info-subtle rounded fs-3">
-                                            <i class="bx bx-box text-info"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div><!-- end card body -->
-                        </div><!-- end card -->
+                                </div><!-- end card body -->
+                            </div><!-- end card -->
 
                     </div>
 
-                    <div class="col-xl-3 col-md-6">
-                        <!-- card -->
+                   <div class="col-xl-3 col-md-6">
                         <div class="card card-animate">
                             <div class="card-body">
                                 <div class="d-flex align-items-center">
                                     <div class="flex-grow-1 overflow-hidden">
-                                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Người dùng mới
-                                        </p>
+                                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Khách hàng mới</p>
                                     </div>
                                     <div class="flex-shrink-0">
-                                        <h5 class="text-muted fs-14 mb-0">
-                                            <i class="ri-user-add-line fs-13 align-middle"></i>
+                                        <h5 class="text-primary fs-14 mb-0">
+                                            <i class="fas fa-user-plus me-1"></i>
                                         </h5>
                                     </div>
                                 </div>
@@ -185,24 +181,156 @@
                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                     <div>
                                         <h4 class="fs-22 fw-semibold ff-secondary mb-4">
-                                            <span class="counter-value" data-target="{{ $usersToday }}">
-                                                <!-- {{ number_format($usersToday) }} -->
-                                            </span>
+                                            <span class="counter-value" data-target="{{ $newCustomers }}">0</span>
                                         </h4>
+                                        <a href="{{ route('admin.userIndex') }}" class="text-decoration">Xem
+                                            khách hàng</a>
+                                    </div>
+                                    <div class="avatar-sm flex-shrink-0">
+                                        <span class="avatar-title bg-primary-subtle rounded fs-3">
+                                            <i class="bx bx-user-plus text-primary"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                     </div>
 
+
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card card-animate">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1 overflow-hidden">
+                                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Số lượng đánh giá</p>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <h5 class="text-info fs-14 mb-0">
+                                            <i class="bx bx-group me-1"></i>
+                                        </h5>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex align-items-end justify-content-between mt-4">
+                                    <div>
+                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+                                           {{ $totalReviews  }}
+                                        </h4>
                                         <a href="{{ route('admin.userIndex') }}" class="text-decoration">Xem
                                             người dùng</a>
                                     </div>
                                     <div class="avatar-sm flex-shrink-0">
-                                        <span class="avatar-title bg-danger-subtle rounded fs-3">
-                                            <i class="bx bx-user text-danger"></i>
+                                        <span class="avatar-title bg-info-subtle rounded fs-3">
+                                            <i class="bx bx-user-circle text-info"></i>
                                         </span>
                                     </div>
                                 </div>
-                            </div><!-- end card body -->
-                        </div><!-- end card -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card card-animate">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1 overflow-hidden">
+                                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Tỉ lệ chuyển đổi</p>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <h5 class="text-primary fs-14 mb-0">
+                                            <i class="bx bx-transfer-alt me-1"></i>
+                                        </h5>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex align-items-end justify-content-between mt-4">
+                                    <div>
+                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+                                            {{ $conversionRate }}%
+                                        </h4>
+                                        <a href="#" class="text-decoration">khách hàng → Đơn hàng</a>
+                                    </div>
+                                    <div class="avatar-sm flex-shrink-0">
+                                        <span class="avatar-title bg-primary-subtle rounded fs-3">
+                                            <i class="bx bx-user-check text-primary"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                     <div class="col-xl-3 col-md-6">
+                        <!-- card -->
+                            <div class="card card-animate">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-grow-1 overflow-hidden">
+                                            <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Sản phẩm hết hàng
+                                            </p>
+                                        </div>
+                                        <div class="flex-shrink-0">
+                                            <h5 class="text-muted fs-14 mb-0">
+                                                <i class="ri-archive-line fs-13 align-middle"></i>
+                                            </h5>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex align-items-end justify-content-between mt-4">
+                                        <div>
+                                            <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+                                             {{ $outOfStockCount  }}
+                                            </h4>
+
+                                            <a href="{{ route('admin.stocks.index') }}" class="text-decoration">Cần nhập thêm</a>
+                                        </div>
+                                        <div class="avatar-sm flex-shrink-0">
+                                            <span class="avatar-title bg-info-subtle rounded fs-3">
+                                                <i class="bx bx-box text-info"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div><!-- end card body -->
+                            </div><!-- end card -->
 
                     </div>
+
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card card-animate">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1 overflow-hidden">
+                                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Tổng người dùng</p>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <h5 class="text-info fs-14 mb-0">
+                                            <i class="bx bx-group me-1"></i>
+                                        </h5>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex align-items-end justify-content-between mt-4">
+                                    <div>
+                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+                                            {{ number_format($totalUsers) }}
+                                        </h4>
+                                        <a href="{{ route('admin.userIndex') }}" class="text-decoration">Xem
+                                            người dùng</a>
+                                    </div>
+                                    <div class="avatar-sm flex-shrink-0">
+                                        <span class="avatar-title bg-info-subtle rounded fs-3">
+                                            <i class="bx bx-user-circle text-info"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                 
+
+
+
                 </div>
 
                 <!-- Biểu đồ Doanh thu -->
@@ -572,10 +700,14 @@
                                     }
                                 }
                             }],
-                            dataLabels: {
+                           dataLabels: {
                                 enabled: true,
-                                formatter: (val) => `${val.toFixed(1)}%`
+                                formatter: function (val, opts) {
+                                    const quantity = opts.w.config.series[opts.seriesIndex];
+                                    return `${val.toFixed(1)}% (${quantity} đơn)`;
+                                }
                             },
+
                             tooltip: {
                                 y: {
                                     formatter: val => `${val.toLocaleString('vi-VN')} đơn`
