@@ -65,28 +65,30 @@ class AdminController extends Controller
         $latestOrders = Order::with('user')->orderByDesc('created_at')->take(5)->get();
     
         // Sản phẩm bán chạy nhất
-        $topProducts = DB::table('products')
-            ->leftJoin('order_items', 'order_items.product_id', '=', 'products.id')
-            ->leftJoin('product_variants', 'product_variants.id', '=', 'order_items.product_variant_id')
-            ->whereBetween('order_items.created_at', [$fromDate, $toDate])
-            ->select(
-                'products.id',
-                'products.name',
-                DB::raw('IFNULL(product_variants.variant_price, products.price) as price'),
-                'products.created_at',
-                DB::raw('SUM(order_items.quantity) as total_orders'),
-                DB::raw('SUM(order_items.price * order_items.quantity) as total_amount')
-            )
-            ->groupBy(
-                'products.id',
-                'products.name',
-                'products.created_at',
-                'product_variants.variant_price',
-                'products.price'
-            )
-            ->orderByDesc('total_orders')
-            ->limit(5)
-            ->get();
+          $topProducts = DB::table('products')
+        ->leftJoin('order_items', 'order_items.product_id', '=', 'products.id')
+        ->leftJoin('product_variants', 'product_variants.id', '=', 'order_items.product_variant_id')
+        ->leftJoin('orders', 'orders.id', '=', 'order_items.order_id') // Join thêm bảng orders
+        ->whereIn('orders.status', ['delivered', 'completed']) // Lọc trạng thái đơn
+        ->whereBetween('order_items.created_at', [$fromDate, $toDate])
+        ->select(
+            'products.id',
+            'products.name',
+            DB::raw('IFNULL(product_variants.variant_price, products.price) as price'),
+            'products.created_at',
+            DB::raw('SUM(order_items.quantity) as total_orders'),
+            DB::raw('SUM(order_items.price * order_items.quantity) as total_amount')
+        )
+        ->groupBy(
+            'products.id',
+            'products.name',
+            'products.created_at',
+            'product_variants.variant_price',
+            'products.price'
+        )
+        ->orderByDesc('total_orders')
+        ->limit(5)
+        ->get();
     
         // Đơn hàng gần nhất kèm sản phẩm
         $recentOrders = Order::with(['user', 'orderItems.product'])

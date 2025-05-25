@@ -216,8 +216,8 @@
                                         <h4 class="fs-22 fw-semibold ff-secondary mb-4">
                                            {{ $totalReviews  }}
                                         </h4>
-                                        <a href="{{ route('admin.userIndex') }}" class="text-decoration">Xem
-                                            người dùng</a>
+                                        <a href="{{ route('admin.reviews.index') }}" class="text-decoration">Xem
+                                            đánh giá</a>
                                     </div>
                                     <div class="avatar-sm flex-shrink-0">
                                         <span class="avatar-title bg-info-subtle rounded fs-3">
