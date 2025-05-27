@@ -417,9 +417,7 @@
                                 <li class="nav-item">
                                     <a href="{{ route('admin.roleIndex') }}" class="nav-link"> Vai trò </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.roleIndex') }}" class="nav-link"> Quyền hạn </a>
-                                </li>
+                              
                             </ul>
                         </div>
                     </li>

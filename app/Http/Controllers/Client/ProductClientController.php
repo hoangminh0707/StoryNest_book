@@ -40,20 +40,22 @@ class ProductClientController extends Controller
             ->limit(8)
             ->get();
 
+        
         $bestSellingProducts = Product::with(['orderItems.order'])
-            ->whereHas('orderItems.order', function ($q) {
-                $q->where('status', 'delivered'); // Chỉ lấy đơn hàng đã giao thành công
+            ->whereHas('orderItems.order', function ($query) {
+                $query->whereIn('status', [4, 5]); // Chỉ lấy đơn hàng có status là 4 hoặc 5
             })
             ->withSum([
-                'orderItems as total_sold' => function ($q) {
-                    $q->whereHas('order', function ($q2) {
-                        $q2->where('status', 'delivered');
+                'orderItems as total_sold' => function ($query) {
+                    $query->whereHas('order', function ($q) {
+                        $q->whereIn('status', [4, 5]); // Chỉ tính tổng số lượng từ đơn hàng có status 4 hoặc 5
                     });
                 }
             ], 'quantity')
             ->orderByDesc('total_sold')
-            ->limit(8)
+            ->limit(20)
             ->get();
+
 
         $bestSellingProductIds = $bestSellingProducts->pluck('id')->toArray();
 
@@ -329,12 +331,22 @@ class ProductClientController extends Controller
 
         $product->total_sold = $totalSold;
 
+       
         $bestSellingProducts = Product::with(['orderItems.order'])
-            ->whereHas('orderItems.order') // chỉ kiểm tra có đơn hàng (bất kỳ trạng thái nào)
-            ->withSum('orderItems as total_sold', 'quantity')
+            ->whereHas('orderItems.order', function ($query) {
+                $query->whereIn('status', [4, 5]); // Chỉ lấy đơn hàng có status là 4 hoặc 5
+            })
+            ->withSum([
+                'orderItems as total_sold' => function ($query) {
+                    $query->whereHas('order', function ($q) {
+                        $q->whereIn('status', [4, 5]); // Chỉ tính tổng số lượng từ đơn hàng có status 4 hoặc 5
+                    });
+                }
+            ], 'quantity')
             ->orderByDesc('total_sold')
-            ->limit(8)
+            ->limit(20)
             ->get();
+
 
         $bestSellingProductIds = $bestSellingProducts->pluck('id')->toArray();
 
