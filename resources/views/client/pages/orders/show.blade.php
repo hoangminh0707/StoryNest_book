@@ -168,15 +168,42 @@
 
     @if (in_array($order->status, ['pending', 'confirmed']))
     <div class="mt-4">
-      <form action="{{ route('orders.cancel', $order->id) }}" method="POST"
-      onsubmit="return confirm('Bạn có chắc muốn huỷ đơn hàng này?');">
+      <form action="{{ route('orders.cancel', $order->id) }}" method="POST" class="cancel-order-form">
       @csrf
       @method('PUT')
       <button type="submit" class="btn btn-sqr">❌ Huỷ đơn hàng</button>
       </form>
     </div>
     @endif
+
     </div>
+
+
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const form = document.querySelector('.cancel-order-form');
+
+      form.addEventListener('submit', function (e) {
+      e.preventDefault(); // Ngăn form submit ngay
+
+      Swal.fire({
+        title: 'Huỷ đơn hàng?',
+        text: 'Bạn có chắc muốn huỷ đơn hàng này không?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Có, huỷ ngay!',
+        cancelButtonText: 'Không'
+      }).then((result) => {
+        if (result.isConfirmed) {
+        form.submit(); // Chỉ submit khi xác nhận
+        }
+      });
+      });
+    });
+    </script>
 
 
   @endsection
