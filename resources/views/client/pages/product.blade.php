@@ -345,14 +345,22 @@
               </div>
 
               {{-- Các thuộc tính sản phẩm --}}
-              @foreach ($groupedAttributes as $attributeName => $attributeValues)
-            <div class="mb-2">
-              <strong>{{ $attributeName }}:</strong>
-              @foreach ($attributeValues as $attribute)
-          <span class="badge bg-primary me-1">{{ $attribute['value'] }}</span>
+                @foreach ($groupedAttributes as $attributeName => $attributeValues)
+              <div class="mb-2">
+                  <strong>{{ $attributeName }}:</strong>
+                  @php
+                      // Lấy danh sách các giá trị đã duyệt (unique)
+                      $uniqueValues = collect($attributeValues)
+                          ->pluck('value')      // lấy mảng các giá trị
+                          ->unique()            // loại bỏ trùng
+                          ->values();           // reset key index
+                  @endphp
+
+                  @foreach ($uniqueValues as $value)
+                      <span class="badge bg-primary me-1">{{ $value }}</span>
+                  @endforeach
+              </div>
           @endforeach
-            </div>
-        @endforeach
               </div>
 
               <div class="tab-pane fade" id="tab_three">

@@ -8,78 +8,83 @@ use App\Models\StockLog;
 use App\Models\ProductVariant;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-
+use Illuminate\Pagination\LengthAwarePaginator;
 class StockController extends Controller
 {
+
+
     public function index(Request $request)
     {
+        $query = Product::with(['images', 'variants.orderItems', 'orderItems']);
 
-        // Lấy ngày bắt đầu và kết thúc từ request, mặc định là tháng này
-        $startDate = $request->input('start_date', Carbon::now()->startOfMonth()->toDateString());
-        $endDate = $request->input('end_date', Carbon::now()->endOfMonth()->toDateString());
-
-        $startOfPeriod = Carbon::parse($startDate)->startOfDay();
-        $endOfPeriod = Carbon::parse($endDate)->endOfDay();
-
-        // Khởi tạo query cơ bản
-        $query = Product::with(['images'])
-            ->withSum('variants', 'stock_quantity')
-            ->with([
-                'variants' => function ($variantQuery) use ($startOfPeriod, $endOfPeriod) {
-                    $variantQuery->with([
-                        'orderItems' => function ($orderItemQuery) use ($startOfPeriod, $endOfPeriod) {
-                            $orderItemQuery->whereBetween('created_at', [$startOfPeriod, $endOfPeriod]);
-                        }
-                    ]);
-                }
-            ]);
-
-        // Tìm kiếm theo tên sản phẩm hoặc tên biến thể
         if ($request->filled('search')) {
             $query->where('products.name', 'like', '%' . $request->search . '%');
         }
 
+        $products = $query->get();
 
-        // Lọc theo trạng thái tồn kho
+        // Lọc tồn kho thủ công trên collection
         if ($request->filled('stock_status')) {
             $status = $request->stock_status;
 
-            if ($status === 'out_of_stock') {
-                $query->having('variants_sum_stock_quantity', '<=', 0);
-            } elseif ($status === 'low_stock') {
-                $query->having('variants_sum_stock_quantity', '>', 0)
-                    ->having('variants_sum_stock_quantity', '<=', 10);
-            } elseif ($status === 'in_stock') {
-                $query->having('variants_sum_stock_quantity', '>', 10);
-            }
+            $products = $products->filter(function ($product) use ($status) {
+                if ($product->product_type === 'simple') {
+                    $qty = $product->quantity ?? 0;
+                    if ($status === 'out_of_stock') {
+                        return $qty <= 0;
+                    } elseif ($status === 'low_stock') {
+                        return $qty > 0 && $qty <= 10;
+                    } elseif ($status === 'in_stock') {
+                        return $qty > 10;
+                    }
+                } else {
+                    // Tính tổng tồn kho biến thể
+                    $totalStock = $product->variants->sum('stock_quantity');
+
+                    if ($status === 'out_of_stock') {
+                        return $totalStock <= 0;
+                    } elseif ($status === 'low_stock') {
+                        return $totalStock > 0 && $totalStock <= 10;
+                    } elseif ($status === 'in_stock') {
+                        return $totalStock > 10;
+                    }
+                }
+                return false;
+            });
         }
 
-        // Phân trang kết quả
-        $products = $query->paginate(15);
+        // Chuyển collection về paginate thủ công
+        $perPage = 15;
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $currentItems = $products->slice(($currentPage - 1) * $perPage, $perPage)->values();
 
-        // Tính tổng số lượng đã bán trong khoảng thời gian
-        $products->getCollection()->transform(function ($product) use ($startOfPeriod, $endOfPeriod) {
-            $totalSold = 0;
+        $paginatedProducts = new \Illuminate\Pagination\LengthAwarePaginator(
+            $currentItems,
+            $products->count(),
+            $perPage,
+            $currentPage,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
 
-            if ($product->product_type === 'simple') {
-                // Nếu là sản phẩm đơn
-                $totalSold = $product->orderItems()
-                    ->whereBetween('created_at', [$startOfPeriod, $endOfPeriod])
-                    ->sum('quantity');
-            } else {
-                // Với sản phẩm có biến thể
-                foreach ($product->variants as $variant) {
-                    $sold = $variant->orderItems->sum('quantity');
-                    $totalSold += $sold;
-                }
-            }
+     // Tính tổng số đã bán (toàn bộ thời gian) chỉ cho sản phẩm có trạng thái 'delivered' hoặc 'completed'
+        $paginatedProducts->getCollection()->transform(function ($product) {
+            // Chỉ tính tổng số bán nếu sản phẩm có đơn hàng có trạng thái 'delivered' hoặc 'completed'
+            $product->sold_this_period = $product->orderItems->filter(function ($orderItem) {
+                // Kiểm tra trạng thái của đơn hàng liên kết với orderItem
+                return in_array($orderItem->order->status, ['delivered', 'completed']);
+            })->sum('quantity'); // Tính tổng số lượng bán được
 
-            $product->sold_this_period = $totalSold;
             return $product;
         });
 
-        return view('admin.pages.stocks.index', compact('products', 'startDate', 'endDate'));
+
+
+        return view('admin.pages.stocks.index', [
+            'products' => $paginatedProducts,
+        ]);
     }
+
+
 
     // Hiển thị form cập nhật tồn kho cho sản phẩm
     public function showUpdateStockForm($productId)
@@ -107,27 +112,28 @@ class StockController extends Controller
         $product = Product::findOrFail($validated['product_id']);
         $change = $validated['quantity'];
 
-        if (!$validated['variant_id']) {
-            // Sản phẩm đơn
-            $stockBefore = $product->quantity ?? 0;
+            if (empty($validated['variant_id'])) {
+        // Sản phẩm đơn
+        $stockBefore = (int) $product->quantity;
 
-            if ($change < 0 && abs($change) > $stockBefore) {
-                return back()->withErrors(['quantity' => 'Số lượng vượt quá tồn kho hiện tại'])->withInput();
-            }
+        if ($change < 0 && abs($change) > $stockBefore) {
+            return back()->withErrors(['quantity' => 'Số lượng vượt quá tồn kho hiện tại'])->withInput();
+        }
 
-            $product->quantity = $stockBefore + $change;
-            $product->save();
+        $product->quantity = $stockBefore + $change;
+        $product->save();
 
-            StockLog::create([
-                'product_id' => $product->id,
-                'variant_id' => null,
-                'admin_id' => auth()->id(),
-                'change_quantity' => $change,
-                'note' => $validated['note'],
-                'stock_before' => $stockBefore,
-                'stock_after' => $product->quantity,
-            ]);
-        } else {
+        StockLog::create([
+            'product_id' => $product->id,
+            'variant_id' => null,
+            'admin_id' => auth()->id(),
+            'change_quantity' => $change,
+            'note' => $validated['note'] ?? null,
+            'stock_before' => $stockBefore,
+            'stock_after' => $product->quantity,
+        ]);
+    }
+    else {
             // Sản phẩm có biến thể
             $variant = ProductVariant::where('product_id', $product->id)
                 ->findOrFail($validated['variant_id']);

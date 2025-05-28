@@ -22,21 +22,7 @@
 
         <!-- Form bộ lọc -->
         <form method="GET" class="mb-4">
-            <div class="row mb-3 align-items-end">
-                <div class="col-md-3">
-                    <label class="form-label">Từ ngày</label>
-                    <input type="date" name="start_date" class="form-control" value="{{ request('start_date', $startDate) }}">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Đến ngày</label>
-                    <input type="date" name="end_date" class="form-control" value="{{ request('end_date', $endDate) }}">
-                </div>
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-primary w-100">
-                        <i class="fas fa-filter me-1"></i> Lọc
-                    </button>
-                </div>
-            </div>
+  
 
             <!-- Tabs lọc trạng thái tồn kho -->
             <div class="row">
@@ -109,7 +95,7 @@
                     </td>
                     <td>{{ $product->name }}</td>
                     <td>{{ $product->total_stock }}</td>
-                    <td>{{ $product->sold_this_period }}</td>
+                      <td>{{ $product->sold_this_period ?? 0 }}</td> 
                     <td><span class="badge bg-{{ $statusColor }}">{{ $status }}</span></td>
                     <td>
                         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateStockModal{{ $product->id }}">Cập nhật</button>
