@@ -46,7 +46,7 @@ class CartClientController extends Controller
         $quantity = $request->input('quantity', 1);
 
         // ✅ KIỂM TRA TRẠNG THÁI SẢN PHẨM
-        if ($product->status == 0 || $product->status == 'discontinued') { // Điều chỉnh theo cấu trúc DB của bạn
+        if ($product->status == 0 || $product->status == 'discontinued') {
             return redirect()->back()->with('error', 'Sản phẩm này đã ngưng kinh doanh.');
         }
 
@@ -67,7 +67,7 @@ class CartClientController extends Controller
             }
 
             // ✅ KIỂM TRA TỒN KHO VARIANT
-            if ($variant->stock_quantity < $quantity) { // Điều chỉnh tên cột theo DB của bạn
+            if ($variant->stock_quantity < $quantity) {
                 return redirect()->back()->with('error', "Chỉ còn {$variant->stock_quantity} sản phẩm trong kho.");
             }
 
@@ -75,12 +75,12 @@ class CartClientController extends Controller
             $availableStock = $variant->stock_quantity;
         } else {
             // ✅ KIỂM TRA TỒN KHO SẢN PHẨM CHÍNH
-            if ($product->stock_quantity < $quantity) { // Điều chỉnh tên cột theo DB của bạn
-                return redirect()->back()->with('error', "Chỉ còn {$product->stock_quantity} sản phẩm trong kho.");
+            if ($product->quantity < $quantity) {
+                return redirect()->back()->with('error', "Chỉ còn {$product->quantity} sản phẩm trong kho.");
             }
 
             $price = $product->price;
-            $availableStock = $product->stock_quantity;
+            $availableStock = $product->quantity;
         }
 
         // ✅ KIỂM TRA HẾT HÀNG
