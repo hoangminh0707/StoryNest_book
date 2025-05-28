@@ -187,7 +187,7 @@
         $minPrice = $productVariants->min('variant_price');
         $maxPrice = $productVariants->max('variant_price');
         $isAvailable = $product->product_type === 'variable' ? $totalStock > 0 : $product->quantity > 0;
-        @endphp
+      @endphp
           <!-- Hiển thị giá -->
           <div class="price-box">
             @if ($productVariants->count() === 1)
@@ -450,7 +450,7 @@
           <h2 class="title">Khám Phá Sản Phẩm Liên Quan</h2>
           <p class="sub-title">Tìm thêm những sản phẩm phù hợp với nhu cầu của bạn ngay dưới đây!</p>
         </div>
-        <!-- section title start -->
+        <!-- section title end -->
         </div>
       </div>
       <div class="row">
@@ -458,41 +458,39 @@
         <div class="product-carousel-4 slick-row-10 slick-arrow-style">
           <!-- product item start -->
 
-          @foreach ($products as $product)
+          @foreach ($relatedProducts as $product)
 
-          @php
+        @php
         $thumbnail = $product->images->where('is_thumbnail', true)->first();
         $secondary = $product->images->where('is_thumbnail', false)->first();
-        @endphp
-          <div class="product-item">
-          <figure class="product-thumb">
+      @endphp
+
+        <div class="product-item">
+        <figure class="product-thumb">
           <a href="{{ route('product.show', $product->slug) }}">
-
           <img class="pri-img"
-            src="{{ $thumbnail ? Storage::url($thumbnail->image_path) : asset('images/default.jpg') }}"
-            alt="product">
+          src="{{ $thumbnail ? Storage::url($thumbnail->image_path) : asset('images/default.jpg') }}"
+          alt="product">
           <img class="sec-img"
-            src="{{ $secondary ? Storage::url($secondary->image_path) : asset('images/default.jpg') }}"
-            alt="product">
-
+          src="{{ $secondary ? Storage::url($secondary->image_path) : asset('images/default.jpg') }}"
+          alt="product">
           </a>
           <div class="product-badge">
           <div class="product-label new">
-            <span>new</span>
+          @if ($product->created_at->gt(\Carbon\Carbon::now()->subDays(7)))
+        <span>Mới</span>
+        @endif
           </div>
           </div>
           <div class="button-group">
           <a href="{{ route('wishlist.add', $product->id) }}" data-bs-toggle="tooltip"
-            data-bs-placement="left" title="Thêm vào yêu thích"><i class="pe-7s-like"></i></a>
-
-          </span>
-          </a>
+          data-bs-placement="left" title="Thêm vào yêu thích"><i class="pe-7s-like"></i></a>
           </div>
           <div class="cart-hover">
           @auth
         <form action="{{ route('cart.add', $product->id) }}" method="POST" style="display:inline;">
-          @csrf
-          <button type="submit" class="btn btn-cart">Thêm vào giỏ hàng</button>
+        @csrf
+        <button type="submit" class="btn btn-cart">Thêm vào giỏ hàng</button>
         </form>
         @endauth
 
@@ -500,18 +498,19 @@
         <button onclick="showLoginAlert()" class="btn btn-cart">Thêm vào giỏ hàng</button>
         @endguest
           </div>
-          </figure>
+        </figure>
 
-          <div class="product-caption text-center">
+        <div class="product-caption text-center">
           <div class="product-identity">
           <p class="manufacturer-name">
-            <a href="#">{{ $product->author->name ?? 'Không rõ tác giả' }}</a>
+          <a href="#">{{ $product->author->name ?? 'Không rõ tác giả' }}</a>
           </p>
           </div>
 
           <h6 class="product-name">
           <a href="{{ route('product.show', $product->slug) }}">{{ $product->name }}</a>
           </h6>
+
           @php
         $productVariants = $product->variants;
         if ($productVariants->count() > 0) {
@@ -519,28 +518,31 @@
         $maxPrice = $productVariants->max('variant_price');
         }
         @endphp
+
           <div class="price-box">
           @if ($productVariants->count() === 1)
         <span class="price-regular">{{ number_format($minPrice) }} đ</span>
         @elseif ($productVariants->count() > 1)
-        <span class="price-regular">{{ number_format($minPrice) }} đ -
-          {{ number_format($maxPrice) }} đ </span>
+        <span class="price-regular">{{ number_format($minPrice) }} đ - {{ number_format($maxPrice) }}
+        đ</span>
         @else
-        <span class="price-regular">{{ number_format($product->price) }}</span>
+        <span class="price-regular">{{ number_format($product->price) }} đ</span>
         @endif
           </div>
 
-          </div>
-          </div>
+        </div>
+        </div>
+
       @endforeach
 
-
-
+          <!-- product item end -->
         </div>
         </div>
       </div>
       </div>
     </section>
+    <!-- related products area end -->
+
     @include('client.pages.bestSellingProducts')
     <!-- related products area end -->
   </main>
