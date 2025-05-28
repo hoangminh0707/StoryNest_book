@@ -187,7 +187,7 @@
         $minPrice = $productVariants->min('variant_price');
         $maxPrice = $productVariants->max('variant_price');
         $isAvailable = $product->product_type === 'variable' ? $totalStock > 0 : $product->quantity > 0;
-        @endphp
+      @endphp
           <!-- Hiển thị giá -->
           <div class="price-box">
             @if ($productVariants->count() === 1)
@@ -200,16 +200,16 @@
         @endif
           </div>
 
-
+          @if ($product->status !== 'discontinued')
           <div class="product-voucher">
-            <ul class="voucher-list">
-            @if ($bestVoucher)
+          <ul class="voucher-list">
+          @if ($bestVoucher)
           <div
-            class="alert alert-success d-flex justify-content-between align-items-center p-3 rounded shadow-sm mt-3">
-            <div>
-            <strong>🎁 Ưu đãi tốt nhất: </strong>
-            <span class="text-primary">{{ $bestVoucher->code }}</span> -
-            @if ($bestVoucher->type === 'percent')
+          class="alert alert-success d-flex justify-content-between align-items-center p-3 rounded shadow-sm mt-3">
+          <div>
+          <strong>🎁 Ưu đãi tốt nhất: </strong>
+          <span class="text-primary">{{ $bestVoucher->code }}</span> -
+          @if ($bestVoucher->type === 'percent')
           Giảm {{ number_format($bestVoucher->value) }}%
           @if ($bestVoucher->max_discount_amount)
           (Tối đa {{ number_format($bestVoucher->max_discount_amount) }}₫)
@@ -217,16 +217,16 @@
         @else
           Giảm {{ number_format($bestVoucher->value) }}₫
         @endif
-            </div>
-            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
-            data-bs-target="#voucherModal">
-            Xem thêm ưu đãi
-            </button>
+          </div>
+          <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+          data-bs-target="#voucherModal">
+          Xem thêm ưu đãi
+          </button>
           </div>
         @endif
-            </ul>
+          </ul>
           </div>
-          @if ($product->status !== 'discontinued')
+
 
           <div class="availability">
           <i class="fa fa-check-circle"></i>
@@ -527,7 +527,7 @@
         $minPrice = $productVariants->min('variant_price');
         $maxPrice = $productVariants->max('variant_price');
         }
-      @endphp
+        @endphp
 
           <div class="price-box">
           @if ($productVariants->count() === 1)

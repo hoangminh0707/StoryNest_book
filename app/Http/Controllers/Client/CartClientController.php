@@ -42,8 +42,13 @@ class CartClientController extends Controller
 
         $product = Product::findOrFail($id);
         $userId = Auth::id();
-        $variantId = $request->input('variant_id'); // lưu ý đây
+        $variantId = $request->input('variant_id');
         $quantity = $request->input('quantity', 1);
+
+        // ✅ KIỂM TRA TRẠNG THÁI SẢN PHẨM
+        if ($product->status == 0 || $product->status == 'discontinued') { // Điều chỉnh theo cấu trúc DB của bạn
+            return redirect()->back()->with('error', 'Sản phẩm này đã ngưng kinh doanh.');
+        }
 
         // Kiểm tra nếu sản phẩm có biến thể mà chưa chọn biến thể
         $hasVariants = ProductVariant::where('product_id', $product->id)->exists();
@@ -52,13 +57,35 @@ class CartClientController extends Controller
             return redirect()->back()->with('error', 'Vui lòng chọn biến thể sản phẩm trước khi thêm vào giỏ hàng.');
         }
 
-
-        // Nếu có variant, dùng giá của variant
+        // Nếu có variant, dùng giá của variant và kiểm tra tồn kho variant
         if ($variantId) {
             $variant = ProductVariant::findOrFail($variantId);
+
+            // ✅ KIỂM TRA TRẠNG THÁI VARIANT (nếu có)
+            if (isset($variant->status) && ($variant->status == 0 || $variant->status == 'inactive')) {
+                return redirect()->back()->with('error', 'Biến thể sản phẩm này đã ngưng kinh doanh.');
+            }
+
+            // ✅ KIỂM TRA TỒN KHO VARIANT
+            if ($variant->stock_quantity < $quantity) { // Điều chỉnh tên cột theo DB của bạn
+                return redirect()->back()->with('error', "Chỉ còn {$variant->stock_quantity} sản phẩm trong kho.");
+            }
+
             $price = $variant->variant_price;
+            $availableStock = $variant->stock_quantity;
         } else {
+            // ✅ KIỂM TRA TỒN KHO SẢN PHẨM CHÍNH
+            if ($product->stock_quantity < $quantity) { // Điều chỉnh tên cột theo DB của bạn
+                return redirect()->back()->with('error', "Chỉ còn {$product->stock_quantity} sản phẩm trong kho.");
+            }
+
             $price = $product->price;
+            $availableStock = $product->stock_quantity;
+        }
+
+        // ✅ KIỂM TRA HẾT HÀNG
+        if ($availableStock <= 0) {
+            return redirect()->back()->with('error', 'Sản phẩm này hiện đã hết hàng.');
         }
 
         // Tìm hoặc tạo giỏ hàng
@@ -74,7 +101,13 @@ class CartClientController extends Controller
             ->first();
 
         if ($item) {
-            $item->quantity += $quantity;
+            // ✅ KIỂM TRA TỔNG SỐ LƯỢNG SAU KHI CỘNG
+            $newQuantity = $item->quantity + $quantity;
+            if ($newQuantity > $availableStock) {
+                return redirect()->back()->with('error', "Không thể thêm {$quantity} sản phẩm. Bạn đã có {$item->quantity} trong giỏ hàng, chỉ còn {$availableStock} sản phẩm trong kho.");
+            }
+
+            $item->quantity = $newQuantity;
             $item->save();
         } else {
             CartItem::create([
@@ -85,6 +118,7 @@ class CartClientController extends Controller
                 'price' => $price,
             ]);
         }
+
         // ✅ XÓA KHỎI DANH SÁCH YÊU THÍCH nếu đến từ wishlist
         if ($request->has('from_wishlist')) {
             Wishlist::where('user_id', $userId)
@@ -94,7 +128,6 @@ class CartClientController extends Controller
 
         return redirect()->back()->with('success', 'Đã thêm sản phẩm vào giỏ hàng.');
     }
-
 
 
     public function update(Request $request, Product $product)

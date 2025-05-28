@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Categories;
+use Illuminate\Support\Facades\DB;
 
 class CategoryAdminController extends Controller
 {
@@ -33,12 +34,24 @@ class CategoryAdminController extends Controller
 
     public function edit(Categories $category)
     {
+        // 🔧 THÊM: Kiểm tra danh mục có được sản phẩm sử dụng không
+        if ($this->categoryHasProducts($category->id)) {
+            return redirect()->route('admin.categories.index')
+                ->with('error', 'Không thể sửa danh mục vì đang được sử dụng bởi sản phẩm.');
+        }
+
         $categories = Categories::whereNull('parent_id')->where('id', '!=', $category->id)->get();
         return view('admin.pages.categories.edit', compact('category', 'categories'));
     }
 
     public function update(Request $request, Categories $category)
     {
+        // 🔧 THÊM: Kiểm tra danh mục có được sản phẩm sử dụng không
+        if ($this->categoryHasProducts($category->id)) {
+            return redirect()->route('admin.categories.index')
+                ->with('error', 'Không thể cập nhật danh mục vì đang được sử dụng bởi sản phẩm.');
+        }
+
         $request->validate([
             'name' => 'required|max:255|unique:categories,name,' . $category->id,
             'description' => 'nullable',
@@ -51,18 +64,42 @@ class CategoryAdminController extends Controller
 
     public function destroy(Categories $category)
     {
-        // Kiểm tra nếu danh mục đang gán sản phẩm
-        if ($category->products()->exists()) {
+        // 🔧 SỬA: Kiểm tra qua bảng category_product thay vì products()
+        if ($this->categoryHasProducts($category->id)) {
             return redirect()->route('admin.categories.index')
-                ->with('error', 'Không thể xoá danh mục vì đang chứa sản phẩm.');
+                ->with('error', 'Không thể xóa danh mục vì đang được sử dụng bởi sản phẩm.');
         }
 
-        // Nếu không có sản phẩm → xoá
+        // 🔧 THÊM: Kiểm tra danh mục con
+        if ($this->categoryHasChildren($category->id)) {
+            return redirect()->route('admin.categories.index')
+                ->with('error', 'Không thể xóa danh mục vì còn danh mục con.');
+        }
+
+        // Nếu không có sản phẩm và danh mục con → xóa
         $category->voucherConditions()->delete();
         $category->delete();
 
         return redirect()->route('admin.categories.index')
-            ->with('success', 'Danh mục đã bị xóa thành công!');
+            ->with('success', 'Danh mục đã được xóa thành công!');
+    }
+
+    /**
+     * 🔧 THÊM: Helper method kiểm tra danh mục có sản phẩm không
+     */
+    private function categoryHasProducts(int $categoryId): bool
+    {
+        return DB::table('category_product')
+            ->where('category_id', $categoryId)
+            ->exists();
+    }
+
+    /**
+     * 🔧 THÊM: Helper method kiểm tra danh mục có danh mục con không
+     */
+    private function categoryHasChildren(int $categoryId): bool
+    {
+        return Categories::where('parent_id', $categoryId)->exists();
     }
 
 }

@@ -145,7 +145,10 @@
       <li><strong>Tạm tính:</strong> {{ number_format($order->total_amount) }} VND</li>
 
 
-      <li><strong>Giảm giá:</strong> – {{ number_format($order->discount_amount) ?? '0' }} VND</li>
+      @if (($order->discount_amount ?? 0) > 0)
+      <li><strong>Giảm giá:</strong> – {{ number_format($order->discount_amount) }} VND</li>
+    @endif
+
 
       <li><strong>Phí vận chuyển:</strong> {{ number_format($order->shipping_fee) }} VND</li>
 

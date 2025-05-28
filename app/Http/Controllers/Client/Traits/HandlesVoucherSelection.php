@@ -112,6 +112,12 @@ trait HandlesVoucherSelection
                     };
                 }
             }
+
+            // Cập nhật số tiền giảm và voucher_id vào session pending_checkout
+            $pendingCheckout = session('pending_checkout', []);
+            $pendingCheckout['discount_amount'] = $discount;
+            $pendingCheckout['voucher_id'] = $voucher ? $voucher->id : null;
+            session(['pending_checkout' => $pendingCheckout]);
         }
 
         return [

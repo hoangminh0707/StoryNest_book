@@ -13,11 +13,14 @@
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{ asset('assets/images/2.png') }}">
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdn.materialdesignicons.com/6.5.95/css/materialdesignicons.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
 
-    <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
+
+    {{--
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet"> --}}
+
+    <link rel="stylesheet" href="{{ asset('assets/css/materialdesignicons.min.css') }}">
+
+    <script src="{{ asset('assets/js/ckeditor.js') }}"></script>
 
     <!-- Sweet Alert css-->
     <link href="{{ asset('assets/libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
@@ -28,13 +31,12 @@
     <link href="{{ asset('assets/libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" />
 
     <!-- Thêm Link CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/list.js@2.3.1/dist/list.min.css" rel="stylesheet">
+    {{--
+    <link href="https://cdn.jsdelivr.net/npm/list.js@2.3.1/dist/list.min.css" rel="stylesheet"> --}}
 
     <!-- SimpleBar CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplebar@latest/dist/simplebar.min.css" />
+    <link href="{{ asset('assets/css/simplebar.min.css') }}" rel="stylesheet" type="text/css" />
 
-    <!-- Layout config Js -->
-    <script src="{{ asset('assets/js/layout.js') }}"></script>
     <!-- Bootstrap Css -->
     <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- Icons Css -->
@@ -44,9 +46,11 @@
     <!-- custom Css-->
     <link href="{{ asset('assets/css/custom.min.css') }}" rel="stylesheet" type="text/css" />
 
-
+    <!-- Layout config Js -->
+    <script src="{{ asset('assets/js/layout.js') }}"></script>
     <!-- SimpleBar JS -->
-    <script src="https://cdn.jsdelivr.net/npm/simplebar@latest/dist/simplebar.min.js"></script>
+    <script src="{{ asset('assets/js/simplebar.min.js') }}"></script>
+
 
 </head>
 <script>
