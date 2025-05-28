@@ -74,7 +74,7 @@ class AppServiceProvider extends ServiceProvider
                 ->first();
 
             $danhMucHanhTrang = Categories::with('childrenRecursive')
-                ->where('name', 'Hành trang đến trường')
+                ->where('name', 'Giáo Khoa - Tham Khảo')
                 ->first();
 
             $view->with([

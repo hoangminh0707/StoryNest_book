@@ -240,7 +240,7 @@ class ProductAdminController extends Controller
         $rules = [
             'product_type' => 'required|in:simple,variable',
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string|max:300',
+            'description' => 'nullable|string|',
             'price' => 'nullable|numeric|min:0.01',
             'quantity' => 'nullable|integer|min:1',
             'category_ids' => 'nullable|json|min:1',

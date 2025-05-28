@@ -241,7 +241,9 @@
           </span>
           </div>
 
-          <p class="pro-desc">{{ $product->description }}</p>
+        <p class="pro-desc">
+          {{ \Illuminate\Support\Str::words($product->description, 50, '...') }}
+      </p>
           <div class="quantity-cart-box d-flex align-items-center gap-2">
           <h6 class="option-title mb-0">Số lượng:</h6>
           <div class="input-group quantity-input" style="width: 120px;">

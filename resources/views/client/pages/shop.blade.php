@@ -186,7 +186,9 @@
       <span class="price-regular">{{ number_format($product->price) }}</span>
       @endif
         </div>
-        <p>{{ $product->description }}</p>
+       <p class="pro-desc">
+          {{ \Illuminate\Support\Str::words($product->description, 50, '...') }}
+      </p>
       </div>
       </div>
       <!-- product list item end -->
