@@ -360,11 +360,6 @@ class ProductClientController extends Controller
 
 
 
-
-
-
-
-
         return view('client.pages.product', compact(
             'product',
             'thumbnail',
