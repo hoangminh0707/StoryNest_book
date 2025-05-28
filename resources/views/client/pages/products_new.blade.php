@@ -17,7 +17,7 @@
           @php
         $thumbnail = $product->images->where('is_thumbnail', true)->first();
         $otherImage = $product->images->where('is_thumbnail', false)->first();
-        @endphp
+      @endphp
           <div class="product-item">
           <figure class="product-thumb">
             <a href="{{ route('product.show', $product->slug) }}">
