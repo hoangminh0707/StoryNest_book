@@ -7,7 +7,7 @@
                 <div class="d-flex">
                     <!-- LOGO -->
                     <div class="navbar-brand-box horizontal-logo">
-                        <a href="index.html" class="logo logo-dark">
+                        <a href="" class="logo logo-dark">
                             <span class="logo-sm">
                                 <img src="http://127.0.0.1:8000/assets/images/1.png" alt="" height="22">
                             </span>
@@ -16,7 +16,7 @@
                             </span>
                         </a>
 
-                        <a href="index.html" class="logo logo-light">
+                        <a href="" class="logo logo-light">
                             <span class="logo-sm">
                                 <img src="http://127.0.0.1:8000/assets/images/1.png" alt="" height="22">
                             </span>
@@ -52,9 +52,9 @@
                                 </div>
 
                                 <div class="dropdown-item bg-transparent text-wrap">
-                                    <a href="index.html" class="btn btn-soft-secondary btn-sm rounded-pill">how to
+                                    <a href="" class="btn btn-soft-secondary btn-sm rounded-pill">how to
                                         setup <i class="mdi mdi-magnify ms-1"></i></a>
-                                    <a href="index.html" class="btn btn-soft-secondary btn-sm rounded-pill">buttons
+                                    <a href="" class="btn btn-soft-secondary btn-sm rounded-pill">buttons
                                         <i class="mdi mdi-magnify ms-1"></i></a>
                                 </div>
                                 <!-- item-->
@@ -366,7 +366,7 @@
         <!-- LOGO -->
         <div class="navbar-brand-box">
             <!-- Dark Logo-->
-            <a href="index.html" class="logo logo-dark">
+            <a href="" class="logo logo-dark">
                 <span class="logo-sm">
                     <img src="http://127.0.0.1:8000/assets/images/1.png" alt="" height="22">
                 </span>
@@ -376,7 +376,7 @@
                 </span>
             </a>
             <!-- Light Logo-->
-            <a href="index.html" class="logo logo-light">
+            <a href="" class="logo logo-light">
                 <span class="logo-sm">
                     <img src="http://127.0.0.1:8000/assets/images/1.png" alt="" height="22">
                 </span>
@@ -417,7 +417,7 @@
                                 <li class="nav-item">
                                     <a href="{{ route('admin.roleIndex') }}" class="nav-link"> Vai trò </a>
                                 </li>
-                              
+
                             </ul>
                         </div>
                     </li>

@@ -73,7 +73,7 @@
         <div class="product-badge">
         @if ($product->created_at->gt(\Carbon\Carbon::now()->subDays(7)))
       <div class="product-label new">
-      <span>new</span>
+      <span>Mới</span>
       </div>
       @endif
 

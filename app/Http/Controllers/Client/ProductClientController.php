@@ -40,7 +40,7 @@ class ProductClientController extends Controller
             ->limit(8)
             ->get();
 
-        
+
         $bestSellingProducts = Product::with(['orderItems.order'])
             ->whereHas('orderItems.order', function ($query) {
                 $query->whereIn('status', [4, 5]); // Chỉ lấy đơn hàng có status là 4 hoặc 5
@@ -223,6 +223,14 @@ class ProductClientController extends Controller
 
         $productCategoryIds = $product->categories->pluck('id')->toArray();
 
+        $relatedProducts = Product::with(['author', 'categories', 'images'])
+            ->whereHas('categories', function ($query) use ($productCategoryIds) {
+                $query->whereIn('categories.id', $productCategoryIds);
+            })
+            ->where('id', '<>', $product->id)
+            ->limit(8)
+            ->get();
+
         $vouchers = Voucher::where('is_active', 1)
             ->where(function ($query) use ($product, $productCategoryIds) {
                 $query
@@ -331,7 +339,7 @@ class ProductClientController extends Controller
 
         $product->total_sold = $totalSold;
 
-       
+
         $bestSellingProducts = Product::with(['orderItems.order'])
             ->whereHas('orderItems.order', function ($query) {
                 $query->whereIn('status', [4, 5]); // Chỉ lấy đơn hàng có status là 4 hoặc 5
@@ -355,6 +363,8 @@ class ProductClientController extends Controller
 
 
 
+
+
         return view('client.pages.product', compact(
             'product',
             'thumbnail',
@@ -370,7 +380,8 @@ class ProductClientController extends Controller
             'canReview',
             'hasReviewed',
             'totalSold',
-            'bestSellingProducts'
+            'bestSellingProducts',
+            'relatedProducts'
         ));
     }
 
